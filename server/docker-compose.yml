@@ -1,0 +1,15 @@
+version: '3.7'
+
+services:
+
+  postgres:
+    image: postgres:14.3
+    restart: always
+    container_name: indoorSoocer
+    ports:
+      - "5832:5432"
+    environment:
+      POSTGRES_PASSWORD: root
+      POSTGRES_DB: indoorSoocerDB
+    volumes:
+      - ./postgres:/var/lib/postgresql/data
