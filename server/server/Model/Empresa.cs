@@ -27,3 +27,16 @@ public partial class Empresa
 
     public virtual ICollection<TipoSocio> TipoSocios { get; set; } = new List<TipoSocio>();
 }
+
+
+public class EmpresaDTO
+{
+    //    public Guid Id { get; set; }
+    public Guid Id { get; set; }
+    public string Nombre { get; set; } = null!;
+
+    public string? Direccion { get; set; }
+
+    public bool? Estado { get; set; }
+
+}
