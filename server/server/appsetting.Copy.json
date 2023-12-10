@@ -5,5 +5,8 @@
       "Microsoft.AspNetCore": "Warning"
     }
   },
+  "ConnectionStrings": {
+    "connection": "Server=localhost;Port=5932;Database=ticketAppDB;User Id=postgres;Password=root;"
+  },
   "AllowedHosts": "*"
 }
