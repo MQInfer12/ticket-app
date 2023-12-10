@@ -13,7 +13,7 @@ public partial class Empresa
 
     public bool? Estado { get; set; }
 
-    public virtual ICollection<Caja> Cajas { get; set; } = new List<Caja>();
+   public virtual ICollection<Caja> Cajas { get; set; } = new List<Caja>();
 
     public virtual ICollection<Categorium> Categoria { get; set; } = new List<Categorium>();
 
