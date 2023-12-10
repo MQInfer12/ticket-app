@@ -63,21 +63,21 @@ namespace server.Controllers
         [HttpPut("{id}")]
         public IActionResult Put(Guid id, EmpresaDTO req)
         {
-            if (id != req.Id)
+
+            var existingEmpresa = _db.Empresas.Find(id);
+
+            if (existingEmpresa == null)
             {
-                return BadRequest();
+                return NotFound();
             }
 
-            var company = new Empresa
-            {
-                Nombre = req.Nombre,
-                Direccion = req.Direccion,
-                Estado = req.Estado
-            };
+            existingEmpresa.Nombre = req.Nombre;
+            existingEmpresa.Direccion = req.Direccion;
+            existingEmpresa.Estado = req.Estado;
 
-            _db.Empresas.Update(company);
+            _db.Empresas.Update(existingEmpresa);
             _db.SaveChanges();
-            return Ok(new { Message = "Se edito la empresa", Data = company });
+            return Ok(new { Message = "Se edito la empresa", Data = existingEmpresa });
 
         }
 

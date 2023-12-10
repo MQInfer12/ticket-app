@@ -32,7 +32,6 @@ public partial class Empresa
 public class EmpresaDTO
 {
     //    public Guid Id { get; set; }
-    public Guid Id { get; set; }
     public string Nombre { get; set; } = null!;
 
     public string? Direccion { get; set; }
