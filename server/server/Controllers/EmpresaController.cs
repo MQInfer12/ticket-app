@@ -16,6 +16,7 @@ namespace server.Controllers
             _db = db;
         }
 
+        [Authorize]
         [HttpGet]
         public IActionResult Get()
         {

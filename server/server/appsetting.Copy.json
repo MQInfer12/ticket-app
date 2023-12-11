@@ -8,5 +8,10 @@
   "ConnectionStrings": {
     "connection": "Server=localhost;Port=5932;Database=ticketAppDB;User Id=postgres;Password=root;"
   },
+  "Jwt": {
+    "Issuer": "htttps://polo.com",
+    "Audience": "htttps://polo.com",
+    "Key": "this is my custom Secret key for authentication"
+  },
   "AllowedHosts": "*"
 }

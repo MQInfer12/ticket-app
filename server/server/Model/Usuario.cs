@@ -23,3 +23,11 @@ public partial class Usuario
 
     public virtual ICollection<UsuarioCaja> UsuarioCajas { get; set; } = new List<UsuarioCaja>();
 }
+
+public class UsuarioDTO
+{
+    public string Usuario { get; set; } = null!;
+
+    public string Contrasenia { get; set; } = null!;
+
+}
