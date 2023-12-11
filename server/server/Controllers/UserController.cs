@@ -25,16 +25,6 @@ namespace server.Controllers
             _db = db;
     }
 
-        private UsuarioDTO AuthticateUser(UsuarioDTO user)
-        {
-            UsuarioDTO _user = null;
-            if(user.Usuario == "admin" && user.Contrasenia == "123456")
-            {
-                _user = new UsuarioDTO { Usuario = "Jose" };
-            }
-            return _user;
-        }
-
         private string GenerateToken()
         {
             var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Jwt:Key"]));
@@ -51,14 +41,26 @@ namespace server.Controllers
         [Route("Login")]
         public IActionResult Login(UsuarioDTO req)
         {
-            IActionResult res = Unauthorized();
-            var user = AuthticateUser(req);
+            var user = _db.Usuarios.FirstOrDefault(e => e.NombreUsuario == req.Usuario);
             if (user != null)
             {
-                var token = GenerateToken();
-                res = Ok(new { Token = token });
+                //Verify password
+                var salt1 = HashHelps.GenerateSalt();
+
+                var hash = HashHelps.HashPasword(req.Contrasenia, out salt1);
+                var passwordHash = HashHelps.VerifyPassword(req.Contrasenia, user.Contrasenia,salt1);
+
+                return Ok(new { Xd = passwordHash });
+
+                if (passwordHash)
+                {
+                    var token = GenerateToken();
+                    return Ok(new { Token = token, Data = user });
+                }
+                return Ok(new { Message = "Contraseña incorrecta", Data = ' ', Status = 409 });
+
             }
-            return res;
+            return Ok(new { Message = "No se encontro el usuario", Data = ' ', Status = 404 });
         }
 
 
@@ -96,7 +98,6 @@ namespace server.Controllers
               _db.SaveChanges();
 
             //Generate password
-
             var salt1 = HashHelps.GenerateSalt();
             var passwordHash = HashHelps.HashPasword(req.Contrasenia, out salt1);
 
@@ -112,10 +113,6 @@ namespace server.Controllers
               var token = GenerateToken();
 
               return Ok(new { Message = "Se registro su cuenta con exito", Data = token, Status= 200 });
-          
-
-        
-
         }
     }
 }
