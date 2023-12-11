@@ -106,7 +106,7 @@ public partial class DBContext : DbContext
             entity.Property(e => e.Id)
                 .HasDefaultValueSql("uuid_generate_v4()")
                 .HasColumnName("id");
-            entity.Property(e => e.Contacto1)
+            entity.Property(e => e.ContactoName)
                 .HasMaxLength(50)
                 .HasColumnName("contacto");
             entity.Property(e => e.Personaempresa).HasColumnName("personaempresa");
@@ -504,10 +504,10 @@ public partial class DBContext : DbContext
                 .HasDefaultValueSql("uuid_generate_v4()")
                 .HasColumnName("id");
             entity.Property(e => e.Contrasenia)
-                .HasMaxLength(50)
+                .HasMaxLength(250)
                 .HasColumnName("contrasenia");
             entity.Property(e => e.Idpersona).HasColumnName("idpersona");
-            entity.Property(e => e.Usuario1)
+            entity.Property(e => e.NombreUsuario)
                 .HasMaxLength(50)
                 .HasColumnName("usuario");
 

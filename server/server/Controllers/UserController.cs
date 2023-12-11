@@ -72,7 +72,7 @@ namespace server.Controllers
                   return Ok(new { Message = "Ya existe este CI", Data=' ', Status=409 });
               }
 
-              var existUser = _db.Usuarios.Any(e => e.Usuario1 == req.Usuario);
+              var existUser = _db.Usuarios.Any(e => e.NombreUsuario == req.Usuario);
               if (existUser)
               {
                   return Ok(new { Message = "Ya existe este nombre de usuario", Data = ' ', Status = 409 });
@@ -98,14 +98,13 @@ namespace server.Controllers
             //Generate password
 
             var salt1 = HashHelps.GenerateSalt();
-
             var passwordHash = HashHelps.HashPasword(req.Contrasenia, out salt1);
 
             var user = new Usuario
               {
-                  Usuario1 = req.Usuario,
-                  Contrasenia = passwordHash,
-                  Idpersona = people.Id,
+                NombreUsuario = req.Usuario,
+                Contrasenia = passwordHash,
+                Idpersona = people.Id,
               };
               _db.Usuarios.Add(user);
               _db.SaveChanges();
