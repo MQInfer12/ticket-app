@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace server.Model;
 
@@ -11,6 +12,7 @@ public partial class Usuario
 
     public string Usuario1 { get; set; } = null!;
 
+    [StringLength(250)]
     public string Contrasenia { get; set; } = null!;
 
     public virtual ICollection<Historial> Historials { get; set; } = new List<Historial>();
