@@ -1,27 +1,33 @@
 import Button from "../../../global/components/button"
 import LoginInput from "./loginInput"
+import Grass from "../../../assets/images/login/grass.jpg"
+import User from "../../../icons/iconProfile"
 
 const LoginForm = () => {
   return (
-    <article className="w-[400px] flex flex-col items-center gap-2 border-2 border-solid border-gray-600 p-5 rounded-lg">
-      <h2 className="border-b border-solid border-gray-600 w-full text-center pb-2 font-semibold text-2xl">Inicio de sesión</h2>
-      <form className="flex flex-col gap-4 p-2 items-center" action="">
-        <div className="flex flex-col items-end gap-4">
-          <LoginInput label={'Correo'} type={'text'}/>
-          <LoginInput label={'Contraseña'} type={'password'}/>
-        </div>
-        <div className="flex flex-col gap-4 items-center">
-          <div className="flex gap-2 items-center">
-            <input 
-              type="checkbox" 
-              className="w-4 h-4"
-            />
-            <label>Recuérdame</label>
+    <div className="w-[500px] flex rounded-3xl overflow-hidden pl-8"
+    style={{ 
+      background: 'linear-gradient(to right top, #1e293b, #283346, #323e51, #3c4a5d, #475569)'
+    }}
+    >
+      <div className="h-full w-[70%] flex flex-col gap-2 py-14">
+        <h2 className="text-slate-50 text-2xl">Inicio de sesion</h2>
+        <form action="" className="flex flex-col gap-5">
+          <div className="flex gap-1">
+            <label htmlFor="" className="text-slate-200">No tienes una cuenta?</label>
+            <a href="#" className="text-emerald-400">Crear cuenta</a>
           </div>
-          <Button>Iniciar sesión</Button>
-        </div>
-      </form>
-    </article>
+          <div className="flex flex-col gap-2">
+            <LoginInput label="Usuario" type="text" icon={<User/>}/>
+            <LoginInput label="Contraseña" type="text" icon={<User/>}/>
+          </div>
+          <Button children="Iniciar sesion"/>
+        </form>
+      </div>
+      <div className="flex-1 relative">
+        <img src={Grass} alt="grass" className="h-full object-cover opacity-30"/>
+      </div>
+    </div>
   )
 }
 
