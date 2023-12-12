@@ -5,9 +5,10 @@ import ControlButton from "./controlButton";
 
 interface Props {
   filter: [string, React.Dispatch<React.SetStateAction<string>>];
+  reload?: () => void;
 }
 
-const TableControls = ({ filter }: Props) => {
+const TableControls = ({ filter, reload }: Props) => {
   const [filterValue, setFilter] = filter;
   return (
     <div className="w-full flex pb-4">
@@ -26,7 +27,10 @@ const TableControls = ({ filter }: Props) => {
       {filterValue && (
         <ControlButton onClick={() => setFilter("")} icon={<IconX />} />
       )}
-      <ControlButton onClick={() => {}} icon={<IconReload />} />
+      {
+        !!reload &&
+        <ControlButton onClick={() => {}} icon={<IconReload />} />
+      }
     </div>
   );
 };
