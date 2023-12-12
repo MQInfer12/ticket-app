@@ -1,10 +1,13 @@
 import TableContainer from "../../global/components/table/tableContainer.tsx";
 import PageContainer from "../../global/components/pageContainer.tsx";
 import { useGet } from "../../hooks/useGet.tsx";
-import { Empresa } from "../../global/interfaces/empresa.ts";
+import { Empresa } from "../../global/interfaces/api/empresa.ts";
+import Modal from "../../global/components/modal.tsx";
+import { useModal } from "../../hooks/useModal.tsx";
 
 const Index = () => {
   const { res, getData } = useGet<Empresa[]>("Empresa");
+  const { item, modal, openModal } = useModal<Empresa>("Formulario de empresa");
 
   const columns = [
     {
@@ -29,7 +32,16 @@ const Index = () => {
 
   return (
     <PageContainer title="Empresas">
-      <TableContainer columns={columns} data={res?.data} reload={getData} />
+      <TableContainer
+        columns={columns}
+        data={res?.data}
+        reload={getData}
+        add={() => openModal()}
+        onClickRow={(row) => openModal(row)}
+      />
+      <Modal state={modal}>
+        <p>{item ? `Editar ${JSON.stringify(item)}` : "Añadir item"}</p>
+      </Modal>
     </PageContainer>
   );
 };

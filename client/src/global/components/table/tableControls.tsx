@@ -1,3 +1,4 @@
+import IconAdd from "../../../icons/iconAdd";
 import IconReload from "../../../icons/iconReload";
 import IconSearch from "../../../icons/iconSearch";
 import IconX from "../../../icons/iconX";
@@ -6,9 +7,10 @@ import ControlButton from "./controlButton";
 interface Props {
   filter: [string, React.Dispatch<React.SetStateAction<string>>];
   reload?: () => void;
+  add?: () => void;
 }
 
-const TableControls = ({ filter, reload }: Props) => {
+const TableControls = ({ filter, reload, add }: Props) => {
   const [filterValue, setFilter] = filter;
   return (
     <div className="w-full flex pb-4">
@@ -28,8 +30,12 @@ const TableControls = ({ filter, reload }: Props) => {
         <ControlButton onClick={() => setFilter("")} icon={<IconX />} />
       )}
       {
+        !!add &&
+        <ControlButton onClick={add} icon={<IconAdd />} />
+      }
+      {
         !!reload &&
-        <ControlButton onClick={() => {}} icon={<IconReload />} />
+        <ControlButton onClick={reload} icon={<IconReload />} />
       }
     </div>
   );

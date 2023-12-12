@@ -1,4 +1,4 @@
-import { ApiResponse } from "../interfaces/apiResponse";
+import { ApiResponse } from "../interfaces/types/apiResponse";
 import { errorAlert } from "./alerts";
 
 export const checkResponse = async <T>(
