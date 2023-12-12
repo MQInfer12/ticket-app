@@ -29,6 +29,7 @@ public class PersonaDTO // para decir al front que me tiene que enviar
 
     public string? Apmaterno { get; set; }
 
+
     public string? NombreUsurio { get; set; }
 
     public string? Password { get; set; }
