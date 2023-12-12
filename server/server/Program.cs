@@ -18,7 +18,7 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy(name: MyAllowSpecificOrigins, policy =>
     {
-        policy.WithOrigins("http://localhost:4200").AllowAnyHeader().AllowAnyMethod();
+        policy.WithOrigins("http://localhost:5173", "https://goalguardian.am2ps.online/").AllowAnyHeader().AllowAnyMethod();
     });
 
 
@@ -82,11 +82,14 @@ var app = builder.Build();
 app.UseCors(MyAllowSpecificOrigins);
 
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
+/*if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
-}
+}*/
+
+app.UseSwagger();
+app.UseSwaggerUI();
 
 app.UseAuthentication();
 
