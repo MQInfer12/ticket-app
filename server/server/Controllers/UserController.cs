@@ -45,14 +45,11 @@ namespace server.Controllers
             if (user != null)
             {
                 //Verify password
-                var salt1 = HashHelps.GenerateSalt();
 
-                var hash = HashHelps.HashPasword(req.Contrasenia, out salt1);
-                var passwordHash = HashHelps.VerifyPassword(req.Contrasenia, user.Contrasenia,salt1);
+                var passwordDecrypt = HashHelps.Decrypt(user.Contrasenia);
 
-                return Ok(new { Xd = passwordHash });
 
-                if (passwordHash)
+                if (passwordDecrypt == req.Contrasenia)
                 {
                     var token = GenerateToken();
                     return Ok(new { Token = token, Data = user });
@@ -98,8 +95,8 @@ namespace server.Controllers
               _db.SaveChanges();
 
             //Generate password
-            var salt1 = HashHelps.GenerateSalt();
-            var passwordHash = HashHelps.HashPasword(req.Contrasenia, out salt1);
+         
+            var passwordHash = HashHelps.Encrypt(req.Contrasenia);
 
             var user = new Usuario
               {
