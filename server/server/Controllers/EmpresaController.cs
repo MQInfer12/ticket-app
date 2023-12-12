@@ -16,12 +16,12 @@ namespace server.Controllers
             _db = db;
         }
 
-        [Authorize]
+       /* [Authorize]*/
         [HttpGet]
         public IActionResult Get()
         {
-            var cars = _db.Empresas;
-            return Ok(cars);
+            var companies = _db.Empresas;
+            return Ok(companies);
         }
 
         [AllowAnonymous]
@@ -32,10 +32,10 @@ namespace server.Controllers
 
             if (company == null)
             {
-                return Ok(new { Message = "No existe esta empresa" });
+                return NotFound(new { Message = "No existe esta empresa", Data = ' ', Status = 404 });
             }
 
-            return Ok(company);
+            return Ok(new { Message = "Datos obtenidos con exito", Data = company, Status = 200 });
         }
 
         [HttpPost]
@@ -44,7 +44,7 @@ namespace server.Controllers
             var exists = _db.Empresas.Any(e => e.Nombre == req.Nombre);
             if (exists)
             {
-                return Ok(new { Message = "Ya existe esta empresa" });
+                return BadRequest(new { Message = "Ya existe esta empresa", Data = ' ', Status = 400 });
             }
 
             var company = new Empresa
@@ -57,7 +57,7 @@ namespace server.Controllers
             _db.Empresas.Add(company);
             _db.SaveChanges();
 
-            return Ok(new { Message = "Se creo la empresa", Data = company });
+            return Ok(new { Message = "Se creo la empresa", Data = company, Status = 201 });
         }
 
 
@@ -69,7 +69,7 @@ namespace server.Controllers
 
             if (existingEmpresa == null)
             {
-                return NotFound();
+                return NotFound(new { Message = "No se encontro la empresa", Data = ' ', Status = 404 });
             }
 
             existingEmpresa.Nombre = req.Nombre;
@@ -78,7 +78,7 @@ namespace server.Controllers
 
             _db.Empresas.Update(existingEmpresa);
             _db.SaveChanges();
-            return Ok(new { Message = "Se edito la empresa", Data = existingEmpresa });
+            return Ok(new { Message = "Se edito la empresa", Data = existingEmpresa, Status = 200 });
 
         }
 
@@ -90,15 +90,12 @@ namespace server.Controllers
             var company = _db.Empresas.Find(id);
             if (company == null)
             {
-                return NotFound(new
-                {
-                    Message = "No se encontro la empresa"
-                });
+                return NotFound(new { Message = "No se encontro la empresa", Data = ' ', Status = 404 });
             }
 
             _db.Empresas.Remove(company);
             _db.SaveChanges();
-            return Ok(new { Message = "Se elimino la empresa" });
+            return Ok(new { Message = "Se elimino la empresa", Data = ' ', Status = 200});
 
         }
 
