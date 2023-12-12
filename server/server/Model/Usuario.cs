@@ -10,7 +10,7 @@ public partial class Usuario
 
     public Guid Idpersona { get; set; }
 
-    public string NombreUsuario{ get; set; } = null!;
+    public string NombreUsuario { get; set; } = null!;
 
     [StringLength(250)]
     public string Contrasenia { get; set; } = null!;
@@ -33,3 +33,4 @@ public class UsuarioDTO
     public string Contrasenia { get; set; } = null!;
 
 }
+

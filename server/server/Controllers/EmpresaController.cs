@@ -1,8 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using server.Model;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
+
 
 namespace server.Controllers
 {
