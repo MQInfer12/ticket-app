@@ -6,7 +6,7 @@ import { useUser } from "../../store/user";
 import Loader from "../../global/components/loader/loader";
 import { useGet } from "../../hooks/useGet";
 import { useEffect } from "react";
-import { User } from "../../global/interfaces/user";
+import { User } from "../../global/interfaces/api/user";
 
 const Index = () => {
   const { state, setUser } = useUser();

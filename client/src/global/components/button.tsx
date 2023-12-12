@@ -1,4 +1,4 @@
-import { AnyFunction } from "../interfaces/anyFunction";
+import { AnyFunction } from "../interfaces/types/anyFunction";
 
 type Props = {
   children: string;

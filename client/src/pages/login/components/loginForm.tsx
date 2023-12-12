@@ -6,7 +6,7 @@ import { useState } from "react";
 import { sendRequest } from "../../../global/utils/sendRequest";
 import { setAuthCookie } from "../../../global/utils/authCookie";
 import { useNavigate } from "react-router-dom";
-import { User } from "../../../global/interfaces/user";
+import { User } from "../../../global/interfaces/api/user";
 import { successAlert } from "../../../global/utils/alerts";
 import { useUser } from "../../../store/user";
 

@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import { User } from "../global/interfaces/user";
+import { User } from "../global/interfaces/api/user";
 import { getAuthCookie } from "../global/utils/authCookie";
 
 interface State {

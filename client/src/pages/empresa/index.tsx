@@ -1,7 +1,7 @@
 import TableContainer from "../../global/components/table/tableContainer.tsx";
 import PageContainer from "../../global/components/pageContainer.tsx";
 import { useGet } from "../../hooks/useGet.tsx";
-import { Empresa } from "../../global/interfaces/empresa.ts";
+import { Empresa } from "../../global/interfaces/api/empresa.ts";
 import Modal from "../../global/components/modal.tsx";
 import { useModal } from "../../hooks/useModal.tsx";
 
