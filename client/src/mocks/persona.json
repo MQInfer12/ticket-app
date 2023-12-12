@@ -1,0 +1,20 @@
+[
+  {
+    "idPersona": 1,
+    "idUsuario": 1,
+    "ci": "13621632",
+    "nombres": "Mauricio",
+    "apPaterno": "Molina",
+    "apMaterno": "Quinteros",
+    "usuario": "MQInfer12"
+  },
+  {
+    "idPersona": 2,
+    "idUsuario": 2,
+    "ci": "12345678",
+    "nombres": "Andres",
+    "apPaterno": "Rocabado",
+    "apMaterno": "Cáceres",
+    "usuario": "Arocabado"
+  }
+]
