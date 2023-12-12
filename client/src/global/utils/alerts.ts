@@ -7,3 +7,11 @@ export const errorAlert = (text: string) => {
     text,
   });
 };
+
+export const successAlert = (text: string) => {
+  Swal.fire({
+    icon: "success",
+    title: "Éxito",
+    text,
+  });
+};

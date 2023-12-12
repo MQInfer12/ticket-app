@@ -68,7 +68,7 @@ namespace server.Controllers
         [Route("Register")]
         public IActionResult Register(RegisterDTO req)
         {
-             var existPeople = _db.Personas.Any(e => e.Ci == req.Ci);
+            var existPeople = _db.Personas.Any(e => e.Ci == req.Ci);
               if (existPeople)
               {
                   return BadRequest(new { Message = "Ya existe este CI", Data=' ', Status=409 });

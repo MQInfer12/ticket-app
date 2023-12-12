@@ -1,7 +1,26 @@
-import CircleButton from "../../../global/components/circleButton"
-import IconHelp from "../../../icons/iconHelp"
+import { useNavigate } from "react-router-dom";
+import CircleButton from "../../../global/components/circleButton";
+import { deleteAuthCookie, getAuthCookie } from "../../../global/utils/authCookie";
+import IconLogout from "../../../icons/iconLogout";
+import { errorAlert } from "../../../global/utils/alerts";
+import { useUser } from "../../../store/user";
 
 const Header = () => {
+  const navigate = useNavigate();
+  const { logout } = useUser();
+
+  const handleLogout = async () => {
+    const token = getAuthCookie();
+    if (!token) {
+      navigate("/");
+      errorAlert("No autorizado");
+      return;
+    }
+    deleteAuthCookie();
+    logout();
+    navigate("/");
+  };
+
   return (
     <header
       style={{ gridArea: "header" }}
@@ -12,12 +31,10 @@ const Header = () => {
         <b className="text-neutral-800">Brooklin Simons</b>
       </div>
       <div>
-        <CircleButton 
-          icon={<IconHelp />}
-        />
+        <CircleButton onClick={handleLogout} icon={<IconLogout />} />
       </div>
     </header>
-  )
-}
+  );
+};
 
-export default Header
+export default Header;

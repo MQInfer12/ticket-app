@@ -4,9 +4,11 @@ type Props = {
   label: string,
   type: string,
   icon: JSX.Element
+  value: string
+  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void
 }
 
-const LoginInput = ({label, type, icon} : Props) => {
+const LoginInput = ({label, type, value, onChange, icon} : Props) => {
   const id = useId();
 
   return (
@@ -17,6 +19,8 @@ const LoginInput = ({label, type, icon} : Props) => {
           id={id} 
           type={type} 
           className="h-full "
+          value={value}
+          onChange={onChange}
         />
         <div className="h-full aspect-square bg-white">
           {icon}
