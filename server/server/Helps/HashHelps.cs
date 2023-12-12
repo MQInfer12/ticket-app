@@ -5,8 +5,7 @@ namespace server.Helps
 {
     public class HashHelps
     {
-        private const int keySize = 64;
-        private const int iterations = 350000;
+ 
         public static string Encrypt(string clearText)
         {
             string encryptionKey = "MAKV2SPBNI99212";

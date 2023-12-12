@@ -7,7 +7,7 @@ using server.Model;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Cryptography;
 using System.Text;
-using static System.Runtime.InteropServices.JavaScript.JSType;
+
 
 
 namespace server.Controllers
@@ -19,13 +19,15 @@ namespace server.Controllers
         private IConfiguration _config;
         private DBContext _db;
 
+
         public UserController(IConfiguration configuration, DBContext db)
         {
             _config = configuration;
             _db = db;
+
     }
 
-        private string GenerateToken()
+      private string GenerateToken()
         {
             var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Jwt:Key"]));
             var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
@@ -51,13 +53,14 @@ namespace server.Controllers
 
                 if (passwordDecrypt == req.Contrasenia)
                 {
+             
                     var token = GenerateToken();
                     return Ok(new { Token = token, Data = user });
                 }
-                return Ok(new { Message = "Contraseña incorrecta", Data = ' ', Status = 409 });
+                return BadRequest(new { Message = "Contraseña incorrecta", Data = ' ', Status = 409 });
 
             }
-            return Ok(new { Message = "No se encontro el usuario", Data = ' ', Status = 404 });
+            return NotFound(new { Message = "No se encontro el usuario", Data = ' ', Status = 404 });
         }
 
 
@@ -68,19 +71,19 @@ namespace server.Controllers
              var existPeople = _db.Personas.Any(e => e.Ci == req.Ci);
               if (existPeople)
               {
-                  return Ok(new { Message = "Ya existe este CI", Data=' ', Status=409 });
+                  return BadRequest(new { Message = "Ya existe este CI", Data=' ', Status=409 });
               }
 
               var existUser = _db.Usuarios.Any(e => e.NombreUsuario == req.Usuario);
               if (existUser)
               {
-                  return Ok(new { Message = "Ya existe este nombre de usuario", Data = ' ', Status = 409 });
+                  return BadRequest(new { Message = "Ya existe este nombre de usuario", Data = ' ', Status = 409 });
               }
 
    
             if(req.Contrasenia != req.ContraseniaRepit)
             {
-                return Ok(new { Message = "Las contraseñas no coindicen", Data = ' ', Status = 409 });
+                return BadRequest(new { Message = "Las contraseñas no coindicen", Data = ' ', Status = 409 });
             }
 
               var people = new Persona
@@ -107,9 +110,10 @@ namespace server.Controllers
               _db.Usuarios.Add(user);
               _db.SaveChanges();
 
-              var token = GenerateToken();
 
-              return Ok(new { Message = "Se registro su cuenta con exito", Data = token, Status= 200 });
+            var token = GenerateToken();
+
+            return Ok(new { Message = "Se registro su cuenta con exito", Data = token, Status= 200 });
         }
     }
 }

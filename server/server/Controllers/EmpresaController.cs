@@ -18,7 +18,7 @@ namespace server.Controllers
         }
 
        /* [Authorize]*/
-        [HttpGet]
+        [HttpGet, Authorize]
         public IActionResult Get()
         {
             var companies = _db.Empresas;
@@ -26,7 +26,7 @@ namespace server.Controllers
         }
 
         [AllowAnonymous]
-        [HttpGet("{id}")]
+        [HttpGet("{id}"), Authorize]
         public IActionResult Get(Guid id)
         {
             var company = _db.Empresas.Find(id);
@@ -39,7 +39,7 @@ namespace server.Controllers
             return Ok(new { Message = "Datos obtenidos con exito", Data = company, Status = 200 });
         }
 
-        [HttpPost]
+        [HttpPost, Authorize]
         public IActionResult Post([FromBody] EmpresaDTO req)
         {
             var exists = _db.Empresas.Any(e => e.Nombre == req.Nombre);
@@ -62,7 +62,7 @@ namespace server.Controllers
         }
 
 
-        [HttpPut("{id}")]
+        [HttpPut("{id}"), Authorize]
         public IActionResult Put(Guid id, EmpresaDTO req)
         {
 
@@ -84,7 +84,7 @@ namespace server.Controllers
         }
 
 
-        [HttpDelete("{id}")]
+        [HttpDelete("{id}"), Authorize]
         public IActionResult Delete(Guid id)
         {
 
