@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using server.Model;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
 namespace server.Controllers
 {
@@ -21,7 +22,7 @@ namespace server.Controllers
         public IActionResult Get()
         {
             var companies = _db.Empresas;
-            return Ok(companies);
+            return Ok(new { Message = "Datos obtenidos con exito", Data = companies, Status = 200 });
         }
 
         [AllowAnonymous]
