@@ -1,0 +1,20 @@
+[
+  {
+    "id": 1,
+    "nombre": "Wilsterman",
+    "direccion": "Cerca del aeropuerto",
+    "estado": true
+  },
+  {
+    "id": 2,
+    "nombre": "Aurora",
+    "direccion": "Cerca de la laguna",
+    "estado": true
+  },
+  {
+    "id": 3,
+    "nombre": "Real Tomayapo",
+    "direccion": null,
+    "estado": false
+  }
+]

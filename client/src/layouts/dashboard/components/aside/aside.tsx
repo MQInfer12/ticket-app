@@ -1,30 +1,36 @@
-import IconEmpresa, { IconEmpresaActive } from "../../../../icons/iconEmpresa"
-import IconPersonas, { IconPersonasActive } from "../../../../icons/iconPersonas"
-import Head from "./head"
-import IconLink from "./iconLink"
-import Section from "./section"
+import IconEmpresa from "../../../../icons/iconEmpresa";
+import IconPersonas from "../../../../icons/iconPersonas";
+import Head from "./head";
+import IconLink from "./iconLink";
+import Profile from "./profile";
+import Section from "./section";
 
 const Aside = () => {
   return (
     <aside
-      className="w-80 bg-slate-200 border-r border-solid border-slate-300 px-4 pt-6"
+      className="flex flex-col w-80 bg-slate-200 border-r border-solid border-slate-300 px-4 pt-6 pb-4 overflow-auto relative"
       style={{ gridArea: "aside" }}
     >
       <Head />
-      <Section title="MAIN">
-        <IconLink 
-          icons={[<IconEmpresa />, <IconEmpresaActive />]}
-          label="Empresas"
-          to="/dashboard/empresas"
-        />
-        <IconLink 
-          icons={[<IconPersonas />, <IconPersonasActive />]}
-          label="Personas"
-          to="/dashboard/personas"
-        />
-      </Section>
+      <div className="flex flex-col justify-between flex-1">
+        <div className="flex-1 overflow-auto">
+          <Section title="MAIN">
+            <IconLink
+              icon={(active) => <IconEmpresa active={active} />}
+              label="Empresas"
+              to="/dashboard/empresas"
+            />
+            <IconLink
+              icon={(active) => <IconPersonas active={active} />}
+              label="Personas"
+              to="/dashboard/personas"
+            />
+          </Section>
+        </div>
+        <Profile />
+      </div>
     </aside>
-  )
-}
+  );
+};
 
-export default Aside
+export default Aside;

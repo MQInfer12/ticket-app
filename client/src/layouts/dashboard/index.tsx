@@ -5,7 +5,7 @@ import styles from "./dashboard.module.css"
 
 const Index = () => {
   return (
-    <div className={styles.container}>
+    <div className={`${styles.container} bg-slate-100`}>
       <Aside />
       <Header />
       <div
