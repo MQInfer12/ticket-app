@@ -22,8 +22,8 @@ const LoginInput = ({ label, type, value, onChange, icon }: Props) => {
       />
       <label
         htmlFor={id}
-        className={`absolute text-slate-50 text-md p-2 peer-focus:-top-5 peer-focus:text-sm ${
-          value ? "-top-5 text-sm" : "top-0"
+        className={`absolute text-slate-50 text-md p-2 peer-focus:-top-7 peer-focus:text-sm transition-all duration-300 ${
+          value ? "-top-7 text-sm" : "top-0"
         }`}
       >
         {label}
