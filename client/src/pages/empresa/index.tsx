@@ -4,10 +4,11 @@ import { useGet } from "../../hooks/useGet.tsx";
 import { Empresa } from "../../global/interfaces/api/empresa.ts";
 import Modal from "../../global/components/modal.tsx";
 import { useModal } from "../../hooks/useModal.tsx";
+import Formulario from "./components/formulario.tsx";
 
 const Index = () => {
-  const { res, getData } = useGet<Empresa[]>("Empresa");
-  const { item, modal, openModal } = useModal<Empresa>("Formulario de empresa");
+  const { res, getData, pushData, filterData } = useGet<Empresa[]>("Empresa");
+  const { state, item, openModal, closeModal } = useModal<Empresa>("Formulario de empresa");
 
   const columns = [
     {
@@ -39,8 +40,18 @@ const Index = () => {
         add={() => openModal()}
         onClickRow={(row) => openModal(row)}
       />
-      <Modal state={modal}>
-        <p>{item ? `Editar ${JSON.stringify(item)}` : "Añadir item"}</p>
+      <Modal state={state}>
+        <Formulario 
+          empresa={item} 
+          onSuccess={data => {
+            pushData([data]);
+            closeModal();
+          }}
+          onDelete={empresa => {
+            filterData(value => value.id !== empresa.id)
+            closeModal();
+          }}
+        />
       </Modal>
     </PageContainer>
   );
