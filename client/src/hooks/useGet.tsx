@@ -7,8 +7,14 @@ import { useNavigate } from "react-router-dom";
 interface ReturnValues<T> {
   res: ApiResponse<T> | null;
   getData: () => void;
-  pushData: (data: T) => void;
-  filterData: (filter: (value: T extends Array<infer U> ? U : T) => boolean) => void;
+  pushData: (data: T extends Array<infer U> ? U : T) => void;
+  modifyData: (
+    data: T extends Array<infer U> ? U : T,
+    condition: (value: T extends Array<infer U> ? U : T) => boolean
+  ) => void;
+  filterData: (
+    filter: (value: T extends Array<infer U> ? U : T) => boolean
+  ) => void;
 }
 
 export const useGet = <T,>(
@@ -39,25 +45,45 @@ export const useGet = <T,>(
     }
   };
 
-  const pushData = (data: T) => {
+  const pushData = (data: T extends Array<infer U> ? U : T) => {
     setRes((old) => {
       if (!old) return null;
       if (!Array.isArray(old.data)) return old;
-      if (!Array.isArray(data)) return old;
       return {
         ...old,
-        data: [...old.data, ...data] as T,
+        data: [...old.data, data] as T,
       };
     });
   };
 
-  const filterData = (filter: (value: T extends Array<infer U> ? U : T) => boolean) => {
+  const filterData = (
+    filter: (value: T extends Array<infer U> ? U : T) => boolean
+  ) => {
     setRes((old) => {
       if (!old) return null;
       if (!Array.isArray(old.data)) return old;
       return {
         ...old,
         data: old.data.filter((value) => filter(value)) as T,
+      };
+    });
+  };
+
+  const modifyData = (
+    data: T extends Array<infer U> ? U : T,
+    condition: (value: T extends Array<infer U> ? U : T) => boolean
+  ) => {
+    setRes((old) => {
+      if (!old) return null;
+      if (!Array.isArray(old.data)) return old;
+      return {
+        ...old,
+        data: old.data.map((value) => {
+          if (condition(value)) {
+            return data;
+          }
+          return value;
+        }) as T,
       };
     });
   };
@@ -72,6 +98,7 @@ export const useGet = <T,>(
     res,
     getData,
     pushData,
-    filterData
+    modifyData,
+    filterData,
   };
 };

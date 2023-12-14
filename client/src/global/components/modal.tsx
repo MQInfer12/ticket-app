@@ -1,6 +1,6 @@
 import { ModalState } from "../../hooks/useModal";
 import IconX from "../../icons/iconX";
-import CircleButton from "./circleButton";
+import CircleButton from "./buttons/circleButton";
 
 interface Props {
   children: React.ReactNode;

@@ -4,11 +4,17 @@ import { useGet } from "../../hooks/useGet.tsx";
 import { Empresa } from "../../global/interfaces/api/empresa.ts";
 import Modal from "../../global/components/modal.tsx";
 import { useModal } from "../../hooks/useModal.tsx";
-import Formulario from "./components/formulario.tsx";
+import Form from "../../global/components/form/form.tsx";
+import FormInput from "../../global/components/form/formInput.tsx";
+import FormSelect from "../../global/components/form/formSelect.tsx";
+import { EmpresaForm, empresaSchema } from "./validations/empresa.ts";
 
 const Index = () => {
-  const { res, getData, pushData, filterData } = useGet<Empresa[]>("Empresa");
-  const { state, item, openModal, closeModal } = useModal<Empresa>("Formulario de empresa");
+  const { res, getData, pushData, filterData, modifyData } =
+    useGet<Empresa[]>("Empresa");
+  const { state, item, openModal, closeModal } = useModal<Empresa>(
+    "Formulario de empresa"
+  );
 
   const columns = [
     {
@@ -41,17 +47,55 @@ const Index = () => {
         onClickRow={(row) => openModal(row)}
       />
       <Modal state={state}>
-        <Formulario 
-          empresa={item} 
-          onSuccess={data => {
-            pushData([data]);
-            closeModal();
+        <Form<Empresa | null, EmpresaForm>
+          item={item}
+          initialValues={{
+            nombre: item?.nombre || "",
+            direccion: item?.direccion || "",
+            estado: !item ? "Activo" : item.estado ? "Activo" : "Desactivo",
           }}
-          onDelete={empresa => {
-            filterData(value => value.id !== empresa.id)
-            closeModal();
+          validationSchema={empresaSchema}
+          post={{
+            route: "Empresa",
+            onBody: value => ({
+              ...value,
+              estado: value.estado === "Activo",
+            }),
+            onSuccess: data => {
+              pushData(data);
+              closeModal();
+            }
           }}
-        />
+          put={{
+            route: `Empresa/${item?.id}`,
+            onBody: value => ({
+              ...value,
+              estado: value.estado === "Activo",
+            }),
+            onSuccess: data => {
+              modifyData(data, (value) => value.id === data.id);
+              closeModal();
+            }
+          }}
+          del={{
+            route: `Empresa/${item?.id}`,
+            onSuccess: data => {
+              filterData((value) => value.id !== data.id);
+              closeModal();
+            }
+          }}
+        >
+          <FormInput title="Nombre" name="nombre" />
+          <FormInput title="Dirección" name="direccion" />
+          <FormSelect
+            title="Estado"
+            name="estado"
+            placeholder="Seleccione estado"
+          >
+            <option value="Activo">Activo</option>
+            <option value="Desactivo">Desactivo</option>
+          </FormSelect>
+        </Form>
       </Modal>
     </PageContainer>
   );

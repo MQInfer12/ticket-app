@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import CircleButton from "../../../global/components/circleButton";
+import CircleButton from "../../../global/components/buttons/circleButton";
 import {
   deleteAuthCookie,
   getAuthCookie,

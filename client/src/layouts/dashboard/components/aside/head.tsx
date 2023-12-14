@@ -1,5 +1,5 @@
 import Logo from "../../../../assets/images/login/GoalGuardian.png";
-import IconButton from "../../../../global/components/iconButton";
+import IconButton from "../../../../global/components/buttons/iconButton";
 import IconMenuLeft from "../../../../icons/iconMenuLeft";
 
 const Head = () => {

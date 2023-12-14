@@ -1,15 +1,15 @@
 import { useId } from "react";
 import { Field, ErrorMessage } from "formik";
-import IconError from "../../icons/iconError";
+import IconError from "../../../icons/iconError";
 
 interface Props {
   title: string;
   name: string;
+  children: React.ReactNode;
   placeholder?: string;
-  type?: string;
 }
 
-const FormInput = ({ title, placeholder, name, type }: Props) => {
+const FormSelect = ({ title, placeholder, name, children }: Props) => {
   const id = useId();
 
   return (
@@ -24,10 +24,12 @@ const FormInput = ({ title, placeholder, name, type }: Props) => {
         <Field
           id={id}
           className="w-full px-2 py-2 pr-10 text-sm border outline-none border-slate-300 text-neutral-700 focus:outline-none focus:ring-2 focus:ring-slate-300 transition-all duration-300"
-          type={type || "text"}
+          as="select"
           name={name}
           placeholder={placeholder || `Ingrese ${title.toLocaleLowerCase()}`}
-        />
+        >
+          {children}
+        </Field>
         <ErrorMessage name={name}>
           {(msg) => (
             <div className="absolute right-0 top-0 p-2 h-full aspect-square z-10 animate-[appear_.5s]">
@@ -45,4 +47,4 @@ const FormInput = ({ title, placeholder, name, type }: Props) => {
   );
 };
 
-export default FormInput;
+export default FormSelect;

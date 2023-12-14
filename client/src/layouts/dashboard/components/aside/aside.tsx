@@ -16,12 +16,12 @@ const Aside = () => {
         <div className="flex-1 overflow-auto">
           <Section title="MAIN">
             <IconLink
-              icon={(active) => <IconEmpresa active={active} />}
+              icon={<IconEmpresa />}
               label="Empresas"
               to="/dashboard/empresas"
             />
             <IconLink
-              icon={(active) => <IconPersonas active={active} />}
+              icon={<IconPersonas />}
               label="Personas"
               to="/dashboard/personas"
             />

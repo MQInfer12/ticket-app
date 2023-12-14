@@ -1,9 +1,5 @@
-interface Props {
-  active: boolean;
-}
-
-const IconEmpresa = ({ active }: Props) => {
-  const color = active ? "#10b981" : "#404040";
+const IconEmpresa = () => {
+  const color = "currentcolor";
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"

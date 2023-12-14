@@ -1,28 +1,23 @@
-import { useState } from "react";
 import { NavLink } from "react-router-dom";
+import styles from "./iconLink.module.css";
 
 type Props = {
-  to: string
-  label: string
-  icon: (active: boolean) => JSX.Element
-}
+  to: string;
+  label: string;
+  icon: JSX.Element;
+};
 
 const IconLink = ({ to, label, icon }: Props) => {
-  const [active, setActive] = useState(false);
   return (
-    <NavLink 
-      className={({ isActive }) => {
-        setActive(isActive);
-        return `flex gap-3 px-3 py-2 rounded-lg transition-all duration-300 hover:opacity-80 ${isActive ? "bg-slate-50" : ""}`
-      }}
+    <NavLink
+      id="/dashboard/empresas"
+      className={`${styles.asidelink} flex gap-3 px-3 py-2 rounded-lg transition-all duration-300 hover:opacity-80`}
       to={to}
     >
-      <div className="w-5 h-5">
-        {icon(active)}
-      </div>
+      <div className="w-5 h-5">{icon}</div>
       <p className="text-sm text-neutral-700">{label}</p>
     </NavLink>
-  )
-}
+  );
+};
 
-export default IconLink
+export default IconLink;
