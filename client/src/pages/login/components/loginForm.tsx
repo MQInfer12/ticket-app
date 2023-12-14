@@ -3,23 +3,27 @@ import Grass from "../../../assets/images/login/grass.jpg";
 import UserIcon from "../../../icons/iconProfile";
 import LockIcon from "../../../icons/iconLock";
 import { useState } from "react";
-import { sendRequest } from "../../../global/utils/sendRequest";
 import { setAuthCookie } from "../../../global/utils/authCookie";
 import { useNavigate } from "react-router-dom";
 import { User } from "../../../global/interfaces/api/user";
 import { successAlert } from "../../../global/utils/alerts";
 import { useUser } from "../../../store/user";
+import { useRequest } from "../../../hooks/useRequest";
 
 const LoginForm = () => {
   const navigate = useNavigate();
   const { setUser } = useUser();
+  const { sendRequest } = useRequest();
 
   const [form, setForm] = useState({
     usuario: "",
     contrasenia: "",
   });
 
-  const handleSend = async () => {
+  const handleSend = async (
+    e: React.MouseEvent<HTMLButtonElement, MouseEvent>
+  ) => {
+    e.preventDefault();
     const resLogin = await sendRequest<string>("User/Login", form);
     if (!resLogin) return;
     const token = resLogin.data;

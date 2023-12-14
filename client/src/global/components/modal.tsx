@@ -16,11 +16,11 @@ const Modal = ({ children, state }: Props) => {
         className="w-full h-full bg-black opacity-20"
       />
       <div className="fixed left-2/4 top-2/4 -translate-x-2/4 -translate-y-2/4 w-96 bg-slate-200 rounded-lg">
-        <header className="w-full flex justify-between items-center py-2 px-4">
+        <header className="w-full flex justify-between items-center pt-2 px-4">
           <b className="text-sm text-neutral-800">{state.title}</b>
           <CircleButton onClick={state.closeModal} icon={<IconX />} />
         </header>
-        <div className="max-h-96 overflow-auto pb-2 px-4">{children}</div>
+        <div className="max-h-96 overflow-auto py-4 px-4">{children}</div>
       </div>
     </div>
   );

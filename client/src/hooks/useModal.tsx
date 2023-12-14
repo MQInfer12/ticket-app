@@ -23,15 +23,15 @@ export const useModal = <T,>(title: string = "") => {
     setOpen(false);
   };
 
-  const modal: ModalState = {
+  const state: ModalState = {
     title,
     open,
     closeModal,
   };
 
   return {
+    state,
     open,
-    modal,
     item,
     openModal,
     closeModal,
