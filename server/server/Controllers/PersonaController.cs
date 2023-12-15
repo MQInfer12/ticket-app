@@ -138,10 +138,7 @@ namespace server.Controllers
                  Usuario = user.NombreUsuario
              }
              ).First();
-
-
             return Ok(new { Message = "Se edito la persona", Data = userGet, Status = 200 });
-
         }
 
 

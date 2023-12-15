@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using server.Helps;
 using server.Model;
+using System.Data;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
@@ -28,10 +29,11 @@ namespace server.Controllers
             var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Jwt:Key"]));
             var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
 
-            var claims = new[]
-            {
+            var claims = new List<Claim>(){
                 new Claim("UserId", user.Id.ToString()),
             };
+      
+            claims.Add(new Claim(ClaimTypes.Role, "SuperAdmin".ToString()));
 
             var token = new JwtSecurityToken(
                 _config["Jwt:Issuer"],
