@@ -48,8 +48,9 @@ const TanstackTable = ({
 
   const thStyle =
     "px-2 py-2 bg-slate-200 border border-solid border-slate-300 text-sm font-medium text-neutral-800 text-start select-none";
-  const tdStyle =
-    "px-2 py-2 border border-solid border-slate-300 text-sm text-neutral-800";
+  const tdStyle = `px-2 py-2 border border-solid border-slate-300 text-sm text-neutral-800 ${
+    onClickRow ? "cursor-pointer" : ""
+  }`;
   return (
     <div className="overflow-auto">
       <table className="w-full border-separate border-spacing-0">
@@ -86,18 +87,33 @@ const TanstackTable = ({
         <tbody>
           {table.getRowModel().rows.map((row) => (
             <tr
-              className={`hover:bg-slate-200 transition-all duration-300 ${onClickRow ? "cursor-pointer" : ""}`}
+              className={`hover:bg-slate-200 transition-all duration-300`}
               key={row.id}
-              onClick={() => handleClickRow(row.original)}
             >
               {/* <td className={tdStyle + " text-center"}>
                 <input type="checkbox" />
               </td> */}
-              {row.getVisibleCells().map((cell) => (
-                <td className={tdStyle} key={cell.id}>
-                  {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                </td>
-              ))}
+              {row.getVisibleCells().map((cell) => {
+                const header = cell.column.columnDef.header;
+                if (header === "Acciones")
+                  return (
+                    <td className={tdStyle + " cursor-default"} key={cell.id}>
+                      {flexRender(
+                        cell.column.columnDef.cell,
+                        cell.getContext()
+                      )}
+                    </td>
+                  );
+                return (
+                  <td
+                    className={tdStyle}
+                    key={cell.id}
+                    onClick={() => handleClickRow(row.original)}
+                  >
+                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                  </td>
+                );
+              })}
             </tr>
           ))}
         </tbody>

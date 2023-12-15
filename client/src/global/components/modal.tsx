@@ -10,7 +10,7 @@ interface Props {
 const Modal = ({ children, state }: Props) => {
   if (!state.open) return null;
   return (
-    <div className="w-screen h-screen fixed inset-0 p-5 flex items-center justify-center isolate">
+    <div className="z-50 w-screen h-screen fixed inset-0 p-5 flex items-center justify-center isolate">
       <div
         onClick={state.closeModal}
         className="w-full h-full bg-black opacity-20 fixed top-0 left-0 -z-10"

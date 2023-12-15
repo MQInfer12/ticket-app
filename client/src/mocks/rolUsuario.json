@@ -1,0 +1,20 @@
+[
+  {
+    "idRolUsuario": "a",
+    "tipoRol": "Cajero",
+    "empresa": "Wilsterman",
+    "estado": "Activo"
+  },
+  {
+    "idRolUsuario": "a",
+    "tipoRol": "superAdmin",
+    "empresa": "Aurora",
+    "estado": "Activo"
+  },
+  {
+    "idRolUsuario": "a",
+    "tipoRol": "Cliente",
+    "empresa": "Strongest",
+    "estado": "Desactivo"
+  }
+]

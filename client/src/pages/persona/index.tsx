@@ -1,97 +1,39 @@
+import { useParams } from "react-router-dom";
 import PageContainer from "../../global/components/pageContainer";
 import TableContainer from "../../global/components/table/tableContainer";
-import { PersonaUsuario } from "../../global/interfaces/api/personaUsuario";
-import { useGet } from "../../hooks/useGet";
-import { useModal } from "../../hooks/useModal";
-import Modal from "../../global/components/modal.tsx";
-import Form from "../../global/components/form/form.tsx";
-import {
-  PersonaUsuarioForm,
-  personaUsuarioSchema,
-} from "./validations/persona.tsx";
-import FormInput from "../../global/components/form/formInput";
+import Mock from "../../mocks/rolUsuario.json";
 
 const Index = () => {
-  const { res, getData, pushData, modifyData, filterData } =
-    useGet<PersonaUsuario[]>("Persona");
-  const { state, item, openModal, closeModal } = useModal<PersonaUsuario>(
-    "Formulario de persona"
-  );
+  const { id } = useParams();
 
   const columns = [
     {
-      header: "CI",
-      accessorKey: "ci",
+      header: "Rol",
+      accessorKey: "tipoRol",
     },
     {
-      header: "Nombres",
-      accessorKey: "nombres",
+      header: "Empresa",
+      accessorKey: "empresa",
     },
     {
-      header: "Apellidos",
-      accessorFn: (row:PersonaUsuario) => `${row.appaterno || ''} ${row.apmaterno || ''}`
-    },
-    {
-      header: "Usuario",
-      accessorKey: "usuario",
+      header: "Estado",
+      accessorKey: "estado",
     },
   ];
 
   return (
-    <PageContainer title="Personas">
-      <TableContainer
-        data={res?.data}
-        columns={columns}
-        reload={getData}
-        add={() => openModal()}
-        onClickRow={(row) => openModal(row)}
-      />
-      <Modal state={state}>
-        <Form<PersonaUsuario | null, PersonaUsuarioForm>
-          item={item}
-          initialValues={{
-            ci: item?.ci || "",
-            nombres: item?.nombres || "",
-            appaterno: item?.appaterno || "",
-            apmaterno: item?.apmaterno || "",
-            nombreUsurio: item?.usuario || "",
-            password: item ? 'password' : "",
-          }}
-          validationSchema={personaUsuarioSchema}
-          post={{
-            route: "Persona",
-            onBody: value => value,
-            onSuccess: (data) => {
-              pushData(data);
-              closeModal();
-            },
-          }}
-          put={{
-            route: `Persona/${item?.idPersona}`,
-            onBody: value => value,
-            onSuccess: (data) => {
-              modifyData(data, (value) => value.idPersona === data.idPersona);
-              closeModal();
-            },
-          }}
-          del={{
-            route: `Persona/${item?.idPersona}`,
-            onSuccess: (data) => {
-              filterData((value) => value.idPersona !== data.idPersona);
-              closeModal();
-            },
-          }}
-        >
-          <FormInput title="CI" name="ci"/>
-          <FormInput title="Nombres" name="nombres"/>
-          <FormInput title="Apellido paterno" name="appaterno"/>
-          <FormInput title="Apellido materno" name="apmaterno"/>
-          <FormInput title="Usuario" name="nombreUsurio"/>
-          {!item && 
-            <FormInput title="Contraseña" name="password"/>
-          }
-        </Form>
-      </Modal>
+    <PageContainer title="Persona">
+      <div className="flex flex-col h-full gap-5">
+        <div className="flex flex-col items-center">
+          <h3 className="font-bold text-lg text-neutral-800">
+            Mauricio Molina Quinteros
+          </h3>
+          <p className="text-sm text-neutral-500">@mqinfer12 (CI: 13621632)</p>
+        </div>
+        <div className="h-[calc(100%_-_68px)]">
+          <TableContainer columns={columns} data={Mock} />
+        </div>
+      </div>
     </PageContainer>
   );
 };
