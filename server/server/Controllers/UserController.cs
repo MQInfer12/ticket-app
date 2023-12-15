@@ -79,7 +79,6 @@ namespace server.Controllers
 
                 var passwordDecrypt = HashHelps.Decrypt(user.Contrasenia);
 
-
                 if (passwordDecrypt == req.Contrasenia)
                 {
 

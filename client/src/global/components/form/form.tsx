@@ -72,7 +72,7 @@ const Form = <T, U>({
       <FormikForm className="flex flex-col gap-6">
         <div className="flex flex-col gap-2">{children}</div>
         <div className="self-center flex gap-4">
-          <Button>Enviar</Button>
+          <Button type="submit">Enviar</Button>
           {item && (
             <Button
               type="button"

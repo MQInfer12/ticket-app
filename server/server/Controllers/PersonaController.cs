@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using server.Helps;
 using server.Model;
 
 namespace server.Controllers
@@ -55,7 +56,7 @@ namespace server.Controllers
             var user = new Usuario
             {
                 NombreUsuario = req.NombreUsurio,
-                Contrasenia = req.Password,
+                Contrasenia = HashHelps.Encrypt(req.Password),
                 IdpersonaNavigation = new Persona
                 {
                     Ci = req.Ci,
@@ -108,6 +109,17 @@ namespace server.Controllers
                 return NotFound(new { Message = "No se encontro el usuario", Data = ' ', Status = 404 });
             }
 
+            var exists = _db.Usuarios.Any(e => e.NombreUsuario == req.NombreUsurio && e.Id != existUser.Id);
+            if (exists)
+            {
+                return BadRequest(new { Message = "Ya existe este usuario", Data = ' ', Status = 400 });
+            }
+            var existsCi = _db.Personas.Any(e => e.Ci == req.Ci && e.Id != id);
+            if (existsCi)
+            {
+                return BadRequest(new { Message = "Ya existe este CI", Data = ' ', Status = 400 });
+            }
+
 
             existPeoples.Nombres = req.Nombres;
             existPeoples.Appaterno = req.Appaterno;
@@ -118,7 +130,6 @@ namespace server.Controllers
 
 
             existUser.NombreUsuario = req.NombreUsurio;
-            existUser.Contrasenia = req.Password;
 
             _db.Usuarios.Update(existUser);
 

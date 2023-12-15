@@ -73,7 +73,7 @@ const LoginForm = () => {
               />
               <LoginInput
                 label="Contraseña"
-                type="text"
+                type="password"
                 icon={<LockIcon />}
                 value={form.contrasenia}
                 onChange={(e) =>
