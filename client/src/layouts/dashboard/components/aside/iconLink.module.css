@@ -1,0 +1,11 @@
+.asidelink svg {
+  color: #404040;
+}
+
+.asidelink[aria-current="page"] {
+  background-color: #f8fafc;
+}
+
+.asidelink[aria-current="page"] svg {
+  color: #10b981;
+}

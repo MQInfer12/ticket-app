@@ -1,38 +1,39 @@
+import { useParams } from "react-router-dom";
 import PageContainer from "../../global/components/pageContainer";
 import TableContainer from "../../global/components/table/tableContainer";
-import PersonasMock from "../../mocks/persona.json";
+import Mock from "../../mocks/rolUsuario.json";
 
 const Index = () => {
+  const { id } = useParams();
+
   const columns = [
     {
-      header: "ID",
-      accessorKey: "idPersona",
-    },
-    {
-      header: "CI",
-      accessorKey: "ci",
-    },
-    {
-      header: "Nombres",
-      accessorKey: "nombres",
-    },
-    {
-      header: "Usuario",
-      accessorKey: "usuario",
-    },
-    {
       header: "Rol",
-      accessorKey: "nombreRol",
+      accessorKey: "tipoRol",
     },
     {
       header: "Empresa",
-      accessorKey: "nombreEmpresa",
+      accessorKey: "empresa",
+    },
+    {
+      header: "Estado",
+      accessorKey: "estado",
     },
   ];
 
   return (
-    <PageContainer title="Personas">
-      <TableContainer data={PersonasMock} columns={columns} />
+    <PageContainer title="Persona">
+      <div className="flex flex-col h-full gap-5">
+        <div className="flex flex-col items-center">
+          <h3 className="font-bold text-lg text-neutral-800">
+            Mauricio Molina Quinteros
+          </h3>
+          <p className="text-sm text-neutral-500">@mqinfer12 (CI: 13621632)</p>
+        </div>
+        <div className="h-[calc(100%_-_68px)]">
+          <TableContainer columns={columns} data={Mock} />
+        </div>
+      </div>
     </PageContainer>
   );
 };

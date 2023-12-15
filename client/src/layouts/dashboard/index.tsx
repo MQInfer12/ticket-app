@@ -5,12 +5,13 @@ import styles from "./dashboard.module.css";
 import { useUser } from "../../store/user";
 import Loader from "../../global/components/loader/loader";
 import { useGet } from "../../hooks/useGet";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { User } from "../../global/interfaces/api/user";
 
 const Index = () => {
   const { state, setUser } = useUser();
   const { res } = useGet<User>("User/GetUser", state === "loading");
+  const [openAside, setOpenAside] = useState(false);
 
   useEffect(() => {
     if (res) {
@@ -27,8 +28,8 @@ const Index = () => {
   if (state === "unlogged") return <Navigate to="/" />;
   return (
     <div className={`${styles.container} bg-slate-100`}>
-      <Aside />
-      <Header />
+      <Aside open={openAside} setOpen={setOpenAside} />
+      <Header setOpen={setOpenAside} />
       <div style={{ gridArea: "outlet" }}>
         <Outlet />
       </div>

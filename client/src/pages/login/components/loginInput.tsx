@@ -1,33 +1,41 @@
 import { useId } from "react";
 
 type Props = {
-  label: string,
-  type: string,
-  icon: JSX.Element
-  value: string
-  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void
-}
+  label: string;
+  type: string;
+  icon: JSX.Element;
+  value: string;
+  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+};
 
-const LoginInput = ({label, type, value, onChange, icon} : Props) => {
+const LoginInput = ({ label, type, value, onChange, icon }: Props) => {
   const id = useId();
 
   return (
-    <div className="flex gap-4 items-center">
-      <div className="flex h-8 relative rounded-lg overflow-hidden items-center">
-        <label htmlFor="" className="absolute p-1 text-slate-400 text-md left-1">{label}</label>
-        <input 
-          id={id} 
-          type={type} 
-          className="h-full "
-          value={value}
-          onChange={onChange}
-        />
-        <div className="h-full aspect-square bg-white">
-          {icon}
-        </div>
-      </div>
+    <div className="flex h-10 relative w-full">
+      <input
+        id={id}
+        type={type}
+        className="peer h-full w-full rounded-lg pl-2 pr-10 py-2 bg-slate-600 text-slate-100 hover:border-2 hover:border-solid hover:border-emerald-600 focus:outline-none focus:ring-1 focus:ring-emerald-300 focus:border-emerald-300"
+        value={value}
+        onChange={onChange}
+      />
+      <label
+        htmlFor={id}
+        className={`absolute text-slate-50 text-md p-2 peer-focus:-top-7 peer-focus:text-sm transition-all duration-300 ${
+          value ? "-top-7 text-sm" : "top-0"
+        }`}
+      >
+        {label}
+      </label>
+      <label
+        htmlFor={id}
+        className="absolute right-0 h-full aspect-square border-none cursor-pointer p-2"
+      >
+        {icon}
+      </label>
     </div>
-  )
-}
+  );
+};
 
-export default LoginInput
+export default LoginInput;

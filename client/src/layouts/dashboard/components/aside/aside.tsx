@@ -5,31 +5,44 @@ import IconLink from "./iconLink";
 import Profile from "./profile";
 import Section from "./section";
 
-const Aside = () => {
+interface Props {
+  open: boolean;
+  setOpen: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
+const Aside = ({ open, setOpen }: Props) => {
+  let asideStyle =
+    "z-40 h-screen flex flex-col w-80 bg-slate-200 border-r border-solid border-slate-300 px-4 pt-6 pb-4 fixed lg:translate-x-0 lg:relative transition-all duration-300 ";
+  asideStyle += open ? "translate-x-0" : "-translate-x-full";
   return (
-    <aside
-      className="flex flex-col w-80 bg-slate-200 border-r border-solid border-slate-300 px-4 pt-6 pb-4 overflow-auto relative"
-      style={{ gridArea: "aside" }}
-    >
-      <Head />
-      <div className="flex flex-col justify-between flex-1">
-        <div className="flex-1 overflow-auto">
-          <Section title="MAIN">
-            <IconLink
-              icon={(active) => <IconEmpresa active={active} />}
-              label="Empresas"
-              to="/dashboard/empresas"
-            />
-            <IconLink
-              icon={(active) => <IconPersonas active={active} />}
-              label="Personas"
-              to="/dashboard/personas"
-            />
-          </Section>
+    <>
+      <div
+        onClick={() => setOpen(false)}
+        className={`fixed top-0 left-0 w-screen h-screen z-30 bg-black transition-opacity duration-300 lg:opacity-0 lg:pointer-events-none ${
+          open ? "opacity-20" : "opacity-0 pointer-events-none"
+        }`}
+      />
+      <aside className={asideStyle} style={{ gridArea: "aside" }}>
+        <Head setOpen={setOpen} />
+        <div className="flex flex-col justify-between flex-1">
+          <div className="flex-1 overflow-auto">
+            <Section title="MAIN">
+              <IconLink
+                icon={<IconEmpresa />}
+                label="Empresas"
+                to="/dashboard/empresas"
+              />
+              <IconLink
+                icon={<IconPersonas />}
+                label="Personas"
+                to="/dashboard/personas"
+              />
+            </Section>
+          </div>
+          <Profile />
         </div>
-        <Profile />
-      </div>
-    </aside>
+      </aside>
+    </>
   );
 };
 

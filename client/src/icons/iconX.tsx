@@ -11,18 +11,18 @@ const IconX = () => {
         <path
           id="Vector"
           stroke="#404040"
-          stroke-linecap="round"
-          stroke-linejoin="round"
+          strokeLinecap="round"
+          strokeLinejoin="round"
           d="m12.535714285714286 0.4642857142857143 -12.071428571428571 12.071428571428571"
-          stroke-width="1"
+          strokeWidth="1"
         ></path>
         <path
           id="Vector_2"
           stroke="#404040"
-          stroke-linecap="round"
-          stroke-linejoin="round"
+          strokeLinecap="round"
+          strokeLinejoin="round"
           d="m0.4642857142857143 0.4642857142857143 12.071428571428571 12.071428571428571"
-          stroke-width="1"
+          strokeWidth="1"
         ></path>
       </g>
     </svg>
