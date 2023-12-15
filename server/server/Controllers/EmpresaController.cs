@@ -16,8 +16,9 @@ namespace server.Controllers
             _db = db;
         }
 
-       /* [Authorize]*/
-        [HttpGet, Authorize(Roles ="SuperAdmin")]
+        /* [Authorize]*/
+        //[HttpGet, Authorize(Roles ="SuperAdmin")]
+        [HttpGet, Authorize]
         public IActionResult Get()
         {
             var companies = _db.Empresas;

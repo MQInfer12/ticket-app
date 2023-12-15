@@ -11,3 +11,9 @@ public partial class TipoRol
 
     public virtual ICollection<RolUsuario> RolUsuarios { get; set; } = new List<RolUsuario>();
 }
+
+public class TipoRolDTO
+{
+    public string Nombre { get; set; } = null!;
+
+}
