@@ -24,16 +24,19 @@ namespace server.Controllers
 
         }
 
-        private string GenerateToken(Usuario user)
+        private string GenerateToken(Usuario user, string nameRole, Guid roleId)
         {
             var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Jwt:Key"]));
             var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
 
             var claims = new List<Claim>(){
                 new Claim("UserId", user.Id.ToString()),
+                new Claim("RoleName", nameRole.ToString()),
+                new Claim("RoleId", roleId.ToString()),
             };
       
-            claims.Add(new Claim(ClaimTypes.Role, "SuperAdmin".ToString()));
+            //Add ROLE
+            claims.Add(new Claim(ClaimTypes.Role, nameRole.ToString()));
 
             var token = new JwtSecurityToken(
                 _config["Jwt:Issuer"],
@@ -46,7 +49,7 @@ namespace server.Controllers
         }
 
         [HttpGet, Authorize]
-        [Route("GetUser")]
+        [Route("GetUserByToken")]
         public IActionResult GetUserToken()
         {
 
@@ -70,6 +73,55 @@ namespace server.Controllers
             return Ok(new { Message = "Token obtenido", Data = userRes, Status = 200 });
         }
 
+        [HttpGet, Authorize]
+        [Route("GetUserById/{id}")]
+        public IActionResult GetUserById(Guid id)
+        {
+
+
+            var userRes = _db.RolUsuarios.Where(v => v.Idusuario == id)
+                .Join(_db.TipoRols,
+                userRole => userRole.Idtiporol,
+                roleType => roleType.Id,
+                (userRole, roleType) => new
+                {
+                    UserId = userRole.Idusuario, 
+                    RoleTypeId = userRole.Idtiporol,
+                    CompanyId = userRole.Idempresa,
+                    RoleName = roleType.Nombre
+                }).Join(_db.Usuarios,
+                userRole => userRole.UserId,
+                user => user.Id,
+                (userRole, user) => new
+                {
+                    UserId = userRole.UserId,
+                    RoleTypeId = userRole.RoleTypeId,
+                    CompanyId = userRole.CompanyId,
+                    RoleName = userRole.RoleName,
+                    UserName = user.NombreUsuario,
+                    Password = user.Contrasenia
+                }
+                ).Join(_db.Empresas,
+                 userRole => userRole.CompanyId,
+                 company => company.Id,
+                 (userRole, company) => new
+                 {
+                     UserId = userRole.UserId,
+                     RoleTypeId = userRole.RoleTypeId,
+                     CompanyId = userRole.CompanyId,
+                     RoleName = userRole.RoleName,
+                     UserName = userRole.UserName,
+                     Password = userRole.Password,
+                     CompanyName = company.Nombre,
+                     CompanyAddress = company.Direccion,
+                     CompanyState = company.Estado,
+                 }
+                 )
+                .First();
+
+            return Ok(new { Message = "Datos obtenidos", Data = userRes, Status = 200 });
+        }
+
         [HttpPost]
         [Route("Login")]
         public IActionResult Login(UsuarioDTO req)
@@ -84,7 +136,24 @@ namespace server.Controllers
                 if (passwordDecrypt == req.Contrasenia)
                 {
 
-                    var token = GenerateToken(user);
+                    //get the id RoleType from the table UserRol
+                    var userRol = _db.RolUsuarios.FirstOrDefault(v => v.Idusuario == user.Id);
+
+                    if(userRol == null)
+                    {
+                        return NotFound(new { Message = "No se encontro el rol de ese usuario", Data = ' ', Status = 404 });
+                    }
+
+                    //get the name of the rol iof the table roleType
+                    var roletype = _db.TipoRols.FirstOrDefault(v => v.Id == userRol.Idtiporol);
+
+                    if (roletype == null)
+                    {
+                        return NotFound(new { Message = "No se encontro el nombre de ese rol", Data = ' ', Status = 404 });
+                    }
+
+
+                    var token = GenerateToken(user, roletype.Nombre, roletype.Id);
                     return Ok(new { Message = "Bienvenido", Data = token, Status = 200 });
                 }
                 return BadRequest(new { Message = "Contraseña incorrecta", Data = ' ', Status = 409 });
@@ -98,6 +167,7 @@ namespace server.Controllers
         [Route("Register")]
         public IActionResult Register(RegisterDTO req)
         {
+            // ====================== SAVE IN PEOPLE TABLE ======================
             var existPeople = _db.Personas.Any(e => e.Ci == req.Ci);
             if (existPeople)
             {
@@ -116,6 +186,20 @@ namespace server.Controllers
                 return BadRequest(new { Message = "Las contraseñas no coindicen", Data = ' ', Status = 409 });
             }
 
+            //get role type
+            var roleType = _db.TipoRols.FirstOrDefault((v) => v.Nombre == "Cliente");
+            if(roleType == null)
+            {
+                return NotFound(new { Message = "No se encontro el rol Cliente", Data = ' ', Status = 404 });
+            }
+
+            //get company
+            var company = _db.Empresas.FirstOrDefault(v => v.Nombre == "CBBA");
+            if (company == null)
+            {
+                return NotFound(new { Message = "No se encontro la empresa global 'CBBA'", Data = ' ', Status = 404 });
+            }
+
             var people = new Persona
             {
                 Ci = req.Ci,
@@ -127,6 +211,8 @@ namespace server.Controllers
             _db.Personas.Add(people);
             _db.SaveChanges();
 
+
+            // ====================== SAVE IN USER TABLE ======================
             //Generate password
 
             var passwordHash = HashHelps.Encrypt(req.Contrasenia);
@@ -141,7 +227,19 @@ namespace server.Controllers
             _db.SaveChanges();
 
 
-            var token = GenerateToken(user);
+            // ====================== SAVE IN USERROLE TABLE ======================
+
+            var userRole = new RolUsuario
+            {
+                Idusuario = user.Id,
+                Idtiporol = roleType.Id,
+                Idempresa = company.Id,
+                Estado = true
+            };
+            _db.RolUsuarios.Add(userRole);
+            _db.SaveChanges();
+
+            var token = GenerateToken(user, roleType.Nombre, roleType.Id);
 
             return Ok(new { Message = "Se registro su cuenta con exito", Data = token, Status = 200 });
         }

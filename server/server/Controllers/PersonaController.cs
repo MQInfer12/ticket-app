@@ -66,8 +66,6 @@ namespace server.Controllers
                 }
             };
 
-
-
             _db.Usuarios.Add(user);
             _db.SaveChanges();
 

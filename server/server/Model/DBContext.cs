@@ -49,10 +49,6 @@ public partial class DBContext : DbContext
 
     public virtual DbSet<UsuarioCaja> UsuarioCajas { get; set; }
 
-   /* protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-
-        => optionsBuilder.UseNpgsql("Server=localhost;Port=5932;Database=ticketAppDB;User Id=postgres;Password=root;");*/
-
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.HasPostgresExtension("uuid-ossp");
