@@ -7,8 +7,13 @@ import {
 import IconLogout from "../../../icons/iconLogout";
 import { errorAlert, successAlert } from "../../../global/utils/alerts";
 import { useUser } from "../../../store/user";
+import IconMenu from "../../../icons/iconMenu";
 
-const Header = () => {
+interface Props {
+  setOpen: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
+const Header = ({ setOpen }: Props) => {
   const navigate = useNavigate();
   const { user, logout } = useUser();
 
@@ -30,9 +35,14 @@ const Header = () => {
       style={{ gridArea: "header" }}
       className="h-20 border-b border-solid border-slate-300 flex justify-between p-6 items-center"
     >
-      <div className="flex flex-col">
-        <small className="text-neutral-500">Bienvenido,</small>
-        <b className="text-neutral-800">{`${user?.nombres} ${user?.apPaterno}`}</b>
+      <div className="flex gap-5">
+        <div className="block lg:hidden">
+          <CircleButton onClick={() => setOpen(true)} icon={<IconMenu />} />
+        </div>
+        <div className="flex flex-col">
+          <small className="text-neutral-500">Bienvenido,</small>
+          <b className="text-neutral-800">{`${user?.nombres} ${user?.apPaterno}`}</b>
+        </div>
       </div>
       <div>
         <CircleButton onClick={handleLogout} icon={<IconLogout />} />
