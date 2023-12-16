@@ -23,17 +23,28 @@ namespace server.Controllers
             return Ok(new { Message = "Datos obtenidos con exito", Data = rolsType, Status = 200 });
         }
 
-        [HttpGet("GetRolesByUser/{id}"), Authorize]
+        [HttpGet("GetRolesByPersona/{id}"), Authorize]
         public IActionResult GetRolsByUser(Guid id)
         {
             //var userrols = _db.RolUsuarios.Where(v=> v.Idusuario == id);
-            var query= from rolUsuario in _db.RolUsuarios
+            /*var query= from rolUsuario in _db.RolUsuarios
                           join tipoRol in _db.TipoRols 
                           on rolUsuario.Idtiporol equals tipoRol.Id
                           where rolUsuario.Idusuario == id
                        select tipoRol.Nombre;
 
-            var userRols = query.ToList();
+            var userRols = query.ToList();*/
+            var userRols = _db.RolUsuarios.Where(ru => ru.IdusuarioNavigation.Idpersona == id).Select(
+                x => new
+                {
+                    id = x.Id,
+                    idRol = x.Idtiporol,
+                    rol = x.IdtiporolNavigation.Nombre,
+                    idEmpresa = x.Idempresa,
+                    empresa = x.IdempresaNavigation.Nombre,
+                    estado = x.Estado
+                }
+                ).ToList();
             if (userRols == null)
             {
                 return NotFound(new { Message = "Este usuario no tiene ningun rol", Data = ' ', Status = 404 });

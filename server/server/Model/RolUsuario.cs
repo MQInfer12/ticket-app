@@ -21,3 +21,11 @@ public partial class RolUsuario
 
     public virtual Usuario IdusuarioNavigation { get; set; } = null!;
 }
+
+public class RolUsuarioDTO
+{
+    public Guid Idusuario { get; set; }
+    public Guid Rol { get; set; }
+    public Guid Empresa { get; set; }
+    public Boolean Estado { get; set; } = true;
+}

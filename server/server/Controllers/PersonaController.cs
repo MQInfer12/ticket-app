@@ -150,6 +150,26 @@ namespace server.Controllers
             return Ok(new { Message = "Se edito la persona", Data = userGet, Status = 200 });
         }
 
+        [HttpGet("GetPersonaPage/{id}"), Authorize]
+        public IActionResult GetPersonaPage(Guid id)
+        {
+            var userData = _db.Usuarios.Where(u => u.Idpersona == id).Select(x => new
+            {
+                fullName = x.IdpersonaNavigation.Nombres + " " + x.IdpersonaNavigation.Appaterno + " " + x.IdpersonaNavigation.Apmaterno,
+                ci = x.IdpersonaNavigation.Ci,
+                idUsuario = x.Id,
+                usuario = x.NombreUsuario
+            }).FirstOrDefault();
+            var rols = _db.TipoRols.ToList();
+            var empresas = _db.Empresas.ToList();
+            if (userData == null)
+            {
+                return NotFound(new { Message = "No se encontro este usuario", Data = ' ', Status = 404 });
+            }
+
+            return Ok(new { Message = "Datos obtenidos con exito", Data = new { userData, rols, empresas }, Status = 200 });
+        }
+
 
         [HttpDelete("{id}"), Authorize]
         public IActionResult Delete(Guid id)

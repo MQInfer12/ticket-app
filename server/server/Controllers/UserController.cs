@@ -7,6 +7,7 @@ using System.Data;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
 namespace server.Controllers
 {
@@ -55,20 +56,21 @@ namespace server.Controllers
 
             string userId = User.FindFirst("UserId").Value; //get id
 
-            var userRes = _db.Usuarios.Where(u => u.Id == Guid.Parse(userId))
-                .Join(_db.Personas,
-                user => user.Idpersona,
-                person => person.Id,
-                (user, person) => new
-                {
-                    UserId = user.Id,
-                    NombreUsuario = user.NombreUsuario,
-                    Nombres = person.Nombres,
-                    Ci = person.Ci,
-                    ApPaterno = person.Appaterno,
-                    ApMaterno = person.Apmaterno,
-                }
-                ).First();
+            var userRes = _db.RolUsuarios.Where(u => u.Idusuario == Guid.Parse(userId)).Select(x=> new
+            {
+                UserId = x.Idusuario,
+                RoleTypeId = x.Idtiporol,
+                CompanyId = x.Idempresa,
+                RoleName = x.IdtiporolNavigation.Nombre,
+                UserName = x.IdusuarioNavigation.NombreUsuario,
+                Password = x.IdusuarioNavigation.Contrasenia,
+                CompanyName = x.IdempresaNavigation.Nombre,
+                CompanyAddress = x.IdempresaNavigation.Direccion,
+                CompanyState = x.IdempresaNavigation.Estado,
+                PersonName = x.IdusuarioNavigation.IdpersonaNavigation.Nombres,
+                PersonLastName = x.IdusuarioNavigation.IdpersonaNavigation.Appaterno,
+                PersonLast = x.IdusuarioNavigation.IdpersonaNavigation.Apmaterno
+            }).First();
 
             return Ok(new { Message = "Token obtenido", Data = userRes, Status = 200 });
         }
