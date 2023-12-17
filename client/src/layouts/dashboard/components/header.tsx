@@ -41,7 +41,7 @@ const Header = ({ setOpen }: Props) => {
         </div>
         <div className="flex flex-col">
           <small className="text-neutral-500">Bienvenido,</small>
-          <b className="text-neutral-800">{`${user?.nombres} ${user?.apPaterno}`}</b>
+          <b className="text-neutral-800">{`${user?.personName} ${user?.personLastName}`}</b>
         </div>
       </div>
       <div>

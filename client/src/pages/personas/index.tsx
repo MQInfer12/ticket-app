@@ -13,7 +13,7 @@ import FormInput from "../../global/components/form/formInput";
 import Button from "../../global/components/buttons/button.tsx";
 import { useNavigate } from "react-router-dom";
 
-const Index = () => {
+const Personas = () => {
   const { res, getData, pushData, modifyData, filterData } =
     useGet<PersonaUsuario[]>("Persona");
   const { state, item, openModal, closeModal } = useModal<PersonaUsuario>(
@@ -46,9 +46,9 @@ const Index = () => {
         return (
           <div className="flex justify-center">
             <Button
-              onClick={() => navigate(`/dashboard/persona/${item.idPersona}`)}
+              onClick={() => navigate(`/dashboard/personas/${item.idPersona}`)}
             >
-              Ver roles
+              Ver
             </Button>
           </div>
         );
@@ -113,4 +113,4 @@ const Index = () => {
   );
 };
 
-export default Index;
+export default Personas;

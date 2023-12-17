@@ -9,7 +9,7 @@ import FormInput from "../../global/components/form/formInput.tsx";
 import FormSelect from "../../global/components/form/formSelect.tsx";
 import { EmpresaForm, empresaSchema } from "./validations/empresa.ts";
 
-const Index = () => {
+const Empresas = () => {
   const { res, getData, pushData, filterData, modifyData } =
     useGet<Empresa[]>("Empresa");
   const { state, item, openModal, closeModal } = useModal<Empresa>(
@@ -17,10 +17,6 @@ const Index = () => {
   );
 
   const columns = [
-    {
-      header: "#",
-      accessorFn: (_: any, i: number) => i + 1,
-    },
     {
       header: "Nombre",
       accessorKey: "nombre",
@@ -57,32 +53,32 @@ const Index = () => {
           validationSchema={empresaSchema}
           post={{
             route: "Empresa",
-            onBody: value => ({
+            onBody: (value) => ({
               ...value,
               estado: value.estado === "Activo",
             }),
-            onSuccess: data => {
+            onSuccess: (data) => {
               pushData(data);
               closeModal();
-            }
+            },
           }}
           put={{
             route: `Empresa/${item?.id}`,
-            onBody: value => ({
+            onBody: (value) => ({
               ...value,
               estado: value.estado === "Activo",
             }),
-            onSuccess: data => {
+            onSuccess: (data) => {
               modifyData(data, (value) => value.id === data.id);
               closeModal();
-            }
+            },
           }}
           del={{
             route: `Empresa/${item?.id}`,
-            onSuccess: data => {
+            onSuccess: (data) => {
               filterData((value) => value.id !== data.id);
               closeModal();
-            }
+            },
           }}
         >
           <FormInput title="Nombre" name="nombre" />
@@ -101,4 +97,4 @@ const Index = () => {
   );
 };
 
-export default Index;
+export default Empresas;

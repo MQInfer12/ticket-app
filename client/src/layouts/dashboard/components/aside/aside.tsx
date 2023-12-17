@@ -1,4 +1,5 @@
 import IconEmpresa from "../../../../icons/iconEmpresa";
+import IconEvent from "../../../../icons/iconEvent";
 import IconPersonas from "../../../../icons/iconPersonas";
 import Head from "./head";
 import IconLink from "./iconLink";
@@ -26,7 +27,7 @@ const Aside = ({ open, setOpen }: Props) => {
         <Head setOpen={setOpen} />
         <div className="flex flex-col justify-between flex-1">
           <div className="flex-1 overflow-auto">
-            <Section title="MAIN">
+            <Section title="ADMINISTRACIÓN">
               <IconLink
                 icon={<IconEmpresa />}
                 label="Empresas"
@@ -36,6 +37,13 @@ const Aside = ({ open, setOpen }: Props) => {
                 icon={<IconPersonas />}
                 label="Personas"
                 to="/dashboard/personas"
+              />
+            </Section>
+            <Section title="ENTRADAS">
+              <IconLink
+                icon={<IconEvent />}
+                label="Eventos"
+                to="/dashboard/eventos"
               />
             </Section>
           </div>

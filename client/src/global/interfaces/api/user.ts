@@ -2,10 +2,15 @@ import { Roles } from "../types/roles";
 
 export interface User {
   userId: string;
-  nombreUsuario: string;
-  nombres: string;
-  ci: string;
-  apPaterno: string | null;
-  apMaterno: string | null;
-  nombreRol: Roles
+  roleTypeId: string;
+  companyId: string;
+  roleName: Roles;
+  userName: string;
+  password: string;
+  companyName: string;
+  companyAddress: string;
+  companyState: boolean;
+  personName: string;
+  personLastName: string | null;
+  personLast: string | null;
 }

@@ -52,7 +52,7 @@ const TanstackTable = ({
     onClickRow ? "cursor-pointer" : ""
   }`;
   return (
-    <div className="overflow-auto">
+    <div className="overflow-auto w-full">
       <table className="w-full border-separate border-spacing-0">
         <thead className="sticky top-0">
           {table.getHeaderGroups().map((group) => (

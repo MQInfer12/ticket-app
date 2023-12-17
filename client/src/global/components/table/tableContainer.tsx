@@ -21,7 +21,13 @@ const TableContainer = ({ data, columns, reload, add, onClickRow }: Props) => {
       <TableControls filter={[filter, setFilter]} reload={reload} add={add} />
       {data ? (
         <TanstackTable
-          columns={columns}
+          columns={[
+            /* {
+              header: "#",
+              accessorFn: (_: any, i: number) => i + 1,
+            }, */
+            ...columns,
+          ]}
           data={data}
           filter={filter}
           setFilter={setFilter}

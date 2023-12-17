@@ -4,6 +4,7 @@ import Dashboard from "./layouts/dashboard";
 import Empresas from "./pages/empresas";
 import Personas from "./pages/personas";
 import Persona from "./pages/persona";
+import Eventos from "./pages/eventos";
 
 function App() {
   return (
@@ -13,7 +14,8 @@ function App() {
         <Route path="/dashboard" element={<Dashboard />}>
           <Route path="/dashboard/empresas" element={<Empresas />} />
           <Route path="/dashboard/personas" element={<Personas />} />
-          <Route path="/dashboard/persona/:id" element={<Persona />} />
+          <Route path="/dashboard/personas/:id" element={<Persona />} />
+          <Route path="/dashboard/eventos" element={<Eventos />} />
         </Route>
       </Routes>
     </HashRouter>
