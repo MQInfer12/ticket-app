@@ -28,7 +28,7 @@ const LoginForm = () => {
     if (!resLogin) return;
     const token = resLogin.data;
     setAuthCookie(token);
-    const resUser = await sendRequest<User>("User/GetUser", null, {
+    const resUser = await sendRequest<User>("User/GetUserByToken", null, {
       method: "GET",
     });
     if (!resUser) return;

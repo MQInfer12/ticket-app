@@ -2,9 +2,11 @@ import { useParams } from "react-router-dom";
 import PageContainer from "../../global/components/pageContainer";
 import TableContainer from "../../global/components/table/tableContainer";
 import Mock from "../../mocks/rolUsuario.json";
+import { useGet } from "../../hooks/useGet";
 
 const Index = () => {
   const { id } = useParams();
+  const { res } = useGet(`User/GetUserById/${id}`);
 
   const columns = [
     {
@@ -20,6 +22,8 @@ const Index = () => {
       accessorKey: "estado",
     },
   ];
+
+  console.log(res);
 
   return (
     <PageContainer title="Persona">

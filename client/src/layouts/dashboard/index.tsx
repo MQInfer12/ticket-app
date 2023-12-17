@@ -10,7 +10,7 @@ import { User } from "../../global/interfaces/api/user";
 
 const Index = () => {
   const { state, setUser } = useUser();
-  const { res } = useGet<User>("User/GetUser", state === "loading");
+  const { res } = useGet<User>("User/GetUserByToken", state === "loading");
   const [openAside, setOpenAside] = useState(false);
 
   useEffect(() => {
