@@ -10,9 +10,11 @@ const Tabs = <T,>({ page, pages, setPage }: Props<T>) => {
       {pages.map((p, index) => (
         <button
           key={index}
-          className={`px-5 py-2 text-sm border-b border-slate-300 text-neutral-600 transition-all duration-300 hover:opacity-80 ${
-            page === p ? "text-emerald-500 border-emerald-500" : ""
-          }`}
+          className={`px-5 py-2 text-sm border-b transition-all duration-300 hover:opacity-80`}
+          style={{
+            color: page === p ? "rgb(16 185 129)" : "rgb(82 82 82)",
+            borderColor: page === p ? "rgb(16 185 129)" : "rgb(203 213 225)",
+          }}
           onClick={() => setPage(p as T)}
         >
           {p}

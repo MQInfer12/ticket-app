@@ -1,5 +1,7 @@
 import IconEmpresa from "../../../../icons/iconEmpresa";
 import IconEvent from "../../../../icons/iconEvent";
+import IconExpenses from "../../../../icons/iconExpenses";
+import IconIncomes from "../../../../icons/iconIncomes";
 import IconPersonas from "../../../../icons/iconPersonas";
 import Head from "./head";
 import IconLink from "./iconLink";
@@ -44,6 +46,18 @@ const Aside = ({ open, setOpen }: Props) => {
                 icon={<IconEvent />}
                 label="Eventos"
                 to="/dashboard/eventos"
+              />
+            </Section>
+            <Section title="MOVIMIENTOS">
+              <IconLink
+                icon={<IconIncomes />}
+                label="Ingresos"
+                to="/dashboard/ingresos"
+              />
+              <IconLink
+                icon={<IconExpenses />}
+                label="Egresos"
+                to="/dashboard/egresos"
               />
             </Section>
           </div>
