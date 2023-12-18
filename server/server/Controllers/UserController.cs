@@ -102,7 +102,10 @@ namespace server.Controllers
             {
                 return NotFound(new { Message = "No se encontro el id de ese usuario", Data = ' ', Status = 404 });
             }
-            Console.WriteLine(userRes.Foto);
+            if (userRes.Foto == null)
+            {
+                return NotFound(new { Message = "No se encontro la foto de este usuario", Data = ' ', Status = 404 });
+            }
             var path = Path.Combine(Directory.GetCurrentDirectory(),
                 "wwwroot", "UserImage", userRes.Foto);
 
