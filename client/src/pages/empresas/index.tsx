@@ -8,8 +8,11 @@ import Form from "../../global/components/form/form.tsx";
 import FormInput from "../../global/components/form/formInput.tsx";
 import FormSelect from "../../global/components/form/formSelect.tsx";
 import { EmpresaForm, empresaSchema } from "./validations/empresa.ts";
+import Button from "../../global/components/buttons/button.tsx";
+import { useNavigate } from "react-router-dom";
 
 const Empresas = () => {
+  const navigate = useNavigate();
   const { res, getData, pushData, filterData, modifyData } =
     useGet<Empresa[]>("Empresa");
   const { state, item, openModal, closeModal } = useModal<Empresa>(
@@ -30,6 +33,19 @@ const Empresas = () => {
       header: "Estado",
       accessorKey: "estado",
       cell: (info: any) => (info.getValue() ? "Activo" : "Desactivo"),
+    },
+    {
+      header: "Acciones",
+      cell: (cell: any) => {
+        const item: Empresa = cell.row.original;
+        return (
+          <div className="flex justify-center">
+            <Button onClick={() => navigate(`/dashboard/empresas/${item.id}`)}>
+              Ver
+            </Button>
+          </div>
+        );
+      },
     },
   ];
 
