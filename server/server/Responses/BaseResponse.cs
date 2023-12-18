@@ -2,20 +2,11 @@
 
 namespace server.Responses
 {
-    public class BaseResponse
+    public class BaseResponse<T>
     {
-
-
-        [JsonIgnore(Condition = JsonIgnoreCondition.Always)]
-        public bool Success { get; set; }
-
-        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-
-        public string ErrorCode { get; set; }
-
-        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-
-        public string Error { get; set; }
+        public string Message { get; set; }
+        public int Status { get; set; }
+        public T Data { get; set; }
 
     }
 }

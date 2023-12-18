@@ -60,7 +60,9 @@ namespace server.Controllers
 
             string userId = User.FindFirst("UserId").Value; //get id
 
-            var userRes = _db.RolUsuarios.Where(u => u.Idusuario == Guid.Parse(userId)).Select(x=> new
+            var userRes = _db.RolUsuarios
+                .Where(u => u.Idusuario == Guid.Parse(userId))
+                .Select(x=> new
             {
                 UserId = x.Idusuario,
                 RoleTypeId = x.Idtiporol,
