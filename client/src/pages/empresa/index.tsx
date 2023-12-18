@@ -1,6 +1,5 @@
 import { useParams } from "react-router-dom";
 import PageContainer from "../../global/components/pageContainer";
-import TableContainer from "../../global/components/table/tableContainer";
 import { useGet } from "../../hooks/useGet";
 import { Empresa as EmpresaType } from "../../global/interfaces/api/empresa";
 import Loader from "../../global/components/loader/loader";

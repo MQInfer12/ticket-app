@@ -23,7 +23,7 @@ const Eventos = () => {
     },
     {
       header: "Acciones",
-      cell: (cell: any) => {
+      cell: () => {
         /* const item = cell.row.original; */
         return (
           <div className="flex justify-center">
