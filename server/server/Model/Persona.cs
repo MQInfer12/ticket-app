@@ -14,6 +14,7 @@ public partial class Persona
     public string? Appaterno { get; set; }
 
     public string? Apmaterno { get; set; }
+    public string? Foto { get; set; }
 
     public virtual ICollection<Socio> Socios { get; set; } = new List<Socio>();
 

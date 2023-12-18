@@ -87,7 +87,7 @@ namespace server.Migrations
                         .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("character varying(50)")
-                        .HasColumnName("contacto");
+                        .HasColumnName("Nombrecontacto");
 
                     b.Property<Guid>("Personaempresa")
                         .HasColumnType("uuid")
@@ -370,6 +370,11 @@ namespace server.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("character varying(50)")
                         .HasColumnName("ci");
+
+                    b.Property<string>("Foto")
+                        .HasMaxLength(500)
+                        .HasColumnType("character varying(500)")
+                        .HasColumnName("foto");
 
                     b.Property<string>("Nombres")
                         .IsRequired()

@@ -1,13 +1,17 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
+using server.Dtos;
+using server.Helpers;
 using server.Helps;
 using server.Model;
+using System;
 using System.Data;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace server.Controllers
 {
@@ -75,6 +79,35 @@ namespace server.Controllers
             return Ok(new { Message = "Token obtenido", Data = userRes, Status = 200 });
         }
 
+
+        [HttpGet]
+        [Route("GetimgPerson/{userId}")]
+        public IActionResult GetImgPerson(Guid userId)
+        {
+    
+            var userRes = _db.Usuarios
+                .Where(v => v.Id == userId)
+                .Join(_db.Personas, 
+                user=> user.Idpersona,
+                person => person.Id, 
+                (user, person) => new
+                {
+                    Foto = person.Foto,
+                }
+                ).First();
+
+            if(userRes == null)
+            {
+                return NotFound(new { Message = "No se encontro el id de ese usuario", Data = ' ', Status = 404 });
+            }
+            Console.WriteLine(userRes.Foto);
+            var path = Path.Combine(Directory.GetCurrentDirectory(),
+                "wwwroot", "UserImage", userRes.Foto);
+
+            return PhysicalFile(path, "image/png");
+        }
+
+
         [HttpGet, Authorize]
         [Route("GetUserById/{id}")]
         public IActionResult GetUserById(Guid id)
@@ -133,7 +166,7 @@ namespace server.Controllers
             {
                 //Verify password
 
-                var passwordDecrypt = HashHelps.Decrypt(user.Contrasenia);
+                var passwordDecrypt = HashHelper.Decrypt(user.Contrasenia);
 
                 if (passwordDecrypt == req.Contrasenia)
                 {
@@ -165,9 +198,31 @@ namespace server.Controllers
         }
 
 
-        [HttpPost]
-        [Route("Register")]
-        public IActionResult Register(RegisterDTO req)
+ 
+        private string saveImg(string fileName, RegisterDTO model)
+        {
+            var uniqueFileName = FileHelper.GetUniqueFileName(fileName);
+
+            var filePath = Path.Combine("wwwroot", "UserImage", uniqueFileName);
+
+            //var filePath = Path.Combine(uploads, uniqueFileName);
+
+            using (var stream = new FileStream(filePath, FileMode.Create))
+            {
+                model.Image.CopyTo(stream);
+               
+            }
+
+            //Directory.CreateDirectory(Path.GetDirectoryName(filePath));
+
+       
+            return uniqueFileName;
+
+        
+        }
+
+        [HttpPost("Register")]
+        public IActionResult Register([FromForm] RegisterDTO req)
         {
             // ====================== SAVE IN PEOPLE TABLE ======================
             var existPeople = _db.Personas.Any(e => e.Ci == req.Ci);
@@ -202,22 +257,27 @@ namespace server.Controllers
                 return NotFound(new { Message = "No se encontro la empresa global 'CBBA'", Data = ' ', Status = 404 });
             }
 
+            //save img
+            var filePathImg = saveImg(req.Image.FileName, req);
+
             var people = new Persona
             {
                 Ci = req.Ci,
                 Apmaterno = req.Apmaterno,
                 Appaterno = req.Appaterno,
                 Nombres = req.Nombres,
+                Foto = filePathImg
             };
 
             _db.Personas.Add(people);
             _db.SaveChanges();
-
+          
+          
 
             // ====================== SAVE IN USER TABLE ======================
             //Generate password
 
-            var passwordHash = HashHelps.Encrypt(req.Contrasenia);
+            var passwordHash = HashHelper.Encrypt(req.Contrasenia);
 
             var user = new Usuario
             {
