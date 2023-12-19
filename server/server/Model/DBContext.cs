@@ -104,7 +104,7 @@ public partial class DBContext : DbContext
                 .HasColumnName("id");
             entity.Property(e => e.ContactoName)
                 .HasMaxLength(50)
-                .HasColumnName("contacto");
+                .HasColumnName("Nombrecontacto");
             entity.Property(e => e.Personaempresa).HasColumnName("personaempresa");
             entity.Property(e => e.Tipo)
                 .HasMaxLength(50)
@@ -292,6 +292,10 @@ public partial class DBContext : DbContext
             entity.Property(e => e.Nombres)
                 .HasMaxLength(50)
                 .HasColumnName("nombres");
+            entity.Property(e => e.Foto)
+                .HasMaxLength(500)
+                .HasColumnName("foto")
+                ;
         });
 
         modelBuilder.Entity<RolUsuario>(entity =>

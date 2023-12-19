@@ -12,94 +12,94 @@ const IconIncomes = () => {
         <path
           id="Vector 2494"
           stroke={color}
-          stroke-linecap="round"
-          stroke-linejoin="round"
+          strokeLinecap="round"
+          strokeLinejoin="round"
           d="M6.5 10.678571428571429v1.8571428571428572"
-          stroke-width="1"
+          strokeWidth="1"
         ></path>
         <path
           id="Vector 2495"
           stroke={color}
-          stroke-linecap="round"
-          stroke-linejoin="round"
+          strokeLinecap="round"
+          strokeLinejoin="round"
           d="M8.821428571428571 9.75v1.8571428571428572"
-          stroke-width="1"
+          strokeWidth="1"
         ></path>
         <path
           id="Vector 2496"
           stroke={color}
-          stroke-linecap="round"
-          stroke-linejoin="round"
+          strokeLinecap="round"
+          strokeLinejoin="round"
           d="M4.178571428571429 9.75v1.8571428571428572"
-          stroke-width="1"
+          strokeWidth="1"
         ></path>
         <g id="Group 4527">
           <path
             id="Ellipse 1090"
             stroke={color}
-            stroke-linecap="round"
-            stroke-linejoin="round"
+            strokeLinecap="round"
+            strokeLinejoin="round"
             d="M2.553571428571429 4.410714285714286c-0.12820785714285715 0 -0.23214285714285715 -0.103935 -0.23214285714285715 -0.23214285714285715s0.103935 -0.23214285714285715 0.23214285714285715 -0.23214285714285715"
-            stroke-width="1"
+            strokeWidth="1"
           ></path>
           <path
             id="Ellipse 1091"
             stroke={color}
-            stroke-linecap="round"
-            stroke-linejoin="round"
+            strokeLinecap="round"
+            strokeLinejoin="round"
             d="M2.553571428571429 4.410714285714286c0.12820785714285715 0 0.23214285714285715 -0.103935 0.23214285714285715 -0.23214285714285715s-0.103935 -0.23214285714285715 -0.23214285714285715 -0.23214285714285715"
-            stroke-width="1"
+            strokeWidth="1"
           ></path>
         </g>
         <g id="Group 4528">
           <path
             id="Ellipse 1090_2"
             stroke={color}
-            stroke-linecap="round"
-            stroke-linejoin="round"
+            strokeLinecap="round"
+            strokeLinejoin="round"
             d="M10.446428571428571 4.410714285714286c-0.1282357142857143 0 -0.23214285714285715 -0.103935 -0.23214285714285715 -0.23214285714285715s0.10390714285714286 -0.23214285714285715 0.23214285714285715 -0.23214285714285715"
-            stroke-width="1"
+            strokeWidth="1"
           ></path>
           <path
             id="Ellipse 1091_2"
             stroke={color}
-            stroke-linecap="round"
-            stroke-linejoin="round"
+            strokeLinecap="round"
+            strokeLinejoin="round"
             d="M10.446428571428571 4.410714285714286c0.1282357142857143 0 0.23214285714285715 -0.103935 0.23214285714285715 -0.23214285714285715s-0.10390714285714286 -0.23214285714285715 -0.23214285714285715 -0.23214285714285715"
-            stroke-width="1"
+            strokeWidth="1"
           ></path>
         </g>
         <path
           id="Vector 3"
           stroke={color}
-          stroke-linecap="round"
-          stroke-linejoin="round"
+          strokeLinecap="round"
+          strokeLinejoin="round"
           d="M7.487749285714286 3.1467521428571428c-0.03396714285714286 -0.09611642857142857 -0.08639428571428572 -0.18351357142857144 -0.1530007142857143 -0.25793857142857146 -0.14169071428571428 -0.15831214285714287 -0.34760142857142856 -0.25793857142857146 -0.5767821428571429 -0.25793857142857146h-0.5989564285714286c-0.3814757142857143 0 -0.6907271428571429 0.30925142857142857 -0.6907271428571429 0.6907364285714286 0 0.3246007142857143 0.22601428571428572 0.60541 0.5431214285714285 0.6747742857142858l0.9119221428571429 0.199485c0.35524357142857144 0.07770285714285714 0.6084557142857142 0.39251642857142854 0.6084557142857142 0.7561635714285715 0 0.4273657142857143 -0.34645 0.7740942857142857 -0.7738157142857143 0.7740942857142857h-0.5158771428571429c-0.33692285714285714 0 -0.6235542857142857 -0.21532642857142859 -0.7297828571428572 -0.5158771428571429"
-          stroke-width="1"
+          strokeWidth="1"
         ></path>
         <path
           id="Vector 2489"
           stroke={color}
-          stroke-linecap="round"
-          stroke-linejoin="round"
+          strokeLinecap="round"
+          strokeLinejoin="round"
           d="M6.5 2.6309585714285717V1.8571428571428572"
-          stroke-width="1"
+          strokeWidth="1"
         ></path>
         <path
           id="Vector 2490"
           stroke={color}
-          stroke-linecap="round"
-          stroke-linejoin="round"
+          strokeLinecap="round"
+          strokeLinejoin="round"
           d="M6.5 6.500083571428572v-0.7738157142857143"
-          stroke-width="1"
+          strokeWidth="1"
         ></path>
         <path
           id="Vector 2493"
           stroke={color}
-          stroke-linecap="round"
-          stroke-linejoin="round"
+          strokeLinecap="round"
+          strokeLinejoin="round"
           d="M11.607142857142858 0.4642857142857143h-10.214285714285715c-0.5128360714285715 0 -0.9285714285714286 0.41573535714285714 -0.9285714285714286 0.9285714285714286v5.571428571428571c0 0.5128314285714286 0.41573535714285714 0.9285714285714286 0.9285714285714286 0.9285714285714286h10.214285714285715c0.51285 0 0.9285714285714286 -0.41574 0.9285714285714286 -0.9285714285714286v-5.571428571428571c0 -0.5128360714285715 -0.4157214285714286 -0.9285714285714286 -0.9285714285714286 -0.9285714285714286Z"
-          stroke-width="1"
+          strokeWidth="1"
         ></path>
       </g>
     </svg>

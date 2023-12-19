@@ -6,6 +6,7 @@ import Personas from "./pages/personas";
 import Persona from "./pages/persona";
 import Eventos from "./pages/eventos";
 import Evento from "./pages/evento";
+import Empresa from "./pages/empresa";
 
 function App() {
   return (
@@ -14,6 +15,7 @@ function App() {
         <Route path="/" element={<Login />} />
         <Route path="/dashboard" element={<Dashboard />}>
           <Route path="/dashboard/empresas" element={<Empresas />} />
+          <Route path="/dashboard/empresas/:id" element={<Empresa />} />
           <Route path="/dashboard/personas" element={<Personas />} />
           <Route path="/dashboard/personas/:id" element={<Persona />} />
           <Route path="/dashboard/eventos" element={<Eventos />} />

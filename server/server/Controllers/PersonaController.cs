@@ -56,7 +56,7 @@ namespace server.Controllers
             var user = new Usuario
             {
                 NombreUsuario = req.NombreUsurio,
-                Contrasenia = HashHelps.Encrypt(req.Password),
+                Contrasenia = HashHelper.Encrypt(req.Password),
                 IdpersonaNavigation = new Persona
                 {
                     Ci = req.Ci,

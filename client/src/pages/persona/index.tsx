@@ -7,6 +7,7 @@ import ProfilePic from "../../global/components/profilePic.tsx";
 import Rols from "./components/rols.tsx";
 import Tabs from "../../global/components/tabs/tabs.tsx";
 import { useState } from "react";
+import Contactos from "./components/contactos.tsx";
 
 type Page = "Roles" | "Contactos";
 
@@ -45,7 +46,7 @@ const Persona = () => {
                 roles={personaPage.data.rols}
               />
             ) : (
-              page === "Contactos" && <></>
+              page === "Contactos" && <Contactos />
             )}
           </div>
         </div>
