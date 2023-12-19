@@ -13,3 +13,12 @@ public partial class Contacto
 
     public Guid Personaempresa { get; set; }
 }
+public class ContactoDTO
+{
+    public string Contacto { get; set; }
+
+    public string TipoContacto { get; set; } 
+
+    public Guid Personaempresa { get; set; }
+
+}
