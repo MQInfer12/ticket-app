@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using server.Dtos;
 using server.Model;
 using server.Responses;
+using System.ComponentModel.Design;
 
 namespace server.Controllers
 {
@@ -106,14 +107,17 @@ namespace server.Controllers
 
             _db.TipoEventos.Add(eventType);
             _db.SaveChanges();
-
-            var eventTypeRes = new EventTypeResponse
-            {
-                Amount = eventType.Cantidad,
-                Date = eventType.Fecha,
-                CompanyId = eventType.Idempresa,
-                TypeEventName = eventType.Nombre,
-            };
+            var eventTypeRes = _db.TipoEventos
+                .Where(v => v.Id == eventType.Id)
+                .Select(x => new EventTypeResponse
+                {
+                    Id = x.Id,
+                    TypeEventName = x.Nombre,
+                    Date = x.Fecha,
+                    Amount = x.Cantidad,
+                    CompanyId = x.Idempresa,
+                    CompanyName = x.IdempresaNavigation.Nombre,
+                }).First();
 
             return Ok(new { Message = "Se creo el tipo de evento", Data = eventTypeRes, Status = 201 });
         }
@@ -137,13 +141,17 @@ namespace server.Controllers
             _db.TipoEventos.Update(existingEventType);
             _db.SaveChanges();
 
-            var eventTypeRes = new EventTypeResponse
-            {
-                Amount = existingEventType.Cantidad,
-                Date = existingEventType.Fecha,
-                CompanyId = existingEventType.Idempresa,
-                TypeEventName = existingEventType.Nombre,
-            };
+            var eventTypeRes = _db.TipoEventos
+                .Where(v => v.Id == existingEventType.Id)
+                .Select(x => new EventTypeResponse
+                {
+                    Id = x.Id,
+                    TypeEventName = x.Nombre,
+                    Date = x.Fecha,
+                    Amount = x.Cantidad,
+                    CompanyId = x.Idempresa,
+                    CompanyName = x.IdempresaNavigation.Nombre,
+                }).First();
 
             return Ok(new { Message = "Se edito la empresa", Data = eventTypeRes, Status = 200 });
         }

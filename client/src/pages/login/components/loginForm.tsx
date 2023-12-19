@@ -2,21 +2,15 @@ import LoginInput from "./loginInput";
 import UserIcon from "../../../icons/iconProfile";
 import LockIcon from "../../../icons/iconLock";
 import { useState } from "react";
-import { setAuthCookie } from "../../../global/utils/authCookie";
-import { useNavigate } from "react-router-dom";
-import { User } from "../../../global/interfaces/api/user";
-import { successAlert } from "../../../global/utils/alerts";
-import { useUser } from "../../../store/user";
 import { useRequest } from "../../../hooks/useRequest";
 import Card from "./card";
+import { UserRol } from "../../../global/interfaces/api/rolUsuario";
 
 interface Props {
-  change: (id: string) => void;
+  change: (rolesEmpresa: UserRol[]) => void;
 }
 
 const LoginForm = ({ change }: Props) => {
-  const navigate = useNavigate();
-  const { setUser } = useUser();
   const { sendRequest } = useRequest();
 
   const [form, setForm] = useState({
@@ -28,17 +22,9 @@ const LoginForm = ({ change }: Props) => {
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>
   ) => {
     e.preventDefault();
-    const resLogin = await sendRequest<string>("User/Login", form);
+    const resLogin = await sendRequest<UserRol[]>("User/Login", form);
     if (!resLogin) return;
-    const token = resLogin.data;
-    setAuthCookie(token);
-    const resUser = await sendRequest<User>("User/GetUserByToken", null, {
-      method: "GET",
-    });
-    if (!resUser) return;
-    const user = resUser.data;
-    setUser(user);
-    change(token);
+    change(resLogin.data);
   };
 
   return (

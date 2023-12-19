@@ -1,10 +1,12 @@
 [
   {
+    "empresa": "Club Deportivo Aurora",
     "nombre": "Concierto de Romeo Santos",
     "fecha": "16-12-2023",
     "cantidad": 3000
   },
   {
+    "empresa": "Club Deportivo Jorge Wilstermann",
     "nombre": "Partido clásico",
     "fecha": "20-12-2023",
     "cantidad": 6000

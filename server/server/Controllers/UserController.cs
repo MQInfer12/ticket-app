@@ -79,7 +79,7 @@ namespace server.Controllers
                     PersonName = x.IdusuarioNavigation.IdpersonaNavigation.Nombres,
                     PersonLastName = x.IdusuarioNavigation.IdpersonaNavigation.Appaterno,
                     PersonLast = x.IdusuarioNavigation.IdpersonaNavigation.Apmaterno
-                });
+                }).First();
 
             return Ok(new { Message = "Token obtenido", Data = userRes, Status = 200 });
         }
@@ -178,7 +178,22 @@ namespace server.Controllers
 
                 if (passwordDecrypt == req.Contrasenia)
                 {
-                    return Ok(new { Message = "Bienvenido", Data = user, Status = 200 });
+                    var userRols = _db.RolUsuarios.Where(ru => ru.IdusuarioNavigation.Idpersona == user.Idpersona).Select(
+                                    x => new
+                                    {
+                                        id = x.Id,
+                                        idRol = x.Idtiporol,
+                                        rol = x.IdtiporolNavigation.Nombre,
+                                        idEmpresa = x.Idempresa,
+                                        empresa = x.IdempresaNavigation.Nombre,
+                                        estado = x.Estado
+                                    }
+                                ).ToList();
+                    if (userRols.Count == 0)
+                    {
+                        return NotFound(new { Message = "Este usuario no tiene ningun rol", Data = ' ', Status = 404 });
+                    }
+                    return Ok(new { Message = "Bienvenido", Data = userRols, Status = 200 });
                 }
                 return BadRequest(new { Message = "Contraseña incorrecta", Data = ' ', Status = 409 });
 

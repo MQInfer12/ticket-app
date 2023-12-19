@@ -32,7 +32,7 @@ const FormSelect = ({ title, placeholder, name, children }: Props) => {
         </Field>
         <ErrorMessage name={name}>
           {(msg) => (
-            <div className="absolute right-0 top-0 p-2 h-full aspect-square z-10 animate-[appear_.5s]">
+            <div className="absolute right-3 top-0 p-2 h-full aspect-square z-10 animate-[appear_.5s]">
               <div className="relative">
                 <IconError />
                 <small className="hidden peer-hover:block absolute max-w-xs w-max bg-slate-100 right-2/4 shadow-lg border border-slate-300 text-xs px-2 py-2 rounded-lg rounded-tr-none text-rose-800 animate-[appear_.5s]">

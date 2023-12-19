@@ -1,20 +1,33 @@
-import { useGet } from "../../../hooks/useGet";
 import Card from "./card";
 import { UserRol } from "../../../global/interfaces/api/rolUsuario";
 import { useNavigate } from "react-router-dom";
 import { successAlert } from "../../../global/utils/alerts";
+import { useRequest } from "../../../hooks/useRequest";
+import { setAuthCookie } from "../../../global/utils/authCookie";
+import { User } from "../../../global/interfaces/api/user";
+import { useUser } from "../../../store/user";
 
 interface Props {
-  id: string;
+  rolesEmpresa: UserRol[];
 }
 
-const RolForm = ({ id }: Props) => {
+const RolForm = ({ rolesEmpresa }: Props) => {
   const navigate = useNavigate();
-  const { res } = useGet<UserRol[]>(
-    `TipoRol/GetRolesByPersona/f25e03fe-e60c-4554-9032-029712fe8820`
-  );
+  const { sendRequest } = useRequest();
+  const { setUser } = useUser();
 
-  const handleLogin = () => {
+  const handleRolLogin = async (id: string) => {
+    const token = await sendRequest<string>(`User/LoginByRole/${id}`, null, {
+      method: "GET",
+    });
+    if (!token) return;
+    setAuthCookie(token.data);
+    const resUser = await sendRequest<User>("User/GetUserByToken", null, {
+      method: "GET",
+    });
+    if (!resUser) return;
+    const user = resUser.data;
+    setUser(user);
     navigate("/dashboard/empresas");
     successAlert("Inicio de sesión correcto");
   };
@@ -22,13 +35,13 @@ const RolForm = ({ id }: Props) => {
   return (
     <Card title="Seleccione cuenta">
       <div className="flex flex-col gap-4">
-        {res?.data.map((data) => (
-          <div className="flex flex-col gap-2">
+        {rolesEmpresa.map((data) => (
+          <div className="flex flex-col gap-2" key={data.id}>
             <p className="text-neutral-50">
               {data.empresa} {data.rol}
             </p>
             <button
-              onClick={handleLogin}
+              onClick={() => handleRolLogin(data.id)}
               className="text-slate-800 bg-emerald-400 rounded-2xl h-8 w-[80%] hover:bg-emerald-500 focus:outline-none focus:bg-emerald-500"
             >
               Ingresar

@@ -104,7 +104,7 @@ public partial class DBContext : DbContext
                 .HasColumnName("id");
             entity.Property(e => e.ContactoName)
                 .HasMaxLength(50)
-                .HasColumnName("Nombrecontacto");
+                .HasColumnName("nombrecontacto");
             entity.Property(e => e.Personaempresa).HasColumnName("personaempresa");
             entity.Property(e => e.Tipo)
                 .HasMaxLength(50)

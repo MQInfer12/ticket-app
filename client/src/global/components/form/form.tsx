@@ -45,6 +45,7 @@ const Form = <T, U>({
     );
     if (!res) return;
     successAlert(res.message);
+    console.log(res.data)
     if (item) {
       put.onSuccess(res.data);
     } else {
