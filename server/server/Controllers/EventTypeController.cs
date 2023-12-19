@@ -31,15 +31,17 @@ namespace server.Controllers
                     CompanyName = x.IdempresaNavigation.Nombre
                 });
 
-            if(eventsType == null)
+            if (eventsType == null)
             {
                 return Ok(new BaseResponse<string> { Message = "No se encontraron datos", Data = " ", Status = 404 });
             }
 
-            return Ok(new BaseResponse<IQueryable<EventTypeResponse>> { 
-                Message = "Datos obtenidos con exito", 
-                Data = eventsType, 
-                Status = 200 });
+            return Ok(new BaseResponse<IQueryable<EventTypeResponse>>
+            {
+                Message = "Datos obtenidos con exito",
+                Data = eventsType,
+                Status = 200
+            });
         }
 
         [AllowAnonymous]
@@ -47,7 +49,7 @@ namespace server.Controllers
         public IActionResult Get(Guid eventTypeId)
         {
             var eventType = _db.TipoEventos
-                .Where(v=>v.Id == eventTypeId)
+                .Where(v => v.Id == eventTypeId)
                 .Select(x => new EventTypeResponse
                 {
                     Id = x.Id,
