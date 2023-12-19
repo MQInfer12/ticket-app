@@ -11,12 +11,10 @@ namespace server.Controllers
 
     public class CajaController : Controller
     {
-        private IConfiguration _config;
         private DBContext _db;
 
-        public CajaController(IConfiguration configuration, DBContext db)
+        public CajaController(DBContext db)
         {
-            _config = configuration;
             _db = db;
         }
 
