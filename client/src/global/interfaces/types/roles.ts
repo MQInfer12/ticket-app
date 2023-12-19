@@ -1,12 +1,12 @@
 export enum Roles {
-  superadmin = "superadmin",
-  adminEmpresa = "adminEmpresa",
-  cliente = "cliente",
-  socio = "socio",
-  contador = "contador",
-  cajero = "cajero",
-  adminTienda = "adminTienda",
-  cajeroOnline = "cajeroOnline",
-  verificador = "verificador",
-  directivo = "directivo"
+  superadmin = "Super Admin",
+  adminEmpresa = "Admin Empresa",
+  cliente = "Cliente",
+  socio = "Socio",
+  contador = "Contador",
+  cajero = "Cajero",
+  adminTienda = "Admin Tienda",
+  cajeroOnline = "Cajero Online",
+  verificador = "Verificador",
+  directivo = "Directivo"
 }
