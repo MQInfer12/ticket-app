@@ -1,40 +1,37 @@
 import { useParams } from "react-router-dom";
-import TableContainer from "../../../global/components/table/tableContainer";
 import { useGet } from "../../../hooks/useGet";
-import {
-  Empresa,
-  UserRol,
-} from "../../../global/interfaces/api/rolUsuario";
+import { UserRol } from "../../../global/interfaces/api/rolUsuario";
+import TableContainer from "../../../global/components/table/tableContainer";
 import { useModal } from "../../../hooks/useModal";
 import Modal from "../../../global/components/modal";
 import Form from "../../../global/components/form/form";
-import { UsuarioRolForm, usuarioRolSchema } from "../validations/persona";
 import FormSelect from "../../../global/components/form/formSelect";
+import { usuarioRolSchema } from "../../persona/validations/persona";
 import { Rol } from "../../../global/interfaces/api/rol";
+import { PersonaForEmpresa } from "../../../global/interfaces/api/empresa";
 
 interface Props {
-  idUser: string;
-  empresas: Empresa[];
   roles: Rol[];
+  personas: PersonaForEmpresa[];
 }
 
-const Rols = ({ idUser, empresas, roles }: Props) => {
+const Personas = ({ roles, personas }: Props) => {
   const { id } = useParams();
   const { res, getData, pushData, modifyData, filterData } = useGet<UserRol[]>(
-    `TipoRol/GetRolesByPersona/${id}`
+    `TipoRol/GetRolesByEmpresa/${id}`
   );
-  const { state, item, openModal, closeModal } = useModal<UserRol>(
-    "Formulario de roles de usuario"
-  );
+  const { state, item, openModal, closeModal } =
+    useModal<UserRol>("Formulario de rol");
 
   const columns = [
     {
-      header: "Rol",
-      accessorKey: "rol",
+      header: "Persona",
+      accessorFn: (row: UserRol) =>
+        `${row.nombreUsuario} ${row.apellidoPaterno || ""} ${row.apellidoMaterno || ""}`,
     },
     {
-      header: "Empresa",
-      accessorKey: "empresa",
+      header: "Rol",
+      accessorKey: "rol",
     },
     {
       header: "Estado",
@@ -53,12 +50,12 @@ const Rols = ({ idUser, empresas, roles }: Props) => {
         onClickRow={(row) => openModal(row)}
       />
       <Modal state={state}>
-        <Form<UserRol | null, UsuarioRolForm>
+        <Form<UserRol | null, UserRol>
           item={item}
           initialValues={{
-            idUsuario: idUser,
+            idUsuario: item?.idUsuario || "",
             rol: item?.idRol || "",
-            empresa: item?.idEmpresa || "",
+            empresa: id,
             estado: !item ? "Activo" : item.estado ? "Activo" : "Desactivo",
           }}
           validationSchema={usuarioRolSchema}
@@ -92,11 +89,11 @@ const Rols = ({ idUser, empresas, roles }: Props) => {
             },
           }}
         >
-          <FormSelect name="empresa" title="Empresa">
-            <option value="">Seleccione empresa</option>
-            {empresas.map((data) => (
-              <option key={data.id} value={data.id}>
-                {data.nombre}
+          <FormSelect name="idUsuario" title="Personas">
+            <option value="">Seleccione la persona</option>
+            {personas.map((data) => (
+              <option key={data.idUsuario} value={data.idUsuario}>
+                {data.nombreCompleto}
               </option>
             ))}
           </FormSelect>
@@ -122,4 +119,4 @@ const Rols = ({ idUser, empresas, roles }: Props) => {
   );
 };
 
-export default Rols;
+export default Personas;

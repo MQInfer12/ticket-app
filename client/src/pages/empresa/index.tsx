@@ -1,19 +1,20 @@
 import { useParams } from "react-router-dom";
 import PageContainer from "../../global/components/pageContainer";
 import { useGet } from "../../hooks/useGet";
-import { Empresa as EmpresaType } from "../../global/interfaces/api/empresa";
+import { EmpresaRes } from "../../global/interfaces/api/empresa";
 import Loader from "../../global/components/loader/loader";
 import { useState } from "react";
 import Tabs from "../../global/components/tabs/tabs";
 import Contactos from "../persona/components/contactos";
+import Personas from "./components/personas";
 
-type Page = "Contactos";
+type Page = "Personas" | "Contactos";
 
 const Empresa = () => {
   const { id } = useParams();
-  const [page, setPage] = useState<Page>("Contactos");
-  const pages: Page[] = ["Contactos"];
-  const { res } = useGet<EmpresaType>(`Empresa/${id}`);
+  const [page, setPage] = useState<Page>("Personas");
+  const pages: Page[] = ["Personas", "Contactos"];
+  const { res } = useGet<EmpresaRes>(`Empresa/${id}`);
 
   return (
     <PageContainer backRoute="/dashboard/empresas" title="Empresa">
@@ -24,13 +25,14 @@ const Empresa = () => {
           <div className="flex flex-col items-center gap-2">
             <div className="flex flex-col items-center">
               <h3 className="font-bold text-lg text-neutral-800">
-                {res.data.nombre}
+                {res.data.empresa.nombre}
               </h3>
-              <p className="text-xs text-neutral-500">{res.data.direccion}</p>
+              <p className="text-xs text-neutral-500">{res.data.empresa.direccion}</p>
             </div>
             <Tabs page={page} pages={pages} setPage={setPage} />
           </div>
           <div className="h-[calc(100%_-_109px)]">
+            {page === "Personas" && <Personas roles={res.data.roles} personas={res.data.personas} />}
             {page === "Contactos" && <Contactos />}
           </div>
         </div>

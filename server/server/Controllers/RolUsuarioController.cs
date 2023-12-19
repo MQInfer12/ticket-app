@@ -40,7 +40,11 @@ namespace server.Controllers
                 rol = data.IdtiporolNavigation.Nombre,
                 idEmpresa = data.Idempresa,
                 empresa = data.IdempresaNavigation.Nombre,
-                estado = data.Estado
+                estado = data.Estado,
+                idUsuario = data.Idusuario,
+                nombreUsuario = data.IdusuarioNavigation.IdpersonaNavigation.Nombres,
+                apellidoPaterno = data.IdusuarioNavigation.IdpersonaNavigation.Appaterno,
+                apellidoMaterno = data.IdusuarioNavigation.IdpersonaNavigation.Apmaterno
             }).First();
 
             return Ok(new { Message = "Se agrego la asignacion", Data = userRoleGet, Status = 201 });
@@ -71,7 +75,11 @@ namespace server.Controllers
                 rol = data.IdtiporolNavigation.Nombre,
                 idEmpresa = data.Idempresa, 
                 empresa = data.IdempresaNavigation.Nombre,
-                estado = data.Estado
+                estado = data.Estado,
+                idUsuario = data.Idusuario,
+                nombreUsuario = data.IdusuarioNavigation.IdpersonaNavigation.Nombres,
+                apellidoPaterno = data.IdusuarioNavigation.IdpersonaNavigation.Appaterno,
+                apellidoMaterno = data.IdusuarioNavigation.IdpersonaNavigation.Apmaterno
             }).First();
             return Ok(new { Message = "Se edito la asignacion", Data = userRoleGet, Status = 200 });
         }

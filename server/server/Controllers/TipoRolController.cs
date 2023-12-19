@@ -42,12 +42,42 @@ namespace server.Controllers
                     rol = x.IdtiporolNavigation.Nombre,
                     idEmpresa = x.Idempresa,
                     empresa = x.IdempresaNavigation.Nombre,
-                    estado = x.Estado
+                    estado = x.Estado,
+                    idUsuario = x.Idusuario,
+                    nombreUsuario = x.IdusuarioNavigation.IdpersonaNavigation.Nombres,
+                    apellidoPaterno = x.IdusuarioNavigation.IdpersonaNavigation.Appaterno,
+                    apellidoMaterno = x.IdusuarioNavigation.IdpersonaNavigation.Apmaterno
                 }
                 ).ToList();
             if (userRols == null)
             {
                 return NotFound(new { Message = "Este usuario no tiene ningun rol", Data = ' ', Status = 404 });
+            }
+
+            return Ok(new { Message = "Datos obtenidos con exito", Data = userRols, Status = 200 });
+        }
+
+        [HttpGet("GetRolesByEmpresa/{id}"), Authorize]
+        public IActionResult GetRolesByEmpresa(Guid id)
+        {
+            var userRols = _db.RolUsuarios.Where(ru => ru.Idempresa == id).Select(
+                x => new
+                {
+                    id = x.Id,
+                    idRol = x.Idtiporol,
+                    rol = x.IdtiporolNavigation.Nombre,
+                    idEmpresa = x.Idempresa,
+                    empresa = x.IdempresaNavigation.Nombre,
+                    estado = x.Estado,
+                    idUsuario = x.Idusuario,
+                    nombreUsuario = x.IdusuarioNavigation.IdpersonaNavigation.Nombres,
+                    apellidoPaterno = x.IdusuarioNavigation.IdpersonaNavigation.Appaterno,
+                    apellidoMaterno = x.IdusuarioNavigation.IdpersonaNavigation.Apmaterno
+                }
+                ).ToList();
+            if (userRols.Count == 0)
+            {
+                return NotFound(new { Message = "Esta empresa no tiene usuarios", Data = ' ', Status = 404 });
             }
 
             return Ok(new { Message = "Datos obtenidos con exito", Data = userRols, Status = 200 });

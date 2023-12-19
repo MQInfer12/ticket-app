@@ -186,7 +186,11 @@ namespace server.Controllers
                                         rol = x.IdtiporolNavigation.Nombre,
                                         idEmpresa = x.Idempresa,
                                         empresa = x.IdempresaNavigation.Nombre,
-                                        estado = x.Estado
+                                        estado = x.Estado,
+                                        idUsuario = x.Idusuario,
+                                        nombreUsuario = x.IdusuarioNavigation.IdpersonaNavigation.Nombres,
+                                        apellidoPaterno = x.IdusuarioNavigation.IdpersonaNavigation.Appaterno,
+                                        apellidoMaterno = x.IdusuarioNavigation.IdpersonaNavigation.Apmaterno
                                     }
                                 ).ToList();
                     if (userRols.Count == 0)

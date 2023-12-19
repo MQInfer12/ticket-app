@@ -36,7 +36,17 @@ namespace server.Controllers
                 return NotFound(new { Message = "No existe esta empresa", Data = ' ', Status = 404 });
             }
 
-            return Ok(new { Message = "Datos obtenidos con exito", Data = company, Status = 200 });
+            var rols = _db.TipoRols.ToList();
+            var personas = _db.Usuarios.Select(p => new {
+                idUsuario = p.Id,
+                nombreCompleto = p.IdpersonaNavigation.Nombres + " " + p.IdpersonaNavigation.Appaterno + " " + p.IdpersonaNavigation.Apmaterno
+            }).ToList();
+
+            return Ok(new { Message = "Datos obtenidos con exito", Data = new {
+                empresa = company,
+                roles = rols,
+                personas
+            }, Status = 200 });
         }
 
         [HttpPost, Authorize]
@@ -99,6 +109,5 @@ namespace server.Controllers
             return Ok(new { Message = "Se elimino la empresa", Data = ' ', Status = 200});
 
         }
-
     }
 }
