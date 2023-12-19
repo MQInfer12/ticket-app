@@ -6,6 +6,7 @@ import IconExpenses from "../../../../icons/iconExpenses";
 import IconHome from "../../../../icons/iconHome";
 import IconIncomes from "../../../../icons/iconIncomes";
 import IconPersonas from "../../../../icons/iconPersonas";
+import IconCaja from "../../../../icons/iconCaja";
 import { useUser } from "../../../../store/user";
 import Head from "./head";
 import IconLink from "./iconLink";
@@ -74,6 +75,11 @@ const Aside = ({ open, setOpen }: Props) => {
               />
             </Section>
             <Section title="MOVIMIENTOS">
+              <IconLink
+                icon={<IconCaja />}
+                label="Cajas"
+                to="/dashboard/cajas"
+              />
               <IconLink
                 icon={<IconIncomes />}
                 label="Ingresos"

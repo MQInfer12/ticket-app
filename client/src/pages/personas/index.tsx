@@ -97,7 +97,6 @@ const Personas = () => {
           post={{
             route: "Persona",
             onBody: (value) => {
-              console.log(value);
               return value;
             },
             onSuccess: (data) => {

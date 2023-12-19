@@ -10,6 +10,8 @@ import Empresa from "./pages/empresa";
 import Inicio from "./pages/inicio";
 import ValidateRol from "./global/guard/validateRol";
 import { Roles } from "./global/interfaces/types/roles";
+import Cajas from "./pages/cajas";
+import Caja from "./pages/caja";
 
 function App() {
   return (
@@ -52,6 +54,8 @@ function App() {
           />
           <Route path="/dashboard/eventos" element={<Eventos />} />
           <Route path="/dashboard/eventos/:id" element={<Evento />} />
+          <Route path="/dashboard/cajas" element={<Cajas />} />
+          <Route path="/dashboard/cajas/:id" element={<Caja />} />
           <Route path="/dashboard/*" element={<div>404</div>} />
         </Route>
       </Routes>

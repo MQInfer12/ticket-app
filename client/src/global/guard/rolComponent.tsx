@@ -8,7 +8,6 @@ interface Props {
 
 const RolComponent = ({ children, roles }: Props) => {
   const { user } = useUser();
-  console.log(user);
 
   if (!user) return null;
   if (!roles.includes(user.roleName)) return null;

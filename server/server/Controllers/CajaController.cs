@@ -51,6 +51,26 @@ namespace server.Controllers
             { Message = "Lista de contactos obtenida correctamente", Data = registers, Status = 200 });
         }
 
+        [HttpGet, Authorize]
+        [Route("ById/{id}")]
+        public IActionResult Get(Guid id)
+        {
+            var caja = _db.Cajas.Where(c => c.Id == id).Select(cr => new CajaResponse
+            {
+                Id = cr.Id,
+                CajaName = cr.Nombre,
+                CompanyId = cr.Idempresa,
+                CompanyName = cr.IdempresaNavigation.Nombre
+            }).First();
+
+            if (caja == null)
+            {
+                return NotFound(new { Message = "No existe esta caja", Data = ' ', Status = 404 });
+            }
+
+            return Ok(new { Message = "Datos obtenidos con exito", Data = caja, Status = 200 });
+        }
+
 
         [HttpPost, Authorize]
         public IActionResult Post([FromBody] CajaDTO req)
@@ -65,21 +85,25 @@ namespace server.Controllers
             _db.Cajas.Add(registers);
             _db.SaveChanges();
 
-            var registersReturn = new CajaResponse
-            {
-                CajaName = registers.Nombre,
-                CompanyId = registers.Idempresa,
-            };
+            var registersReturn = _db.Cajas
+                .Where(v => v.Id == registers.Id)
+                .Select(x => new CajaResponse
+                {
+                    Id = x.Id,
+                    CajaName = x.Nombre,
+                    CompanyId = x.Idempresa,
+                    CompanyName = x.IdempresaNavigation.Nombre
+                }).First();
 
             return Ok(new BaseResponse<CajaResponse>
-                { Message = "Se creo la empresa", Data = registersReturn, Status = 201 });
+            { Message = "Se creo la empresa", Data = registersReturn, Status = 201 });
         }
 
         [HttpPut("{id}"), Authorize]
         public IActionResult Put(Guid id, CajaDTO req)
         {
 
-            var existingCaja= _db.Cajas.Find(id);
+            var existingCaja = _db.Cajas.Find(id);
 
             if (existingCaja == null)
             {
@@ -92,15 +116,18 @@ namespace server.Controllers
             _db.Cajas.Update(existingCaja);
             _db.SaveChanges();
 
-            var registersReturn = new CajaResponse
-            {
-                CajaName = existingCaja.Nombre,
-                CompanyId = existingCaja.Idempresa,
-            };
-
+            var registersReturn = _db.Cajas
+                .Where(v => v.Id == existingCaja.Id)
+                .Select(x => new CajaResponse
+                {
+                    Id = x.Id,
+                    CajaName = x.Nombre,
+                    CompanyId = x.Idempresa,
+                    CompanyName = x.IdempresaNavigation.Nombre
+                }).First();
 
             return Ok(new BaseResponse<CajaResponse>
-                { Message = "Se edito la empresa", Data = registersReturn, Status = 200 });
+            { Message = "Se edito la empresa", Data = registersReturn, Status = 200 });
 
         }
 
@@ -116,7 +143,7 @@ namespace server.Controllers
 
             _db.Cajas.Remove(registers);
             _db.SaveChanges();
-            return Ok(new { Message = "Se elimino la Caja", Data = ' ', Status = 200});
+            return Ok(new { Message = "Se elimino la Caja", Data = ' ', Status = 200 });
 
         }
     }
