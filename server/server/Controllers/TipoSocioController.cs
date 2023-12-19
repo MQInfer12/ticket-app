@@ -34,6 +34,7 @@ namespace server.Controllers
                     TypePartnerCost = x.Costo,
                     TypePartnerDiscount = x.Descuento,
                     TypePartnerDuration = x.Duracion,
+                    TypePartnerState = x.Estado,
                     ComapanyId = x.Idempresa,
                     CompanyName = x.IdempresaNavigation.Nombre
                 });
@@ -53,6 +54,7 @@ namespace server.Controllers
                     TypePartnerCost = x.Costo,
                     TypePartnerDiscount = x.Descuento,
                     TypePartnerDuration = x.Duracion,
+                    TypePartnerState = x.Estado,
                     ComapanyId = x.Idempresa,
                     CompanyName = x.IdempresaNavigation.Nombre
                 });
@@ -94,6 +96,7 @@ namespace server.Controllers
                     TypePartnerCost = x.Costo,
                     TypePartnerDiscount = x.Descuento,
                     TypePartnerDuration = x.Duracion,
+                    TypePartnerState = x.Estado,
                     ComapanyId = x.Idempresa,
                     CompanyName = x.IdempresaNavigation.Nombre
                 }).First();
