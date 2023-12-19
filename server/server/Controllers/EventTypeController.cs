@@ -107,7 +107,15 @@ namespace server.Controllers
             _db.TipoEventos.Add(eventType);
             _db.SaveChanges();
 
-            return Ok(new { Message = "Se creo el tipo de evento", Data = eventType, Status = 201 });
+            var eventTypeRes = new EventTypeResponse
+            {
+                Amount = eventType.Cantidad,
+                Date = eventType.Fecha,
+                CompanyId = eventType.Idempresa,
+                TypeEventName = eventType.Nombre,
+            };
+
+            return Ok(new { Message = "Se creo el tipo de evento", Data = eventTypeRes, Status = 201 });
         }
 
         [HttpPut("{id}"), Authorize]
@@ -128,7 +136,16 @@ namespace server.Controllers
 
             _db.TipoEventos.Update(existingEventType);
             _db.SaveChanges();
-            return Ok(new { Message = "Se edito la empresa", Data = existingEventType, Status = 200 });
+
+            var eventTypeRes = new EventTypeResponse
+            {
+                Amount = existingEventType.Cantidad,
+                Date = existingEventType.Fecha,
+                CompanyId = existingEventType.Idempresa,
+                TypeEventName = existingEventType.Nombre,
+            };
+
+            return Ok(new { Message = "Se edito la empresa", Data = eventTypeRes, Status = 200 });
         }
 
         [HttpDelete("{id}"), Authorize]
