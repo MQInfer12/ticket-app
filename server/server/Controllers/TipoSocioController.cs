@@ -17,6 +17,12 @@ namespace server.Controllers
             _db = db;
         }
 
+        private IActionResult HandleNotFoundResult(string data)
+        {
+            return NotFound(new BaseResponse<string>
+            { Message = "No se encontro " + data, Data = " ", Status = 404 });
+        }
+
         [HttpGet, Authorize]
         public IActionResult Get()
         {
@@ -61,8 +67,7 @@ namespace server.Controllers
 
             if (findCompany == null)
             {
-                return NotFound(new BaseResponse<string>
-                { Message = "No se encontro la empresa", Data = " ", Status = 404 });
+                return HandleNotFoundResult("la empresa");
             }
 
             var PartnerType = new TipoSocio
@@ -105,7 +110,7 @@ namespace server.Controllers
 
             if (existePartnetType == null)
             {
-                return NotFound(new { Message = "No se encontraron los datos", Data = ' ', Status = 404 });
+                return HandleNotFoundResult("los datos");
             }
 
             existePartnetType.Costo = req.Cost;
@@ -145,7 +150,7 @@ namespace server.Controllers
             var partnetType = _db.TipoSocios.Find(id);
             if (partnetType == null)
             {
-                return NotFound(new { Message = "No se encontro ningun dato", Data = ' ', Status = 404 });
+               return HandleNotFoundResult("ningun dato");
             }
 
             _db.TipoSocios.Remove(partnetType);
