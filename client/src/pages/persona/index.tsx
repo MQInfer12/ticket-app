@@ -8,6 +8,8 @@ import Rols from "./components/rols.tsx";
 import Tabs from "../../global/components/tabs/tabs.tsx";
 import { useState } from "react";
 import Contactos from "./components/contactos.tsx";
+import { useUser } from "../../store/user.ts";
+import { Roles } from "../../global/interfaces/types/roles.ts";
 
 type Page = "Roles" | "Contactos";
 
@@ -18,6 +20,7 @@ const Persona = () => {
   const { res: personaPage } = useGet<PersonaPage>(
     `Persona/GetPersonaPage/${id}`
   );
+  const { user } = useUser();
 
   return (
     <PageContainer backRoute="/dashboard/personas" title="Persona">
@@ -46,7 +49,7 @@ const Persona = () => {
                 roles={personaPage.data.rols}
               />
             ) : (
-              page === "Contactos" && <Contactos />
+              page === "Contactos" && <Contactos canEdit={user?.roleName === Roles.superadmin} />
             )}
           </div>
         </div>

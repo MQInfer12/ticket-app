@@ -21,26 +21,47 @@ namespace server.Controllers
 
         public IActionResult Get()
         {
-            var persona = _db.Personas.Join(_db.Usuarios,
-                person => person.Id,
-                user => user.Idpersona,
-                (person, user) => new
-                {
-                    IdPersona = person.Id,
-                    Ci = person.Ci,
-                    Nombres = person.Nombres,
-                    Appaterno = person.Appaterno,
-                    Apmaterno = person.Apmaterno,
-                    Usuario = user.NombreUsuario
-                }
-                );
-            //primero se pone la tabla con la que se esta trabajando y despues con la que la relacionas//
-            return Ok(new { Message = "Lista de Personas", Data = persona, Status = 200 });
+            var rol = User.FindFirst("RoleName").Value;
+            var idEmpresa = User.FindFirst("CompanyId").Value;
+            if(rol == "Super Administrador") {
+                var persona = _db.Personas.Join(_db.Usuarios,
+                    person => person.Id,
+                    user => user.Idpersona,
+                    (person, user) => new
+                    {
+                        IdPersona = person.Id,
+                        Ci = person.Ci,
+                        Nombres = person.Nombres,
+                        Appaterno = person.Appaterno,
+                        Apmaterno = person.Apmaterno,
+                        Usuario = user.NombreUsuario
+                    }
+                    );
+                return Ok(new { Message = "Lista de Personas", Data = persona, Status = 200 });
+            } else {
+                var persona = _db.RolUsuarios.Where(ru => ru.Idempresa == Guid.Parse(idEmpresa)).Select(ru => new {
+                    IdPersona = ru.IdusuarioNavigation.Idpersona,
+                    Ci = ru.IdusuarioNavigation.IdpersonaNavigation.Ci,
+                    Nombres = ru.IdusuarioNavigation.IdpersonaNavigation.Nombres,
+                    Appaterno = ru.IdusuarioNavigation.IdpersonaNavigation.Appaterno,
+                    Apmaterno = ru.IdusuarioNavigation.IdpersonaNavigation.Apmaterno,
+                    Usuario = ru.IdusuarioNavigation.NombreUsuario
+                }).ToList();
+                return Ok(new { Message = "Lista de Personas", Data = persona, Status = 200 });
+            }
         }
+
+        [HttpGet("EmpresasRols"), Authorize]
+        public IActionResult GetRolsEmpresas()
+        {
+            var rols = _db.TipoRols.ToList();
+            var empresas = _db.Empresas.ToList();
+            return Ok(new { Message = "Datos obtenidos con exito", Data = new { rols, empresas }, Status = 200 });
+        }
+
         [HttpPost, Authorize] //    Tipo post //
         public IActionResult Post([FromBody] PersonaDTO req)
         {
-
             var exists = _db.Usuarios.Any(e => e.NombreUsuario == req.NombreUsurio);
             if (exists)
             {
@@ -67,8 +88,18 @@ namespace server.Controllers
             };
 
             _db.Usuarios.Add(user);
+
             _db.SaveChanges();
 
+            var rolUser = new RolUsuario {
+                Idtiporol = req.IdTipoRol,
+                Idempresa = req.IdEmpresa,
+                Idusuario = user.Id
+            };
+
+            _db.RolUsuarios.Add(rolUser);
+
+            _db.SaveChanges();
 
             var userGet = _db.Usuarios.Where(v => v.Id == user.Id).Join(_db.Personas,
 

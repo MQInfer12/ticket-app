@@ -40,7 +40,7 @@ const Header = ({ setOpen }: Props) => {
           <CircleButton onClick={() => setOpen(true)} icon={<IconMenu />} />
         </div>
         <div className="flex flex-col">
-          <small className="text-neutral-500">Bienvenido,</small>
+          <small className="text-neutral-500">{user?.companyName} ({user?.roleName}),</small>
           <b className="text-neutral-800">{`${user?.personName} ${user?.personLastName}`}</b>
         </div>
       </div>

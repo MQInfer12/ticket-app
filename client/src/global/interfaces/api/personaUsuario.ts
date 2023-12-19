@@ -1,3 +1,6 @@
+import { Empresa } from "./empresa"
+import { Rol } from "./rol"
+
 export interface PersonaUsuario {
   idPersona: string,
   ci: string,
@@ -6,4 +9,9 @@ export interface PersonaUsuario {
   apmaterno: string | null,
   usuario: string,
   password: string | null
+}
+
+export interface EmpresasRolsForPersonas {
+  empresas: Empresa[],
+  rols: Rol[]
 }

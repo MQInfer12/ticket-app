@@ -1,8 +1,12 @@
+import RolComponent from "../../../../global/guard/rolComponent";
+import { Roles } from "../../../../global/interfaces/types/roles";
 import IconEmpresa from "../../../../icons/iconEmpresa";
 import IconEvent from "../../../../icons/iconEvent";
 import IconExpenses from "../../../../icons/iconExpenses";
+import IconHome from "../../../../icons/iconHome";
 import IconIncomes from "../../../../icons/iconIncomes";
 import IconPersonas from "../../../../icons/iconPersonas";
+import { useUser } from "../../../../store/user";
 import Head from "./head";
 import IconLink from "./iconLink";
 import Profile from "./profile";
@@ -14,9 +18,12 @@ interface Props {
 }
 
 const Aside = ({ open, setOpen }: Props) => {
+  const { user } = useUser();
+
   let asideStyle =
     "z-40 h-screen flex flex-col w-80 bg-slate-200 border-r border-solid border-slate-300 px-4 pt-6 pb-4 fixed lg:translate-x-0 lg:relative transition-all duration-300 ";
   asideStyle += open ? "translate-x-0" : "-translate-x-full";
+
   return (
     <>
       <div
@@ -29,18 +36,36 @@ const Aside = ({ open, setOpen }: Props) => {
         <Head setOpen={setOpen} />
         <div className="flex flex-col justify-between flex-1">
           <div className="flex-1 overflow-auto">
-            <Section title="ADMINISTRACIÓN">
+            <Section title="INICIO">
               <IconLink
-                icon={<IconEmpresa />}
-                label="Empresas"
-                to="/dashboard/empresas"
-              />
-              <IconLink
-                icon={<IconPersonas />}
-                label="Personas"
-                to="/dashboard/personas"
+                icon={<IconHome />}
+                label="Inicio"
+                to="/dashboard/inicio"
               />
             </Section>
+            <RolComponent roles={[Roles.superadmin, Roles.adminEmpresa]}>
+              <Section title="ADMINISTRACIÓN">
+                <RolComponent roles={[Roles.superadmin]}>
+                  <IconLink
+                    icon={<IconEmpresa />}
+                    label="Empresas"
+                    to="/dashboard/empresas"
+                  />
+                </RolComponent>
+                <RolComponent roles={[Roles.adminEmpresa]}>
+                  <IconLink
+                    icon={<IconEmpresa />}
+                    label="Empresa"
+                    to={`/dashboard/empresas/${user?.companyId}`}
+                  />
+                </RolComponent>
+                <IconLink
+                  icon={<IconPersonas />}
+                  label="Personas"
+                  to="/dashboard/personas"
+                />
+              </Section>
+            </RolComponent>
             <Section title="ENTRADAS">
               <IconLink
                 icon={<IconEvent />}

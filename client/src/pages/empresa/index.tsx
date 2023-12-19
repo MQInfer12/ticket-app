@@ -7,6 +7,8 @@ import { useState } from "react";
 import Tabs from "../../global/components/tabs/tabs";
 import Contactos from "../persona/components/contactos";
 import Personas from "./components/personas";
+import { useUser } from "../../store/user";
+import { Roles } from "../../global/interfaces/types/roles";
 
 type Page = "Personas" | "Contactos";
 
@@ -15,9 +17,10 @@ const Empresa = () => {
   const [page, setPage] = useState<Page>("Personas");
   const pages: Page[] = ["Personas", "Contactos"];
   const { res } = useGet<EmpresaRes>(`Empresa/${id}`);
+  const { user } = useUser();
 
   return (
-    <PageContainer backRoute="/dashboard/empresas" title="Empresa">
+    <PageContainer backRoute={user?.roleName === Roles.superadmin ? "/dashboard/empresas" : undefined} title="Empresa">
       {!res ? (
         <Loader />
       ) : (
@@ -33,7 +36,7 @@ const Empresa = () => {
           </div>
           <div className="h-[calc(100%_-_109px)]">
             {page === "Personas" && <Personas roles={res.data.roles} personas={res.data.personas} />}
-            {page === "Contactos" && <Contactos />}
+            {page === "Contactos" && <Contactos canEdit />}
           </div>
         </div>
       )}

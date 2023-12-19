@@ -1,6 +1,9 @@
 import PageContainer from "../../global/components/pageContainer";
 import TableContainer from "../../global/components/table/tableContainer";
-import { PersonaUsuario } from "../../global/interfaces/api/personaUsuario";
+import {
+  EmpresasRolsForPersonas,
+  PersonaUsuario,
+} from "../../global/interfaces/api/personaUsuario";
 import { useGet } from "../../hooks/useGet";
 import { useModal } from "../../hooks/useModal";
 import Modal from "../../global/components/modal.tsx";
@@ -12,14 +15,21 @@ import {
 import FormInput from "../../global/components/form/formInput";
 import Button from "../../global/components/buttons/button.tsx";
 import { useNavigate } from "react-router-dom";
+import FormSelect from "../../global/components/form/formSelect.tsx";
+import { useUser } from "../../store/user.ts";
+import { Roles } from "../../global/interfaces/types/roles.ts";
 
 const Personas = () => {
   const { res, getData, pushData, modifyData, filterData } =
     useGet<PersonaUsuario[]>("Persona");
+  const { res: resEmpresasRols } = useGet<EmpresasRolsForPersonas>(
+    "Persona/EmpresasRols"
+  );
   const { state, item, openModal, closeModal } = useModal<PersonaUsuario>(
     "Formulario de persona"
   );
   const navigate = useNavigate();
+  const { user } = useUser();
 
   const columns = [
     {
@@ -75,11 +85,21 @@ const Personas = () => {
             apmaterno: item?.apmaterno || "",
             nombreUsurio: item?.usuario || "",
             password: item ? "password" : "",
+            idTipoRol: item ? item.idPersona : "",
+            idEmpresa:
+              user?.roleName === Roles.superadmin
+                ? item
+                  ? item.idPersona
+                  : ""
+                : user?.companyId,
           }}
           validationSchema={personaUsuarioSchema}
           post={{
             route: "Persona",
-            onBody: (value) => value,
+            onBody: (value) => {
+              console.log(value);
+              return value;
+            },
             onSuccess: (data) => {
               pushData(data);
               closeModal();
@@ -107,6 +127,26 @@ const Personas = () => {
           <FormInput title="Apellido materno" name="apmaterno" />
           <FormInput title="Usuario" name="nombreUsurio" />
           {!item && <FormInput title="Contraseña" name="password" />}
+          {(user?.roleName === Roles.superadmin && !item) && (
+            <FormSelect title="Empresa inicial" name="idEmpresa">
+              <option value="">Seleccionar empresa</option>
+              {resEmpresasRols?.data.empresas.map((empresa) => (
+                <option key={empresa.id} value={empresa.id}>
+                  {empresa.nombre}
+                </option>
+              ))}
+            </FormSelect>
+          )}
+          {!item && (
+            <FormSelect title="Rol inicial" name="idTipoRol">
+              <option value="">Seleccionar rol</option>
+              {resEmpresasRols?.data.rols.map((rol) => (
+                <option key={rol.id} value={rol.id}>
+                  {rol.nombre}
+                </option>
+              ))}
+            </FormSelect>
+          )}
         </Form>
       </Modal>
     </PageContainer>

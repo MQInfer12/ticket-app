@@ -26,35 +26,45 @@ namespace server.Controllers
         [HttpGet("GetRolesByPersona/{id}"), Authorize]
         public IActionResult GetRolsByUser(Guid id)
         {
-            //var userrols = _db.RolUsuarios.Where(v=> v.Idusuario == id);
-            /*var query= from rolUsuario in _db.RolUsuarios
-                          join tipoRol in _db.TipoRols 
-                          on rolUsuario.Idtiporol equals tipoRol.Id
-                          where rolUsuario.Idusuario == id
-                       select tipoRol.Nombre;
+            var rol = User.FindFirst("RoleName").Value;
+            var idEmpresa = User.FindFirst("CompanyId").Value;
+            if(rol == "Super Administrador") {
+                var userRols = _db.RolUsuarios.Where(ru => ru.IdusuarioNavigation.Idpersona == id).Select(
+                    x => new
+                    {
+                        id = x.Id,
+                        idRol = x.Idtiporol,
+                        rol = x.IdtiporolNavigation.Nombre,
+                        idEmpresa = x.Idempresa,
+                        empresa = x.IdempresaNavigation.Nombre,
+                        estado = x.Estado,
+                        idUsuario = x.Idusuario,
+                        nombreUsuario = x.IdusuarioNavigation.IdpersonaNavigation.Nombres,
+                        apellidoPaterno = x.IdusuarioNavigation.IdpersonaNavigation.Appaterno,
+                        apellidoMaterno = x.IdusuarioNavigation.IdpersonaNavigation.Apmaterno
+                    }
+                    ).ToList();
 
-            var userRols = query.ToList();*/
-            var userRols = _db.RolUsuarios.Where(ru => ru.IdusuarioNavigation.Idpersona == id).Select(
-                x => new
-                {
-                    id = x.Id,
-                    idRol = x.Idtiporol,
-                    rol = x.IdtiporolNavigation.Nombre,
-                    idEmpresa = x.Idempresa,
-                    empresa = x.IdempresaNavigation.Nombre,
-                    estado = x.Estado,
-                    idUsuario = x.Idusuario,
-                    nombreUsuario = x.IdusuarioNavigation.IdpersonaNavigation.Nombres,
-                    apellidoPaterno = x.IdusuarioNavigation.IdpersonaNavigation.Appaterno,
-                    apellidoMaterno = x.IdusuarioNavigation.IdpersonaNavigation.Apmaterno
-                }
-                ).ToList();
-            if (userRols == null)
-            {
-                return NotFound(new { Message = "Este usuario no tiene ningun rol", Data = ' ', Status = 404 });
+                return Ok(new { Message = "Datos obtenidos con exito", Data = userRols, Status = 200 });
+            } else {
+                var userRols = _db.RolUsuarios.Where(ru => ru.Idempresa == Guid.Parse(idEmpresa) && ru.IdusuarioNavigation.Idpersona == id).Select(
+                    x => new
+                    {
+                        id = x.Id,
+                        idRol = x.Idtiporol,
+                        rol = x.IdtiporolNavigation.Nombre,
+                        idEmpresa = x.Idempresa,
+                        empresa = x.IdempresaNavigation.Nombre,
+                        estado = x.Estado,
+                        idUsuario = x.Idusuario,
+                        nombreUsuario = x.IdusuarioNavigation.IdpersonaNavigation.Nombres,
+                        apellidoPaterno = x.IdusuarioNavigation.IdpersonaNavigation.Appaterno,
+                        apellidoMaterno = x.IdusuarioNavigation.IdpersonaNavigation.Apmaterno
+                    }
+                    ).ToList();
+
+                return Ok(new { Message = "Datos obtenidos con exito", Data = userRols, Status = 200 });
             }
-
-            return Ok(new { Message = "Datos obtenidos con exito", Data = userRols, Status = 200 });
         }
 
         [HttpGet("GetRolesByEmpresa/{id}"), Authorize]

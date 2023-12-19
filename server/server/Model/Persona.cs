@@ -20,6 +20,7 @@ public partial class Persona
 
     public virtual ICollection<Usuario> Usuarios { get; set; } = new List<Usuario>();
 }
+
 public class PersonaDTO // para decir al front que me tiene que enviar
 {
     public string Ci { get; set; } = null!;
@@ -34,4 +35,6 @@ public class PersonaDTO // para decir al front que me tiene que enviar
     public string? NombreUsurio { get; set; }
 
     public string? Password { get; set; }
+    public Guid IdTipoRol { get; set; }
+    public Guid IdEmpresa { get; set; }
 }

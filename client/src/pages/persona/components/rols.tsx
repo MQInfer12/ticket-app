@@ -11,6 +11,8 @@ import Form from "../../../global/components/form/form";
 import { UsuarioRolForm, usuarioRolSchema } from "../validations/persona";
 import FormSelect from "../../../global/components/form/formSelect";
 import { Rol } from "../../../global/interfaces/api/rol";
+import { useUser } from "../../../store/user";
+import { Roles } from "../../../global/interfaces/types/roles";
 
 interface Props {
   idUser: string;
@@ -26,6 +28,7 @@ const Rols = ({ idUser, empresas, roles }: Props) => {
   const { state, item, openModal, closeModal } = useModal<UserRol>(
     "Formulario de roles de usuario"
   );
+  const { user } = useUser();
 
   const columns = [
     {
@@ -58,7 +61,7 @@ const Rols = ({ idUser, empresas, roles }: Props) => {
           initialValues={{
             idUsuario: idUser,
             rol: item?.idRol || "",
-            empresa: item?.idEmpresa || "",
+            empresa: user?.roleName === Roles.superadmin ? item?.idEmpresa || "" : user?.companyId,
             estado: !item ? "Activo" : item.estado ? "Activo" : "Desactivo",
           }}
           validationSchema={usuarioRolSchema}
@@ -92,14 +95,17 @@ const Rols = ({ idUser, empresas, roles }: Props) => {
             },
           }}
         >
-          <FormSelect name="empresa" title="Empresa">
-            <option value="">Seleccione empresa</option>
-            {empresas.map((data) => (
-              <option key={data.id} value={data.id}>
-                {data.nombre}
-              </option>
-            ))}
-          </FormSelect>
+          {
+            user?.roleName === Roles.superadmin &&
+            <FormSelect name="empresa" title="Empresa">
+              <option value="">Seleccione empresa</option>
+              {empresas.map((data) => (
+                <option key={data.id} value={data.id}>
+                  {data.nombre}
+                </option>
+              ))}
+            </FormSelect>
+          }
           <FormSelect name="rol" title="Rol">
             <option value="">Seleccione rol</option>
             {roles.map((data) => (

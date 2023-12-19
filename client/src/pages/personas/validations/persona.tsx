@@ -7,6 +7,8 @@ export const personaUsuarioSchema = Yup.object({
   apMaterno: Yup.string(),
   nombreUsurio: Yup.string().required("Usuario es requerido"),
   password: Yup.string().required("Contraseña es requerida"),
+  idTipoRol: Yup.string().required("Rol inicial es requerido"),
+  idEmpresa: Yup.string().required("Empresa inicial es requerida")
 });
 
 export interface PersonaUsuarioForm

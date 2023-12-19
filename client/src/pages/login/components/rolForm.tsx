@@ -28,7 +28,7 @@ const RolForm = ({ rolesEmpresa }: Props) => {
     if (!resUser) return;
     const user = resUser.data;
     setUser(user);
-    navigate("/dashboard/empresas");
+    navigate("/dashboard/inicio");
     successAlert("Inicio de sesión correcto");
   };
 

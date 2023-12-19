@@ -9,7 +9,11 @@ import FormInput from "../../../global/components/form/formInput";
 import FormSelect from "../../../global/components/form/formSelect";
 import { useParams } from "react-router-dom";
 
-const Contactos = () => {
+interface Props {
+  canEdit: boolean;
+}
+
+const Contactos = ({ canEdit }: Props) => {
   const { id } = useParams();
   const { res, getData, pushData, modifyData, filterData } = useGet<Contacto[]>(
     `Contacto/GetContactoById/${id}`
@@ -35,8 +39,8 @@ const Contactos = () => {
         columns={columns}
         data={res?.data}
         reload={getData}
-        add={() => openModal()}
-        onClickRow={(row) => openModal(row)}
+        add={canEdit ? () => openModal() : undefined}
+        onClickRow={canEdit ? (row) => openModal(row) : undefined}
       />
       <Modal state={state}>
         <Form<Contacto | null, ContactoForm>
