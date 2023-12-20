@@ -21,3 +21,13 @@ public partial class TipoEntradum
 
     public virtual TipoEvento IdtipoeventoNavigation { get; set; } = null!;
 }
+public class TipoEntradaDTO
+{
+    public string NombreEvent { get; set; }
+
+    public double CostoEvent { get; set; }
+
+    public int CantidadinicialEvent { get; set; }
+
+    public int StockEvent { get; set; }
+}

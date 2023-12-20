@@ -17,7 +17,7 @@ namespace server.Controllers
         {
             _config = config;
             _db = db;
-        }
+        }  
         [HttpGet, Authorize]
         [Route ("GetContactoById/{id}")]
         public IActionResult GetContactoById(Guid id)
