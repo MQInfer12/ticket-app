@@ -3,7 +3,7 @@ import { Roles } from "../types/roles";
 export interface User {
   userId: string;
   roleTypeId: string;
-  companyId: string;
+  companyId: string | null;
   roleName: Roles;
   userName: string;
   password: string;

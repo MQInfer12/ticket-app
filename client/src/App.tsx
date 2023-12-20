@@ -54,8 +54,22 @@ function App() {
           />
           <Route path="/dashboard/eventos" element={<Eventos />} />
           <Route path="/dashboard/eventos/:id" element={<Evento />} />
-          <Route path="/dashboard/cajas" element={<Cajas />} />
-          <Route path="/dashboard/cajas/:id" element={<Caja />} />
+          <Route
+            path="/dashboard/cajas"
+            element={
+              <ValidateRol roles={[Roles.superadmin, Roles.adminEmpresa]}>
+                <Cajas />
+              </ValidateRol>
+            }
+          />
+          <Route
+            path="/dashboard/cajas/:id"
+            element={
+              <ValidateRol roles={[Roles.superadmin, Roles.adminEmpresa]}>
+                <Caja />
+              </ValidateRol>
+            }
+          />
           <Route path="/dashboard/*" element={<div>404</div>} />
         </Route>
       </Routes>

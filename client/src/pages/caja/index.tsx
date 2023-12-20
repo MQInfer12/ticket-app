@@ -16,7 +16,7 @@ const Caja = () => {
   const { res } = useGet<CajaType>(`Caja/ById/${id}`);
 
   return (
-    <PageContainer backRoute="/dashboard/cajas" title="Cajas">
+    <PageContainer backRoute="/dashboard/cajas" title="Caja">
       {!res ? (
         <Loader />
       ) : (
@@ -31,7 +31,7 @@ const Caja = () => {
             <Tabs page={page} pages={pages} setPage={setPage} />
           </div>
           <div className="h-[calc(100%_-_109px)]">
-            {page === "Usuarios" && <User/>}
+            {page === "Usuarios" && <User idEmpresa={res.data.companyId} />}
           </div>
         </div>
       )}

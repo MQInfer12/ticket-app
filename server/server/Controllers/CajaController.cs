@@ -21,15 +21,33 @@ namespace server.Controllers
         [HttpGet, Authorize]
         public IActionResult Get()
         {
-            var registers = _db.Cajas
-                .Select(x => new CajaResponse
-                {
-                    Id = x.Id,
-                    CajaName = x.Nombre,
-                    CompanyId = x.Idempresa,
-                    CompanyName = x.IdempresaNavigation.Nombre
+            var rol = User.FindFirst("RoleName").Value;
+            IQueryable<CajaResponse> registers;
+            if (rol == "Super Administrador")
+            {
+                registers = _db.Cajas
+                   .Select(x => new CajaResponse
+                   {
+                       Id = x.Id,
+                       CajaName = x.Nombre,
+                       CompanyId = x.Idempresa,
+                       CompanyName = x.IdempresaNavigation.Nombre
 
-                });
+                   });
+            }
+            else
+            {
+                var idEmpresa = User.FindFirst("CompanyId").Value;
+                registers = _db.Cajas.Where(c => c.Idempresa == Guid.Parse(idEmpresa))
+                   .Select(x => new CajaResponse
+                   {
+                       Id = x.Id,
+                       CajaName = x.Nombre,
+                       CompanyId = x.Idempresa,
+                       CompanyName = x.IdempresaNavigation.Nombre
+
+                   });
+            }
             return Ok(new BaseResponse<IQueryable<CajaResponse>>
             { Message = "Lista de contactos obtenida correctamente", Data = registers, Status = 200 });
         }

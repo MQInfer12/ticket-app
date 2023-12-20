@@ -22,8 +22,8 @@ namespace server.Controllers
         public IActionResult Get()
         {
             var rol = User.FindFirst("RoleName").Value;
-            var idEmpresa = User.FindFirst("CompanyId").Value;
-            if(rol == "Super Administrador") {
+            if (rol == "Super Administrador")
+            {
                 var persona = _db.Personas.Join(_db.Usuarios,
                     person => person.Id,
                     user => user.Idpersona,
@@ -38,8 +38,12 @@ namespace server.Controllers
                     }
                     );
                 return Ok(new { Message = "Lista de Personas", Data = persona, Status = 200 });
-            } else {
-                var persona = _db.RolUsuarios.Where(ru => ru.Idempresa == Guid.Parse(idEmpresa)).Select(ru => new {
+            }
+            else
+            {
+                var idEmpresa = User.FindFirst("CompanyId").Value;
+                var persona = _db.RolUsuarios.Where(ru => ru.Idempresa == Guid.Parse(idEmpresa)).Select(ru => new
+                {
                     IdPersona = ru.IdusuarioNavigation.Idpersona,
                     Ci = ru.IdusuarioNavigation.IdpersonaNavigation.Ci,
                     Nombres = ru.IdusuarioNavigation.IdpersonaNavigation.Nombres,
@@ -91,7 +95,8 @@ namespace server.Controllers
 
             _db.SaveChanges();
 
-            var rolUser = new RolUsuario {
+            var rolUser = new RolUsuario
+            {
                 Idtiporol = req.IdTipoRol,
                 Idempresa = req.IdEmpresa,
                 Idusuario = user.Id
@@ -213,7 +218,7 @@ namespace server.Controllers
 
             var user = _db.Usuarios.FirstOrDefault(v => v.Idpersona == id);
             _db.Usuarios.Remove(user);
-     
+
             var person = _db.Personas.Find(id);
             _db.Personas.Remove(person);
 

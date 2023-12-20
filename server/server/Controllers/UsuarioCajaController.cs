@@ -17,46 +17,19 @@ namespace server.Controllers
             _db = db;
         }
 
-        [HttpGet, Authorize]
-        public IActionResult Get()
-        {
-            var registerUser = _db.UsuarioCajas
-                .Select(x => new UsuarioCajaResponse
-                {
-                    Id = x.Id,
-                    CajaId = x.Idcaja,
-                    UserId = x.Idusuario,
-                    CajaName = x.IdcajaNavigation.Nombre,
-                    UserName = x.IdusuarioNavigation.NombreUsuario,
-                    Ci = x.IdusuarioNavigation.IdpersonaNavigation.Ci,
-                    PersonApmaterno = x.IdusuarioNavigation.IdpersonaNavigation.Apmaterno,
-                    PersonAppaterno = x.IdusuarioNavigation.IdpersonaNavigation.Appaterno,
-                    PersonName = x.IdusuarioNavigation.IdpersonaNavigation.Nombres,
-                    CompanyId = x.IdcajaNavigation.Idempresa,
-                    CompanyName = x.IdcajaNavigation.IdempresaNavigation.Nombre
-                });
-            return Ok(new BaseResponse<IQueryable<UsuarioCajaResponse>>
-            { Message = "Lista de contactos obtenida correctamente", Data = registerUser, Status = 200 });
-        }
-
-        [HttpGet("{GetByCompanyId}"), Authorize]
-        public IActionResult GetByCompany(Guid GetByCompanyId)
+        [HttpGet("{GetByCajaId}"), Authorize]
+        public IActionResult GetByCaja(Guid GetByCajaId)
         {
             var registers = _db.UsuarioCajas
-                .Where(v => v.IdcajaNavigation.Idempresa == GetByCompanyId)
+                .Where(v => v.Idcaja == GetByCajaId)
                 .Select(x => new UsuarioCajaResponse
                 {
                     Id = x.Id,
-                    CajaId = x.Idcaja,
-                    UserId = x.Idusuario,
-                    CajaName = x.IdcajaNavigation.Nombre,
-                    UserName = x.IdusuarioNavigation.NombreUsuario,
-                    Ci = x.IdusuarioNavigation.IdpersonaNavigation.Ci,
-                    PersonApmaterno = x.IdusuarioNavigation.IdpersonaNavigation.Apmaterno,
-                    PersonAppaterno = x.IdusuarioNavigation.IdpersonaNavigation.Appaterno,
-                    PersonName = x.IdusuarioNavigation.IdpersonaNavigation.Nombres,
+                    IdUsuario = x.Idusuario,
+                    Name = x.IdusuarioNavigation.IdpersonaNavigation.Nombres,
+                    LastName = x.IdusuarioNavigation.IdpersonaNavigation.Appaterno + " " + x.IdusuarioNavigation.IdpersonaNavigation.Apmaterno
                 });
-            return Ok(new BaseResponse<IQueryable<UsuarioCajaResponse>>
+            return Ok(new BaseResponse<IQueryable>
             { Message = "Lista de contactos obtenida correctamente", Data = registers, Status = 200 });
         }
 
@@ -79,6 +52,12 @@ namespace server.Controllers
                 { Message = "No se encontro el usuario", Data = " ", Status = 404 });
             }
 
+            var exists = _db.UsuarioCajas.Any(cu => cu.Idcaja == req.CajaId && cu.Idusuario == req.UserId);
+
+            if(exists){
+                 return BadRequest(new { Message = "Este usuario ya esta asignado a esa caja", Data = ' ', Status = 409 });
+            }
+
             var UserRegister = new UsuarioCaja
             {
                 Idcaja = req.CajaId,
@@ -94,16 +73,9 @@ namespace server.Controllers
                 .Select(x => new UsuarioCajaResponse
                 {
                     Id = x.Id,
-                    CajaId = x.Idcaja,
-                    UserId = x.Idusuario,
-                    CajaName = x.IdcajaNavigation.Nombre,
-                    UserName = x.IdusuarioNavigation.NombreUsuario,
-                    Ci = x.IdusuarioNavigation.IdpersonaNavigation.Ci,
-                    PersonApmaterno = x.IdusuarioNavigation.IdpersonaNavigation.Apmaterno,
-                    PersonAppaterno = x.IdusuarioNavigation.IdpersonaNavigation.Appaterno,
-                    PersonName = x.IdusuarioNavigation.IdpersonaNavigation.Nombres,
-                    CompanyId = x.IdcajaNavigation.IdempresaNavigation.Id,
-                    CompanyName = x.IdcajaNavigation.IdempresaNavigation.Nombre
+                    IdUsuario = x.Idusuario,
+                    Name = x.IdusuarioNavigation.IdpersonaNavigation.Nombres,
+                    LastName = x.IdusuarioNavigation.IdpersonaNavigation.Appaterno + " " + x.IdusuarioNavigation.IdpersonaNavigation.Apmaterno
                 }).First();
 
             return Ok(new BaseResponse<UsuarioCajaResponse>
@@ -119,6 +91,11 @@ namespace server.Controllers
             {
                 return NotFound(new { Message = "No se encontraron los datos", Data = ' ', Status = 404 });
             }
+            var exists = _db.UsuarioCajas.Any(cu => cu.Idcaja == req.CajaId && cu.Idusuario == req.UserId && cu.Id != id);
+
+            if(exists){
+                 return BadRequest(new { Message = "Este usuario ya esta asignado a esa caja", Data = ' ', Status = 409 });
+            }
 
             existingUserService.Idusuario = req.UserId;
             existingUserService.Idcaja = req.CajaId;
@@ -132,16 +109,9 @@ namespace server.Controllers
                 .Select(x => new UsuarioCajaResponse
                 {
                     Id = x.Id,
-                    CajaId = x.Idcaja,
-                    UserId = x.Idusuario,
-                    CajaName = x.IdcajaNavigation.Nombre,
-                    UserName = x.IdusuarioNavigation.NombreUsuario,
-                    Ci = x.IdusuarioNavigation.IdpersonaNavigation.Ci,
-                    PersonApmaterno = x.IdusuarioNavigation.IdpersonaNavigation.Apmaterno,
-                    PersonAppaterno = x.IdusuarioNavigation.IdpersonaNavigation.Appaterno,
-                    PersonName = x.IdusuarioNavigation.IdpersonaNavigation.Nombres,
-                    CompanyId = x.IdcajaNavigation.IdempresaNavigation.Id,
-                    CompanyName = x.IdcajaNavigation.IdempresaNavigation.Nombre
+                    IdUsuario = x.Idusuario,
+                    Name = x.IdusuarioNavigation.IdpersonaNavigation.Nombres,
+                    LastName = x.IdusuarioNavigation.IdpersonaNavigation.Appaterno + " " + x.IdusuarioNavigation.IdpersonaNavigation.Apmaterno
                 }).First();
 
             return Ok(new BaseResponse<UsuarioCajaResponse>

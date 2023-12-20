@@ -75,11 +75,13 @@ const Aside = ({ open, setOpen }: Props) => {
               />
             </Section>
             <Section title="MOVIMIENTOS">
-              <IconLink
-                icon={<IconCaja />}
-                label="Cajas"
-                to="/dashboard/cajas"
-              />
+              <RolComponent roles={[Roles.superadmin, Roles.adminEmpresa]}>
+                <IconLink
+                  icon={<IconCaja />}
+                  label="Cajas"
+                  to="/dashboard/cajas"
+                />
+              </RolComponent>
               <IconLink
                 icon={<IconIncomes />}
                 label="Ingresos"

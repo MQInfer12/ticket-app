@@ -18,6 +18,7 @@ import { useNavigate } from "react-router-dom";
 import FormSelect from "../../global/components/form/formSelect.tsx";
 import { useUser } from "../../store/user.ts";
 import { Roles } from "../../global/interfaces/types/roles.ts";
+import { useState, useEffect } from "react";
 
 const Personas = () => {
   const { res, getData, pushData, modifyData, filterData } =
@@ -25,11 +26,16 @@ const Personas = () => {
   const { res: resEmpresasRols } = useGet<EmpresasRolsForPersonas>(
     "Persona/EmpresasRols"
   );
-  const { state, item, openModal, closeModal } = useModal<PersonaUsuario>(
+  const { state, item, openModal, closeModal, open } = useModal<PersonaUsuario>(
     "Formulario de persona"
   );
   const navigate = useNavigate();
   const { user } = useUser();
+  const [rolType, setRolType] = useState("");
+  const roles =
+    user?.roleName === Roles.superadmin
+      ? resEmpresasRols?.data.rols
+      : resEmpresasRols?.data.rols.filter((x) => x.nombre != Roles.superadmin);
 
   const columns = [
     {
@@ -66,6 +72,12 @@ const Personas = () => {
     },
   ];
 
+  useEffect(() => {
+    if (open == false) {
+      setRolType("");
+    }
+  }, [open]);
+
   return (
     <PageContainer title="Personas">
       <TableContainer
@@ -96,9 +108,10 @@ const Personas = () => {
           validationSchema={personaUsuarioSchema}
           post={{
             route: "Persona",
-            onBody: (value) => {
-              return value;
-            },
+            onBody: (value) => ({
+              ...value,
+              idEmpresa: rolType === Roles.superadmin ? null : value.idEmpresa
+            }),
             onSuccess: (data) => {
               pushData(data);
               closeModal();
@@ -119,6 +132,14 @@ const Personas = () => {
               closeModal();
             },
           }}
+          onChange={(e) => {
+            if (e.target.name == "idTipoRol")
+              setRolType(
+                resEmpresasRols?.data.rols.find(
+                  (rol) => rol.id === e.target.value
+                )?.nombre || ""
+              );
+          }}
         >
           <FormInput title="CI" name="ci" />
           <FormInput title="Nombres" name="nombres" />
@@ -126,26 +147,28 @@ const Personas = () => {
           <FormInput title="Apellido materno" name="apmaterno" />
           <FormInput title="Usuario" name="nombreUsurio" />
           {!item && <FormInput title="Contraseña" name="password" />}
-          {(user?.roleName === Roles.superadmin && !item) && (
-            <FormSelect title="Empresa inicial" name="idEmpresa">
-              <option value="">Seleccionar empresa</option>
-              {resEmpresasRols?.data.empresas.map((empresa) => (
-                <option key={empresa.id} value={empresa.id}>
-                  {empresa.nombre}
-                </option>
-              ))}
-            </FormSelect>
-          )}
           {!item && (
             <FormSelect title="Rol inicial" name="idTipoRol">
               <option value="">Seleccionar rol</option>
-              {resEmpresasRols?.data.rols.map((rol) => (
+              {roles?.map((rol) => (
                 <option key={rol.id} value={rol.id}>
                   {rol.nombre}
                 </option>
               ))}
             </FormSelect>
           )}
+          {user?.roleName === Roles.superadmin &&
+            !item &&
+            rolType !== Roles.superadmin && (
+              <FormSelect title="Empresa inicial" name="idEmpresa">
+                <option value="">Seleccionar empresa</option>
+                {resEmpresasRols?.data.empresas.map((empresa) => (
+                  <option key={empresa.id} value={empresa.id}>
+                    {empresa.nombre}
+                  </option>
+                ))}
+              </FormSelect>
+            )}
         </Form>
       </Modal>
     </PageContainer>

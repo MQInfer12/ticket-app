@@ -27,8 +27,8 @@ namespace server.Controllers
         public IActionResult GetRolsByUser(Guid id)
         {
             var rol = User.FindFirst("RoleName").Value;
-            var idEmpresa = User.FindFirst("CompanyId").Value;
-            if(rol == "Super Administrador") {
+            if (rol == "Super Administrador")
+            {
                 var userRols = _db.RolUsuarios.Where(ru => ru.IdusuarioNavigation.Idpersona == id).Select(
                     x => new
                     {
@@ -46,7 +46,10 @@ namespace server.Controllers
                     ).ToList();
 
                 return Ok(new { Message = "Datos obtenidos con exito", Data = userRols, Status = 200 });
-            } else {
+            }
+            else
+            {
+                var idEmpresa = User.FindFirst("CompanyId").Value;
                 var userRols = _db.RolUsuarios.Where(ru => ru.Idempresa == Guid.Parse(idEmpresa) && ru.IdusuarioNavigation.Idpersona == id).Select(
                     x => new
                     {

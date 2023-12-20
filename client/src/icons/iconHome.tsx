@@ -11,18 +11,18 @@ const IconHome = () => {
         <path
           id="Vector"
           stroke="currentColor"
-          stroke-linecap="round"
-          stroke-linejoin="round"
+          strokeLinecap="round"
+          strokeLinejoin="round"
           d="M0.5 8 7 1.5 13.5 8"
-          stroke-width="1"
+          strokeWidth="1"
         ></path>
         <path
           id="Vector_2"
           stroke="currentColor"
-          stroke-linecap="round"
-          stroke-linejoin="round"
+          strokeLinecap="round"
+          strokeLinejoin="round"
           d="m2.5 6 0 6.5h9V6"
-          stroke-width="1"
+          strokeWidth="1"
         ></path>
       </g>
     </svg>
