@@ -11,7 +11,7 @@ public partial class RolUsuario
 
     public Guid Idtiporol { get; set; }
 
-    public Guid Idempresa { get; set; }
+    public Guid? Idempresa { get; set; }
 
     public bool? Estado { get; set; }
 

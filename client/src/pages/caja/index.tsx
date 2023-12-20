@@ -16,7 +16,7 @@ const Caja = () => {
   const { res } = useGet<CajaType>(`Caja/ById/${id}`);
 
   return (
-    <PageContainer backRoute="/dashboard/cajas" title="Cajas">
+    <PageContainer backRoute="/dashboard/cajas" title="Caja">
       {!res ? (
         <Loader />
       ) : (

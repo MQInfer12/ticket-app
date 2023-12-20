@@ -29,17 +29,21 @@ namespace server.Controllers
 
         }
 
-        private string GenerateToken(Usuario user, string nameRole, Guid roleId, Guid companyId)
+        private string GenerateToken(Usuario user, string nameRole, Guid roleId, Guid? companyId)
         {
             var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Jwt:Key"]));
             var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
+
 
             var claims = new List<Claim>(){
                 new Claim("UserId", user.Id.ToString()),
                 new Claim("RoleName", nameRole.ToString()),
                 new Claim("RoleId", roleId.ToString()),
-                new Claim("CompanyId", companyId.ToString()),
             };
+            if (companyId != null)
+            {
+                claims.Add(new Claim("CompanyId", companyId.ToString()));
+            }
 
             //Add ROLE
             claims.Add(new Claim(ClaimTypes.Role, nameRole.ToString()));
@@ -60,28 +64,50 @@ namespace server.Controllers
         {
 
             string userId = User.FindFirst("UserId").Value; //get id
-            string companyId = User.FindFirst("CompanyId").Value; //get id
-
-            var userRes = _db.RolUsuarios
-                .Where(u => u.Idusuario == Guid.Parse(userId))
-                .Where(u => u.Idempresa == Guid.Parse(companyId))
-                .Select(x => new
-                {
-                    UserId = x.Idusuario,
-                    RoleTypeId = x.Idtiporol,
-                    CompanyId = x.Idempresa,
-                    RoleName = x.IdtiporolNavigation.Nombre,
-                    UserName = x.IdusuarioNavigation.NombreUsuario,
-                    Password = x.IdusuarioNavigation.Contrasenia,
-                    CompanyName = x.IdempresaNavigation.Nombre,
-                    CompanyAddress = x.IdempresaNavigation.Direccion,
-                    CompanyState = x.IdempresaNavigation.Estado,
-                    PersonName = x.IdusuarioNavigation.IdpersonaNavigation.Nombres,
-                    PersonLastName = x.IdusuarioNavigation.IdpersonaNavigation.Appaterno,
-                    PersonLast = x.IdusuarioNavigation.IdpersonaNavigation.Apmaterno
-                }).First();
-
-            return Ok(new { Message = "Token obtenido", Data = userRes, Status = 200 });
+            string companyId = User.FindFirst("CompanyId")?.Value; //get id
+            if (companyId != null)
+            {
+                var userRes = _db.RolUsuarios
+                    .Where(u => u.Idusuario == Guid.Parse(userId))
+                    .Where(u => u.Idempresa == Guid.Parse(companyId))
+                    .Select(x => new
+                    {
+                        UserId = x.Idusuario,
+                        RoleTypeId = x.Idtiporol,
+                        CompanyId = x.Idempresa,
+                        RoleName = x.IdtiporolNavigation.Nombre,
+                        UserName = x.IdusuarioNavigation.NombreUsuario,
+                        Password = x.IdusuarioNavigation.Contrasenia,
+                        CompanyName = x.IdempresaNavigation.Nombre,
+                        CompanyAddress = x.IdempresaNavigation.Direccion,
+                        CompanyState = x.IdempresaNavigation.Estado,
+                        PersonName = x.IdusuarioNavigation.IdpersonaNavigation.Nombres,
+                        PersonLastName = x.IdusuarioNavigation.IdpersonaNavigation.Appaterno,
+                        PersonLast = x.IdusuarioNavigation.IdpersonaNavigation.Apmaterno
+                    }).First();
+                return Ok(new { Message = "Token obtenido", Data = userRes, Status = 200 });
+            }
+            else
+            {
+                var userRes = _db.RolUsuarios
+                    .Where(u => u.Idusuario == Guid.Parse(userId))
+                    .Select(x => new
+                    {
+                        UserId = x.Idusuario,
+                        RoleTypeId = x.Idtiporol,
+                        CompanyId = x.Idempresa,
+                        RoleName = x.IdtiporolNavigation.Nombre,
+                        UserName = x.IdusuarioNavigation.NombreUsuario,
+                        Password = x.IdusuarioNavigation.Contrasenia,
+                        CompanyName = x.IdempresaNavigation.Nombre,
+                        CompanyAddress = x.IdempresaNavigation.Direccion,
+                        CompanyState = x.IdempresaNavigation.Estado,
+                        PersonName = x.IdusuarioNavigation.IdpersonaNavigation.Nombres,
+                        PersonLastName = x.IdusuarioNavigation.IdpersonaNavigation.Appaterno,
+                        PersonLast = x.IdusuarioNavigation.IdpersonaNavigation.Apmaterno
+                    }).First();
+                return Ok(new { Message = "Token obtenido", Data = userRes, Status = 200 });
+            }
         }
 
 
@@ -226,7 +252,7 @@ namespace server.Controllers
 
             var user = _db.Usuarios.Find(userRol.Idusuario);
 
-        
+
             var token = GenerateToken(user, roletype.Nombre, roletype.Id, userRol.Idempresa);
             return Ok(new { Message = "Bienvenido", Data = token, Status = 200 });
         }

@@ -36,5 +36,5 @@ public class PersonaDTO // para decir al front que me tiene que enviar
 
     public string? Password { get; set; }
     public Guid IdTipoRol { get; set; }
-    public Guid IdEmpresa { get; set; }
+    public Guid? IdEmpresa { get; set; }
 }
