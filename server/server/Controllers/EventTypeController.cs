@@ -21,16 +21,33 @@ namespace server.Controllers
         [HttpGet, Authorize]
         public IActionResult Get()
         {
-            var eventsType = _db.TipoEventos
-                .Select(x => new EventTypeResponse
-                {
-                    Id = x.Id,
-                    TypeEventName = x.Nombre,
-                    Date = x.Fecha,
-                    Amount = x.Cantidad,
-                    CompanyId = x.Idempresa,
-                    CompanyName = x.IdempresaNavigation.Nombre
-                });
+            var rol = User.FindFirst("RoleName").Value;
+            IQueryable<EventTypeResponse> eventsType;
+            if (rol == "Super Administrador")
+            {
+                eventsType = _db.TipoEventos
+                    .Select(x => new EventTypeResponse
+                    {
+                        Id = x.Id,
+                        TypeEventName = x.Nombre,
+                        Date = x.Fecha,
+                        Amount = x.Cantidad,
+                        CompanyId = x.Idempresa,
+                        CompanyName = x.IdempresaNavigation.Nombre
+                    });
+            } else{
+                var idEmpresa = User.FindFirst("CompanyId").Value;
+                eventsType = _db.TipoEventos.Where(e => e.Idempresa == Guid.Parse(idEmpresa))
+                    .Select(x => new EventTypeResponse
+                    {
+                        Id = x.Id,
+                        TypeEventName = x.Nombre,
+                        Date = x.Fecha,
+                        Amount = x.Cantidad,
+                        CompanyId = x.Idempresa,
+                        CompanyName = x.IdempresaNavigation.Nombre
+                    });
+            }
 
             if (eventsType == null)
             {

@@ -11,6 +11,8 @@ import Modal from "../../global/components/modal.tsx";
 import FormInput from "../../global/components/form/formInput.tsx";
 import FormSelect from "../../global/components/form/formSelect.tsx";
 import { Empresa } from "../../global/interfaces/api/empresa.ts";
+import { useUser } from "../../store/user.ts";
+import { Roles } from "../../global/interfaces/types/roles.ts";
 
 const Eventos = () => {
   const navigate = useNavigate();
@@ -20,12 +22,9 @@ const Eventos = () => {
   const { state, item, openModal, closeModal } = useModal<Evento>(
     "Formulario de empresa"
   );
+  const { user } = useUser();
 
   const columns = [
-    {
-      header: "Empresa",
-      accessorKey: "companyName",
-    },
     {
       header: "Nombre",
       accessorKey: "typeEventName",
@@ -52,6 +51,12 @@ const Eventos = () => {
       },
     },
   ];
+  if (user?.roleName === Roles.superadmin) {
+    columns.unshift({
+      header: "Empresa",
+      accessorKey: "companyName",
+    });
+  }
 
   return (
     <PageContainer title="Eventos">
@@ -66,7 +71,12 @@ const Eventos = () => {
         <Form<Evento | null, EventoForm>
           item={item}
           initialValues={{
-            idEmpresa: item?.companyId || "",
+            idEmpresa:
+              user?.roleName === Roles.superadmin
+                ? item
+                  ? item.companyId
+                  : ""
+                : user?.companyId,
             nombre: item?.typeEventName || "",
             fecha: item?.date.split("-").reverse().join("-") || "",
             cantidad: item?.amount || "",
@@ -99,11 +109,13 @@ const Eventos = () => {
             },
           }}
         >
-          {!item && (
+          {(!item && user?.roleName === Roles.superadmin)&& (
             <FormSelect title="Empresa" name="idEmpresa">
               <option value="">Seleccione empresa...</option>
               {dataEmpresa?.data.map((data) => (
-                <option value={data.id} key={data.id}>{data.nombre}</option>
+                <option value={data.id} key={data.id}>
+                  {data.nombre}
+                </option>
               ))}
             </FormSelect>
           )}

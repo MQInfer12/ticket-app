@@ -37,16 +37,23 @@ namespace server.Controllers
             }
 
             var rols = _db.TipoRols.ToList();
-            var personas = _db.Usuarios.Select(p => new {
+            var personas = _db.Usuarios.Select(p => new
+            {
                 idUsuario = p.Id,
                 nombreCompleto = p.IdpersonaNavigation.Nombres + " " + p.IdpersonaNavigation.Appaterno + " " + p.IdpersonaNavigation.Apmaterno
             }).ToList();
 
-            return Ok(new { Message = "Datos obtenidos con exito", Data = new {
-                empresa = company,
-                roles = rols,
-                personas
-            }, Status = 200 });
+            return Ok(new
+            {
+                Message = "Datos obtenidos con exito",
+                Data = new
+                {
+                    empresa = company,
+                    roles = rols,
+                    personas
+                },
+                Status = 200
+            });
         }
 
         [HttpPost, Authorize]
@@ -66,6 +73,15 @@ namespace server.Controllers
             };
 
             _db.Empresas.Add(company);
+            _db.SaveChanges();
+
+            var accounts = new List<Cuentum>
+            {
+                new Cuentum { Idempresa = company.Id, Nombre = "Venta entradas", Tipo="Ingreso" },
+                new Cuentum { Idempresa = company.Id, Nombre = "Venta tienda virtual", Tipo="Ingreso" },
+                new Cuentum { Idempresa = company.Id, Nombre = "Venta socios", Tipo="Ingreso" },
+            };
+            _db.Cuenta.AddRange(accounts);
             _db.SaveChanges();
 
             return Ok(new { Message = "Se creo la empresa", Data = company, Status = 201 });
@@ -106,7 +122,7 @@ namespace server.Controllers
 
             _db.Empresas.Remove(company);
             _db.SaveChanges();
-            return Ok(new { Message = "Se elimino la empresa", Data = ' ', Status = 200});
+            return Ok(new { Message = "Se elimino la empresa", Data = ' ', Status = 200 });
 
         }
     }

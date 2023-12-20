@@ -12,6 +12,7 @@ import Head from "./head";
 import IconLink from "./iconLink";
 import Profile from "./profile";
 import Section from "./section";
+import IconCuenta from "../../../../icons/iconCuenta";
 
 interface Props {
   open: boolean;
@@ -67,13 +68,15 @@ const Aside = ({ open, setOpen }: Props) => {
                 />
               </Section>
             </RolComponent>
-            <Section title="ENTRADAS">
-              <IconLink
-                icon={<IconEvent />}
-                label="Eventos"
-                to="/dashboard/eventos"
-              />
-            </Section>
+            <RolComponent roles={[Roles.superadmin, Roles.adminEmpresa]}>
+              <Section title="ENTRADAS">
+                <IconLink
+                  icon={<IconEvent />}
+                  label="Eventos"
+                  to="/dashboard/eventos"
+                />
+              </Section>
+            </RolComponent>
             <Section title="MOVIMIENTOS">
               <RolComponent roles={[Roles.superadmin, Roles.adminEmpresa]}>
                 <IconLink
@@ -82,6 +85,11 @@ const Aside = ({ open, setOpen }: Props) => {
                   to="/dashboard/cajas"
                 />
               </RolComponent>
+              <IconLink
+                icon={<IconCuenta />}
+                label="Cuentas"
+                to="/dashboard/cuentas"
+              />
               <IconLink
                 icon={<IconIncomes />}
                 label="Ingresos"

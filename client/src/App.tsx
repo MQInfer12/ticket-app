@@ -12,6 +12,7 @@ import ValidateRol from "./global/guard/validateRol";
 import { Roles } from "./global/interfaces/types/roles";
 import Cajas from "./pages/cajas";
 import Caja from "./pages/caja";
+import Cuentas from "./pages/cuentas";
 
 function App() {
   return (
@@ -52,8 +53,22 @@ function App() {
               </ValidateRol>
             }
           />
-          <Route path="/dashboard/eventos" element={<Eventos />} />
-          <Route path="/dashboard/eventos/:id" element={<Evento />} />
+          <Route
+            path="/dashboard/eventos"
+            element={
+              <ValidateRol roles={[Roles.superadmin, Roles.adminEmpresa]}>
+                <Eventos />
+              </ValidateRol>
+            }
+          />
+          <Route
+            path="/dashboard/eventos/:id"
+            element={
+              <ValidateRol roles={[Roles.superadmin, Roles.adminEmpresa]}>
+                <Evento />
+              </ValidateRol>
+            }
+          />
           <Route
             path="/dashboard/cajas"
             element={
@@ -70,6 +85,7 @@ function App() {
               </ValidateRol>
             }
           />
+          <Route path="/dashboard/cuentas" element={<Cuentas/>}/>
           <Route path="/dashboard/*" element={<div>404</div>} />
         </Route>
       </Routes>

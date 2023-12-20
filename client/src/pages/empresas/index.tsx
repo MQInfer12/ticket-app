@@ -96,6 +96,7 @@ const Empresas = () => {
               closeModal();
             },
           }}
+          showDelete={false}
         >
           <FormInput title="Nombre" name="nombre" />
           <FormInput title="Dirección" name="direccion" />

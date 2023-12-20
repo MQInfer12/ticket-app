@@ -12,6 +12,7 @@ interface Props<T, U> {
   post: SendRequest<T, U>;
   del: DeleteRequest<T>;
   onChange?: (e:any) => void;
+  showDelete?:boolean;
 }
 
 interface SendRequest<T, U> {
@@ -33,6 +34,7 @@ const Form = <T, U>({
   put,
   post,
   del,
+  showDelete = true,
   onChange = () => {},
 }: Props<T, U>) => {
   const { sendRequest } = useRequest();
@@ -75,7 +77,7 @@ const Form = <T, U>({
         <div className="flex flex-col gap-2">{children}</div>
         <div className="self-center flex gap-4">
           <Button type="submit">Enviar</Button>
-          {item && (
+          {(item && showDelete) && (
             <Button
               type="button"
               onClick={() => confirmAlert(handleDelete)}
