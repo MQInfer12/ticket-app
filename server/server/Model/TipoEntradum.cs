@@ -23,6 +23,8 @@ public partial class TipoEntradum
 }
 public class TipoEntradaDTO
 {
+    public Guid idEvent { get; set; }
+
     public string NombreEvent { get; set; }
 
     public double CostoEvent { get; set; }

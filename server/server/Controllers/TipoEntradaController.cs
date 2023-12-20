@@ -19,7 +19,7 @@ namespace server.Controllers
             _db = db;
         }
         [HttpGet, Authorize]
-        [Route("GetTipoEntradaById{id}")]
+        [Route("GetTipoEntradaById/{id}")]
         public IActionResult GetTipoEntradaById(Guid id)
         {
             var entrada = _db.TipoEntrada.Where(e => e.Idtipoevento == id).ToList();
@@ -31,6 +31,7 @@ namespace server.Controllers
         {
             var e = new TipoEntradum
             {
+                Idtipoevento = TipoEntradum.idEvent,
                 Nombre = TipoEntradum.NombreEvent,
                 Costo = TipoEntradum.CostoEvent,
                 Cantidadinicial = TipoEntradum.CantidadinicialEvent,
