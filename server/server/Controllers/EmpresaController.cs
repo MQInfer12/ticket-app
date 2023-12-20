@@ -84,6 +84,11 @@ namespace server.Controllers
             _db.Cuenta.AddRange(accounts);
             _db.SaveChanges();
 
+            var caja = new Caja{
+                Idempresa = company.Id,
+                Nombre = "Caja virtual"
+            };
+
             return Ok(new { Message = "Se creo la empresa", Data = company, Status = 201 });
         }
 
