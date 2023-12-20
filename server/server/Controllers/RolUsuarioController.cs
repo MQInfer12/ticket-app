@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using server.Model;
+using server.Responses;
 
 namespace server.Controllers
 {
@@ -17,11 +18,26 @@ namespace server.Controllers
             _db = db;
         }
 
+        [HttpGet("GetUserCajaByCompany/{id}"), Authorize]
+        public IActionResult GetUsersByCompany(Guid id)
+        {
+            var registers = _db.RolUsuarios
+                .Where(v => v.Idempresa == id && v.IdtiporolNavigation.Nombre == "Cajero")
+                .Select(x => new
+                {
+                    Id = x.Idusuario,
+                    FullName = x.IdusuarioNavigation.IdpersonaNavigation.Nombres + " " + x.IdusuarioNavigation.IdpersonaNavigation.Appaterno + " " + x.IdusuarioNavigation.IdpersonaNavigation.Apmaterno
+                });
+            return Ok(new BaseResponse<IQueryable>
+            { Message = "Lista de usuarios obtenida correctamente", Data = registers, Status = 200 });
+        }
+
         [HttpPost, Authorize] //    Tipo post //
         public IActionResult Post([FromBody] RolUsuarioDTO req)
         {
             var exists = _db.RolUsuarios.Any(e => e.Idtiporol == req.Rol && e.Idempresa == req.Empresa && e.Idusuario == req.Idusuario);
-            if (exists) {
+            if (exists)
+            {
                 return BadRequest(new { Message = "Ya existe este rol en esta empresa", Data = ' ', Status = 400 });
             }
             var userRole = new RolUsuario
@@ -34,7 +50,8 @@ namespace server.Controllers
             _db.RolUsuarios.Add(userRole);
             _db.SaveChanges();
 
-            var userRoleGet = _db.RolUsuarios.Where(x => x.Id == userRole.Id).Select(data =>new {
+            var userRoleGet = _db.RolUsuarios.Where(x => x.Id == userRole.Id).Select(data => new
+            {
                 id = data.Id,
                 idRol = data.Idtiporol,
                 rol = data.IdtiporolNavigation.Nombre,
@@ -54,12 +71,13 @@ namespace server.Controllers
         public IActionResult Put(Guid id, RolUsuarioDTO req)
         {
             var existsRoleUser = _db.RolUsuarios.Find(id);
-            if(existsRoleUser == null)
+            if (existsRoleUser == null)
             {
                 return NotFound(new { Message = "No se encontro asignacion", Data = ' ', Status = 404 });
             }
             var exists = _db.RolUsuarios.Any(e => e.Idempresa == req.Empresa && e.Idtiporol == req.Rol && e.Idusuario == req.Idusuario && e.Id != id);
-            if(exists) {
+            if (exists)
+            {
                 return BadRequest(new { Message = "Ya existe este rol en esta empresa", Data = ' ', Status = 400 });
             }
             existsRoleUser.Idempresa = req.Empresa;
@@ -69,11 +87,12 @@ namespace server.Controllers
             _db.RolUsuarios.Update(existsRoleUser);
             _db.SaveChanges();
 
-            var userRoleGet = _db.RolUsuarios.Where(x => x.Id == existsRoleUser.Id).Select(data => new {
+            var userRoleGet = _db.RolUsuarios.Where(x => x.Id == existsRoleUser.Id).Select(data => new
+            {
                 id = data.Id,
                 idRol = data.Idtiporol,
                 rol = data.IdtiporolNavigation.Nombre,
-                idEmpresa = data.Idempresa, 
+                idEmpresa = data.Idempresa,
                 empresa = data.IdempresaNavigation.Nombre,
                 estado = data.Estado,
                 idUsuario = data.Idusuario,

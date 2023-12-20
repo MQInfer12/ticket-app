@@ -32,3 +32,8 @@ export interface PersonaPage {
   rols: Rol[];
   empresas: Empresa[];
 }
+
+export interface CajaUser {
+  id: string;
+  fullName: string;
+}
