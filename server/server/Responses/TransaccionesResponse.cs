@@ -2,6 +2,7 @@ namespace server.Responses
 {
   public class TransaccionResponse
   {
+    public string NombreEmpresa { get; set; }
     public string NombreUsuario { get; set; }
     public double Total { get; set; }
     public int Cantidad { get; set; }

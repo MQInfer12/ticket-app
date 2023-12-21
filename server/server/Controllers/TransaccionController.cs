@@ -24,6 +24,7 @@ namespace server.Controllers
             if (rol == "Super Administrador")
             {
                 var transaccion = _db.Transaccions.Where(x => x.IdcuentaNavigation.Tipo == "Ingreso").Select(t => new TransaccionResponse{
+                  NombreEmpresa = t.IdcajaNavigation.IdempresaNavigation.Nombre,
                   NombreUsuario = t.IdusuarioNavigation.NombreUsuario,
                   Total = t.Montototal,
                   Cantidad = t.Cantidad,
@@ -37,6 +38,7 @@ namespace server.Controllers
             {
                 var idEmpresa = User.FindFirst("CompanyId").Value;
                 var transaccion = _db.Transaccions.Where(x => x.IdcuentaNavigation.Tipo == "Ingreso" && x.IdcajaNavigation.Idempresa == Guid.Parse(idEmpresa) && x.IdcuentaNavigation.Idempresa == Guid.Parse(idEmpresa)).Select(t => new TransaccionResponse{
+                  NombreEmpresa = t.IdcajaNavigation.IdempresaNavigation.Nombre,
                   NombreUsuario = t.IdusuarioNavigation.NombreUsuario,
                   Total = t.Montototal,
                   Cantidad = t.Cantidad,

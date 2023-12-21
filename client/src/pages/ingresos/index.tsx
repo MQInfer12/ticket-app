@@ -1,22 +1,38 @@
-import { Cuenta } from "../../global/interfaces/api/cuenta";
 import { useGet } from "../../hooks/useGet";
 import PageContainer from "../../global/components/pageContainer";
 import TableContainer from "../../global/components/table/tableContainer";
 import { useUser } from "../../store/user";
 import { Roles } from "../../global/interfaces/types/roles";
+import { Ingreso } from "../../global/interfaces/api/ingreso";
 
 const Ingresos = () => {
-  const { res, getData } = useGet<Cuenta[]>("Cuenta");
+  const { res, getData } = useGet<Ingreso[]>("Transaccion");
   const { user } = useUser();
 
   const columns = [
     {
-      header: "Cuenta",
-      accessorKey: "nombre",
+      header: "Cliente",
+      accessorKey: "nombreUsuario",
     },
     {
-      header: "Tipo",
-      accessorKey: "tipo",
+      header: "Total",
+      accessorKey: "total",
+    },
+    {
+      header: "Cantidad",
+      accessorKey: "cantidad",
+    },
+    {
+      header: "Extra",
+      accessorKey: "extra",
+    },
+    {
+      header: "Tipo de entrega",
+      accessorKey: "tipoEntrega",
+    },
+    {
+      header: "Fecha",
+      accessorKey: "fecha",
     },
   ];
 
