@@ -88,6 +88,8 @@ namespace server.Controllers
                 Idempresa = company.Id,
                 Nombre = "Caja virtual"
             };
+            _db.Cajas.Add(caja);
+            _db.SaveChanges();
 
             return Ok(new { Message = "Se creo la empresa", Data = company, Status = 201 });
         }
