@@ -13,6 +13,7 @@ import { Roles } from "./global/interfaces/types/roles";
 import Cajas from "./pages/cajas";
 import Caja from "./pages/caja";
 import Cuentas from "./pages/cuentas";
+import VerEvento from "./pages/verEvento";
 
 function App() {
   return (
@@ -21,6 +22,10 @@ function App() {
         <Route path="/" element={<Login />} />
         <Route path="/dashboard" element={<Dashboard />}>
           <Route path="/dashboard/inicio" element={<Inicio />} />
+          <Route
+            path="/dashboard/inicio/verEvento/:id"
+            element={<VerEvento />}
+          />
           <Route
             path="/dashboard/empresas"
             element={
@@ -85,7 +90,7 @@ function App() {
               </ValidateRol>
             }
           />
-          <Route path="/dashboard/cuentas" element={<Cuentas/>}/>
+          <Route path="/dashboard/cuentas" element={<Cuentas />} />
           <Route path="/dashboard/*" element={<div>404</div>} />
         </Route>
       </Routes>

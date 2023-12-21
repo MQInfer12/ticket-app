@@ -40,7 +40,8 @@ const Eventos = () => {
     },
     {
       header: "Acciones",
-      cell: () => {
+      cell: (cell: any) => {
+        const item: Evento = cell.row.original;
         return (
           <div className="flex justify-center">
             <Button onClick={() => navigate(`/dashboard/eventos/${item?.id}`)}>
