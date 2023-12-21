@@ -1,3 +1,4 @@
+import { useNavigate } from "react-router-dom";
 import Logo from "../../../../assets/images/login/GoalGuardian.png";
 import CircleButton from "../../../../global/components/buttons/circleButton";
 import IconMenuLeft from "../../../../icons/iconMenuLeft";
@@ -7,8 +8,13 @@ interface Props {
 }
 
 const Head = ({ setOpen }: Props) => {
+  const navigate = useNavigate();
+
   return (
-    <div className="flex justify-between items-center mb-4">
+    <div
+      onClick={() => navigate("/dashboard/inicio")}
+      className="flex justify-between items-center mb-4 cursor-pointer hover:bg-slate-50 transition-all duration-300 rounded-md"
+    >
       <div className="flex items-center gap-2">
         <div className="w-10 h-10">
           <img src={Logo} alt="logo" className="rounded-lg object-cover" />

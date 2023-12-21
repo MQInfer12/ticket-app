@@ -2,7 +2,7 @@ import RolComponent from "../../../../global/guard/rolComponent";
 import { Roles } from "../../../../global/interfaces/types/roles";
 import IconEmpresa from "../../../../icons/iconEmpresa";
 import IconEvent from "../../../../icons/iconEvent";
-import IconExpenses from "../../../../icons/iconExpenses";
+/* import IconExpenses from "../../../../icons/iconExpenses"; */
 import IconHome from "../../../../icons/iconHome";
 import IconIncomes from "../../../../icons/iconIncomes";
 import IconPersonas from "../../../../icons/iconPersonas";
@@ -94,11 +94,11 @@ const Aside = ({ open, setOpen }: Props) => {
                   label="Ingresos"
                   to="/dashboard/ingresos"
                 />
-                <IconLink
+                {/* <IconLink
                   icon={<IconExpenses />}
                   label="Egresos"
                   to="/dashboard/egresos"
-                />
+                /> */}
               </Section>
             </RolComponent>
           </div>

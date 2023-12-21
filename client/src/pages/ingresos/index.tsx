@@ -5,9 +5,8 @@ import TableContainer from "../../global/components/table/tableContainer";
 import { useUser } from "../../store/user";
 import { Roles } from "../../global/interfaces/types/roles";
 
-const Cuentas = () => {
-  const { res, getData } =
-    useGet<Cuenta[]>("Cuenta");
+const Ingresos = () => {
+  const { res, getData } = useGet<Cuenta[]>("Cuenta");
   const { user } = useUser();
 
   const columns = [
@@ -28,10 +27,10 @@ const Cuentas = () => {
     });
   }
   return (
-    <PageContainer title="Cajas">
+    <PageContainer title="Ingresos">
       <TableContainer columns={columns} data={res?.data} reload={getData} />
     </PageContainer>
   );
 };
 
-export default Cuentas;
+export default Ingresos;
