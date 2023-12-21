@@ -56,7 +56,7 @@ namespace server.Controllers
         return BadRequest(new { Message = "Debe seleccionar al menos un ticket", Data = ' ', Status = 400 });
       }
       var idEmpresa = User.FindFirst("CompanyId").Value;
-      var dataEmpresa = _db.Empresas.Find(idEmpresa);
+      var dataEmpresa = _db.Empresas.Find(Guid.Parse(idEmpresa));
       var cuentaTicket = _db.Cuenta.Where(c => c.Idempresa == Guid.Parse(idEmpresa) && c.Nombre == "Venta entradas").First();
       var cajaTicket = _db.Cajas.Where(c => c.Idempresa == Guid.Parse(idEmpresa) && c.Nombre == "Caja virtual").First();
       var suma = 0.0;
@@ -88,15 +88,21 @@ namespace server.Controllers
       _db.SaveChanges();
 
       List<DetalleTransaccione> detalles = new List<DetalleTransaccione>();
-      for (int i = 0; i < req.Items.Count; i++)
-      {
-        var entrada = _db.TipoEntrada.Find(req.Items[i].IdEntrada);
-        for (int j = 0; j < req.Items[i].Cantidad; j++)
-        {
-          var detalle = new DetalleTransaccione
-          {
+      for (int i = 0; i < req.Items.Count; i++){
+        var entrada = _db.TipoEntrada.Where(te => te.Id == req.Items[i].IdEntrada).Join(
+          _db.TipoEventos,
+          te => te.Idtipoevento,
+          t => t.Id,
+          (te, t) => new {
+            Nombre = te.Nombre,
+            NombreEvento = t.Nombre,
+            Costo = te.Costo
+          }
+        ).First();
+        for (int j = 0; j < req.Items[i].Cantidad; j++){
+          var detalle = new DetalleTransaccione{
             Idtransaccion = transaccion.Id,
-            Detalle = entrada.IdtipoeventoNavigation.Nombre + " (" + entrada.Nombre + ")",
+            Detalle = entrada.NombreEvento + " (" + entrada.Nombre +")",
             Preciounitario = entrada.Costo,
             Ci = req.Items[i].Ci[j]
           };

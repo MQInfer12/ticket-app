@@ -37,6 +37,14 @@ namespace server.Controllers
                 Cantidadinicial = TipoEntradum.CantidadinicialEvent,
                 Stock = TipoEntradum.StockEvent
             };
+
+            var evento = _db.TipoEventos.Find(TipoEntradum.idEvent);
+            var allTicketQuantity = _db.TipoEntrada.Where(te => te.Idtipoevento == TipoEntradum.idEvent).Sum(te => te.Cantidadinicial);
+            if(allTicketQuantity + TipoEntradum.CantidadinicialEvent > evento.Cantidad) {
+                var restantes = evento.Cantidad - allTicketQuantity;
+                return BadRequest(new { Message = "La cantidad inicial máxima excede la del evento (disponibles " + restantes.ToString() + ")", Data = ' ', Status = 409 });
+            }
+
             _db.TipoEntrada.Add(e);
             _db.SaveChanges();
             return Ok(new { Message = "Se añadio la entrada", Data = e, Status = 200 });
@@ -44,11 +52,23 @@ namespace server.Controllers
         [HttpPut("{id}"), Authorize]
         public IActionResult PutTipoEntradum(Guid id, TipoEntradaDTO TipoEntradum)
         {
+            if(TipoEntradum.StockEvent > TipoEntradum.CantidadinicialEvent) {
+                return BadRequest(new { Message = "El stock no puede superar a la cantidad inicial", Data = ' ', Status = 409 });
+            }
+
             var e = _db.TipoEntrada.Find(id);
             if (e == null)
             {
                 return NotFound(new { Message = "No se encontro la entrada", Data = ' ', Status = 404 });
             }
+            
+            var evento = _db.TipoEventos.Find(TipoEntradum.idEvent);
+            var allTicketQuantity = _db.TipoEntrada.Where(te => te.Idtipoevento == TipoEntradum.idEvent).Sum(te => te.Cantidadinicial);
+            if(allTicketQuantity + TipoEntradum.CantidadinicialEvent - e.Cantidadinicial > evento.Cantidad) {
+                var restantes = evento.Cantidad - allTicketQuantity + e.Cantidadinicial;
+                return BadRequest(new { Message = "La cantidad inicial máxima excede la del evento (disponibles " + restantes.ToString() + ")", Data = ' ', Status = 409 });
+            }
+
             e.Nombre = TipoEntradum.NombreEvent;
             e.Costo = TipoEntradum.CostoEvent;
             e.Cantidadinicial = TipoEntradum.CantidadinicialEvent;

@@ -63,7 +63,7 @@ namespace server.Controllers
         }
 
         [AllowAnonymous]
-        [HttpGet("GetEventByEventTypeId{eventTypeId}"), Authorize]
+        [HttpGet("GetEventByEventTypeId/{eventTypeId}"), Authorize]
         public IActionResult Get(Guid eventTypeId)
         {
             var eventType = _db.TipoEventos
@@ -87,7 +87,7 @@ namespace server.Controllers
         }
 
         [AllowAnonymous]
-        [HttpGet("GetEventByCompanyId{companyId}"), Authorize]
+        [HttpGet("GetEventByCompanyId/{companyId}"), Authorize]
         public IActionResult GetEventTypeByCompanyId(Guid companyId)
         {
             var eventType = _db.TipoEventos

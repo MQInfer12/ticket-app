@@ -11,6 +11,7 @@ import FormInput from "../../global/components/form/formInput";
 import { Empresa } from "../../global/interfaces/api/empresa";
 import Button from "../../global/components/buttons/button";
 import { useNavigate } from "react-router-dom";
+import { Cajas as CajaType } from "../../global/interfaces/types/cajas";
 
 const Cajas = () => {
   const navigate = useNavigate();
@@ -83,6 +84,7 @@ const Cajas = () => {
               closeModal();
             },
           }}
+          showDelete={item?.cajaName !== CajaType.cajaVirtual}
         >
           <FormSelect title="Empresa" name="companyId">
             <option value="">Seleccione empresa</option>

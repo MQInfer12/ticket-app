@@ -34,6 +34,7 @@ const RolForm = ({ rolesEmpresa }: Props) => {
 
   return (
     <Card title="Seleccione cuenta">
+      <small className="text-neutral-50">Usted puede ingresar como {rolesEmpresa.length} rol{rolesEmpresa.length > 1 ? "es" : ""} {rolesEmpresa.length > 1 ? "distintos" : ""}</small>
       <div className="flex flex-col gap-4">
         {rolesEmpresa.map((data) => (
           <div className="flex flex-col gap-2" key={data.id}>

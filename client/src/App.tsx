@@ -13,6 +13,9 @@ import { Roles } from "./global/interfaces/types/roles";
 import Cajas from "./pages/cajas";
 import Caja from "./pages/caja";
 import Cuentas from "./pages/cuentas";
+import VerEvento from "./pages/verEvento";
+import Gracias from "./pages/gracias";
+import Ingresos from "./pages/ingresos";
 
 function App() {
   return (
@@ -21,6 +24,30 @@ function App() {
         <Route path="/" element={<Login />} />
         <Route path="/dashboard" element={<Dashboard />}>
           <Route path="/dashboard/inicio" element={<Inicio />} />
+          <Route
+            path="/dashboard/inicio/verEvento/:id"
+            element={
+              <ValidateRol roles={[Roles.cliente]}>
+                <VerEvento />
+              </ValidateRol>
+            }
+          />
+          <Route
+            path="/dashboard/ingresos"
+            element={
+              <ValidateRol roles={[Roles.superadmin, Roles.adminEmpresa]}>
+                <Ingresos />
+              </ValidateRol>
+            }
+          />
+          <Route
+            path="/dashboard/inicio/gracias"
+            element={
+              <ValidateRol roles={[Roles.cliente]}>
+                <Gracias />
+              </ValidateRol>
+            }
+          />
           <Route
             path="/dashboard/empresas"
             element={
@@ -85,7 +112,14 @@ function App() {
               </ValidateRol>
             }
           />
-          <Route path="/dashboard/cuentas" element={<Cuentas/>}/>
+          <Route
+            path="/dashboard/cuentas"
+            element={
+              <ValidateRol roles={[Roles.superadmin, Roles.adminEmpresa]}>
+                <Cuentas />
+              </ValidateRol>
+            }
+          />
           <Route path="/dashboard/*" element={<div>404</div>} />
         </Route>
       </Routes>
