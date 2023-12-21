@@ -19,7 +19,7 @@ const Evento = () => {
     pushData,
     modifyData,
     filterData,
-    getData
+    getData,
   } = useGet<Entrada[]>(`TipoEntrada/GetTipoEntradaById/${id}`);
   const { state, item, openModal, closeModal } = useModal<Entrada>(
     "Formulario de entradas"
@@ -73,7 +73,7 @@ const Evento = () => {
                   nombreEvent: item?.nombre || "",
                   costoEvent: item?.costo || "",
                   cantidadinicialEvent: item?.cantidadinicial || "",
-                  stockEvent: item?.stock || "stock",
+                  stockEvent: item?.stock || 0,
                 }}
                 validationSchema={entradaSchema}
                 post={{

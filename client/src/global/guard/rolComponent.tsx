@@ -3,7 +3,7 @@ import { Roles } from "../interfaces/types/roles";
 
 interface Props {
   roles: Roles[];
-  children: JSX.Element;
+  children: JSX.Element | JSX.Element[];
 }
 
 const RolComponent = ({ children, roles }: Props) => {

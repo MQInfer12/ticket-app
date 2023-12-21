@@ -12,7 +12,7 @@ const Inicio = () => {
   const { res } = useGet<Evento[]>("EventType");
   const { user } = useUser();
 
-  if (user?.roleName === Roles.cliente)
+  if (user?.roleName === Roles.cliente) {
     return (
       <PageContainer title="Inicio">
         {!res ? (
@@ -33,7 +33,7 @@ const Inicio = () => {
         )}
       </PageContainer>
     );
-
+  }
   return (
     <PageContainer title="Inicio">
       <p>Inicio</p>

@@ -1,4 +1,4 @@
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import PageContainer from "../../global/components/pageContainer";
 import { Entrada } from "../../global/interfaces/api/entrada";
 import { useGet } from "../../hooks/useGet";
@@ -10,9 +10,9 @@ import EntradaCart from "./components/entradaCart";
 import { Carrito } from "./interfaces/carrito";
 import ExternalInput from "../../global/components/form/externalInput";
 import { useRequest } from "../../hooks/useRequest";
-import { successAlert } from "../../global/utils/alerts";
 
 const VerEvento = () => {
+  const navigate = useNavigate();
   const { id } = useParams();
   const { res } = useGet<Entrada[]>(`TipoEntrada/GetTipoEntradaById/${id}`);
   const { user } = useUser();
@@ -21,6 +21,7 @@ const VerEvento = () => {
     items: [],
   });
   const { sendRequest } = useRequest();
+  const [loading, setLoading] = useState(false);
 
   const handleAddToCart = (cantidad: number, idEntrada: string) => {
     const exists = carrito.items.find((item) => item.idEntrada === idEntrada);
@@ -80,12 +81,12 @@ const VerEvento = () => {
   };
 
   const handleSend = async () => {
-    console.log(JSON.stringify(carrito));
+    setLoading(true);
     const res = await sendRequest("Transaccion/ComprarTicket", carrito);
     if(res) {
-      console.log(res);
-      successAlert(res.message);
+      navigate("/dashboard/inicio/gracias");
     }
+    setLoading(false);
   }
 
   return (
@@ -132,7 +133,7 @@ const VerEvento = () => {
           </div>
           {carrito.items.length > 0 && (
             <div>
-              <Button onClick={handleSend}>Comprar</Button>
+              <Button disabled={loading} onClick={handleSend}>{loading ? "Cargando..." : "Comprar"}</Button>
             </div>
           )}
         </div>
