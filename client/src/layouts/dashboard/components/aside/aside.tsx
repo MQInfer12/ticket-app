@@ -13,6 +13,7 @@ import IconLink from "./iconLink";
 import Profile from "./profile";
 import Section from "./section";
 import IconCuenta from "../../../../icons/iconCuenta";
+import IconTienda from "../../../../icons/iconTienda";
 
 interface Props {
   open: boolean;
@@ -36,7 +37,7 @@ const Aside = ({ open, setOpen }: Props) => {
       />
       <aside className={asideStyle} style={{ gridArea: "aside" }}>
         <Head setOpen={setOpen} />
-        <div className="flex flex-col justify-between flex-1">
+        <div className="flex flex-col justify-between flex-1 overflow-auto">
           <div className="flex-1 overflow-auto">
             <Section title="INICIO">
               <IconLink
@@ -99,6 +100,15 @@ const Aside = ({ open, setOpen }: Props) => {
                   label="Egresos"
                   to="/dashboard/egresos"
                 /> */}
+              </Section>
+            </RolComponent>
+            <RolComponent roles={[Roles.superadmin, Roles.adminEmpresa, Roles.adminTienda]}>
+              <Section title="TIENDA">
+                <IconLink
+                  icon={<IconTienda />}
+                  label="Categorias"
+                  to="/dashboard/categorias"
+                />
               </Section>
             </RolComponent>
           </div>

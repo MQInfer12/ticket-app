@@ -49,7 +49,7 @@ namespace server.Controllers
                    });
             }
             return Ok(new BaseResponse<IQueryable<CajaResponse>>
-            { Message = "Lista de contactos obtenida correctamente", Data = registers, Status = 200 });
+            { Message = "Lista de cajas obtenida correctamente", Data = registers, Status = 200 });
         }
 
         [HttpGet("{GetByCompanyId}"), Authorize]

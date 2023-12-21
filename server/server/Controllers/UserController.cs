@@ -29,14 +29,14 @@ namespace server.Controllers
 
         }
 
-        private string GenerateToken(Usuario user, string nameRole, Guid roleId, Guid? companyId)
+        private string GenerateToken(RolUsuario userRol, string nameRole, Guid roleId, Guid? companyId)
         {
             var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Jwt:Key"]));
             var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
 
 
             var claims = new List<Claim>(){
-                new Claim("UserId", user.Id.ToString()),
+                new Claim("UserRolId", userRol.Id.ToString()),
                 new Claim("RoleName", nameRole.ToString()),
                 new Claim("RoleId", roleId.ToString()),
             };
@@ -63,12 +63,12 @@ namespace server.Controllers
         public IActionResult GetUserToken()
         {
 
-            string userId = User.FindFirst("UserId").Value; //get id
+            string userRolId = User.FindFirst("UserRolId").Value; //get id
             string companyId = User.FindFirst("CompanyId")?.Value; //get id
             if (companyId != null)
             {
                 var userRes = _db.RolUsuarios
-                    .Where(u => u.Idusuario == Guid.Parse(userId))
+                    .Where(u => u.Id == Guid.Parse(userRolId))
                     .Where(u => u.Idempresa == Guid.Parse(companyId))
                     .Select(x => new
                     {
@@ -90,7 +90,7 @@ namespace server.Controllers
             else
             {
                 var userRes = _db.RolUsuarios
-                    .Where(u => u.Idusuario == Guid.Parse(userId))
+                    .Where(u => u.Id == Guid.Parse(userRolId))
                     .Select(x => new
                     {
                         UserId = x.Idusuario,
@@ -253,7 +253,7 @@ namespace server.Controllers
             var user = _db.Usuarios.Find(userRol.Idusuario);
 
 
-            var token = GenerateToken(user, roletype.Nombre, roletype.Id, userRol.Idempresa);
+            var token = GenerateToken(userRol, roletype.Nombre, roletype.Id, userRol.Idempresa);
             return Ok(new { Message = "Bienvenido", Data = token, Status = 200 });
         }
 
@@ -359,7 +359,7 @@ namespace server.Controllers
             _db.RolUsuarios.Add(userRole);
             _db.SaveChanges();
 
-            var token = GenerateToken(user, roleType.Nombre, roleType.Id, userRole.Idempresa);
+            var token = GenerateToken(userRole, roleType.Nombre, roleType.Id, userRole.Idempresa);
 
             return Ok(new { Message = "Se registro su cuenta con exito", Data = token, Status = 200 });
         }

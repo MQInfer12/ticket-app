@@ -79,16 +79,13 @@ const Eventos = () => {
                   : ""
                 : user?.companyId,
             nombre: item?.typeEventName || "",
-            fecha: item?.date.split("-").reverse().join("-") || "",
+            fecha: item?.date || "",
             cantidad: item?.amount || "",
           }}
           validationSchema={eventoSchema}
           post={{
             route: "EventType",
-            onBody: (value) => ({
-              ...value,
-              fecha: value.fecha.split("-").reverse().join("-"),
-            }),
+            onBody: (value) => value,
             onSuccess: (data) => {
               pushData(data);
               closeModal();
