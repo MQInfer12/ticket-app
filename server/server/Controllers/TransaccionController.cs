@@ -17,6 +17,37 @@ namespace server.Controllers
       _db = db;
     }
 
+    [HttpGet, Authorize]
+    public IActionResult Get()
+    {
+      var rol = User.FindFirst("RoleName").Value;
+            if (rol == "Super Administrador")
+            {
+                var transaccion = _db.Transaccions.Where(x => x.IdcuentaNavigation.Tipo == "Ingreso").Select(t => new TransaccionResponse{
+                  NombreUsuario = t.IdusuarioNavigation.NombreUsuario,
+                  Total = t.Montototal,
+                  Cantidad = t.Cantidad,
+                  Extra = t.Extra,
+                  TipoEntrega = t.Tipoentrega,
+                  Fecha = t.Fecha
+                }).ToList();
+                return Ok(new { Message = "Lista de ingresos", Data = transaccion, Status = 200 });
+            }
+            else
+            {
+                var idEmpresa = User.FindFirst("CompanyId").Value;
+                var transaccion = _db.Transaccions.Where(x => x.IdcuentaNavigation.Tipo == "Ingreso" && x.IdcajaNavigation.Idempresa == Guid.Parse(idEmpresa) && x.IdcuentaNavigation.Idempresa == Guid.Parse(idEmpresa)).Select(t => new TransaccionResponse{
+                  NombreUsuario = t.IdusuarioNavigation.NombreUsuario,
+                  Total = t.Montototal,
+                  Cantidad = t.Cantidad,
+                  Extra = t.Extra,
+                  TipoEntrega = t.Tipoentrega,
+                  Fecha = t.Fecha
+                }).ToList();
+                return Ok(new { Message = "Lista de ingresos", Data = transaccion, Status = 200 });
+            }
+    }
+
     [HttpPost("ComprarTicket"), Authorize]
     public IActionResult Post([FromBody] CarritoDTO req)
     {
@@ -57,12 +88,15 @@ namespace server.Controllers
       _db.SaveChanges();
 
       List<DetalleTransaccione> detalles = new List<DetalleTransaccione>();
-      for (int i = 0; i < req.Items.Count; i++){
+      for (int i = 0; i < req.Items.Count; i++)
+      {
         var entrada = _db.TipoEntrada.Find(req.Items[i].IdEntrada);
-        for (int j = 0; j < req.Items[i].Cantidad; j++){
-          var detalle = new DetalleTransaccione{
+        for (int j = 0; j < req.Items[i].Cantidad; j++)
+        {
+          var detalle = new DetalleTransaccione
+          {
             Idtransaccion = transaccion.Id,
-            Detalle = entrada.IdtipoeventoNavigation.Nombre + " (" + entrada.Nombre +")",
+            Detalle = entrada.IdtipoeventoNavigation.Nombre + " (" + entrada.Nombre + ")",
             Preciounitario = entrada.Costo,
             Ci = req.Items[i].Ci[j]
           };
