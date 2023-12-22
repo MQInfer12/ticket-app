@@ -11,8 +11,9 @@ interface Props<T, U> {
   put: SendRequest<T, U>;
   post: SendRequest<T, U>;
   del: DeleteRequest<T>;
-  onChange?: (e:any) => void;
-  showDelete?:boolean;
+  onChange?: (e: any) => void;
+  showDelete?: boolean;
+  showEnviar?: boolean;
 }
 
 interface SendRequest<T, U> {
@@ -35,6 +36,7 @@ const Form = <T, U>({
   post,
   del,
   showDelete = true,
+  showEnviar = true,
   onChange = () => {},
 }: Props<T, U>) => {
   const { sendRequest } = useRequest();
@@ -76,8 +78,8 @@ const Form = <T, U>({
       <FormikForm className="flex flex-col gap-6" onChange={onChange}>
         <div className="flex flex-col gap-2">{children}</div>
         <div className="self-center flex gap-4">
-          <Button type="submit">Enviar</Button>
-          {(item && showDelete) && (
+          {showEnviar && <Button type="submit">Enviar</Button>}
+          {item && showDelete && (
             <Button
               type="button"
               onClick={() => confirmAlert(handleDelete)}

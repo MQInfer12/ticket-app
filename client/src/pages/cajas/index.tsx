@@ -85,6 +85,7 @@ const Cajas = () => {
             },
           }}
           showDelete={item?.cajaName !== CajaType.cajaVirtual}
+          showEnviar={item?.cajaName !== CajaType.cajaVirtual}
         >
           <FormSelect title="Empresa" name="companyId">
             <option value="">Seleccione empresa</option>
