@@ -27,7 +27,7 @@ const EntradaCart = ({ entrada, handleSend }: Props) => {
           <small>{entrada.costo} Bs.</small>
           <label>Cantidad</label>
           <FormInput title="Cantidad" name="cantidad" />
-          <Button>Añadir</Button>
+          <Button type="submit">Añadir</Button>
         </div>
       </Form>
     </Formik>

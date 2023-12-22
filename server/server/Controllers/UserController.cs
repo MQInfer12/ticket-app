@@ -83,7 +83,8 @@ namespace server.Controllers
                         CompanyState = x.IdempresaNavigation.Estado,
                         PersonName = x.IdusuarioNavigation.IdpersonaNavigation.Nombres,
                         PersonLastName = x.IdusuarioNavigation.IdpersonaNavigation.Appaterno,
-                        PersonLast = x.IdusuarioNavigation.IdpersonaNavigation.Apmaterno
+                        PersonLast = x.IdusuarioNavigation.IdpersonaNavigation.Apmaterno,
+                        IdRolUser = x.Id,
                     }).First();
                 return Ok(new { Message = "Token obtenido", Data = userRes, Status = 200 });
             }
@@ -104,7 +105,8 @@ namespace server.Controllers
                         CompanyState = x.IdempresaNavigation.Estado,
                         PersonName = x.IdusuarioNavigation.IdpersonaNavigation.Nombres,
                         PersonLastName = x.IdusuarioNavigation.IdpersonaNavigation.Appaterno,
-                        PersonLast = x.IdusuarioNavigation.IdpersonaNavigation.Apmaterno
+                        PersonLast = x.IdusuarioNavigation.IdpersonaNavigation.Apmaterno,
+                        IdRolUser = x.Id,
                     }).First();
                 return Ok(new { Message = "Token obtenido", Data = userRes, Status = 200 });
             }

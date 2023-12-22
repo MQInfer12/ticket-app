@@ -114,7 +114,7 @@ const VerEvento = () => {
               return (
                 <div className="flex flex-col" key={item.idEntrada}>
                   <p>{entrada?.nombre}</p>
-                  <small>{entrada?.costo} Bs.</small>
+                  <small>Total {entrada?.costo * item.cantidad} Bs.</small>
                   {new Array(item.cantidad).fill("").map((_, i) => (
                     <div className="flex" key={i}>
                       <ExternalInput
