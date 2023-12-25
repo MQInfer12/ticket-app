@@ -51,6 +51,10 @@ namespace server.Controllers
                     Apmaterno = ru.IdusuarioNavigation.IdpersonaNavigation.Apmaterno,
                     Usuario = ru.IdusuarioNavigation.NombreUsuario
                 }).ToList();
+
+                //remove equal elements
+                persona = persona.Distinct().ToList(); 
+
                 return Ok(new { Message = "Lista de Personas", Data = persona, Status = 200 });
             }
         }
