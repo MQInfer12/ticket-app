@@ -10,6 +10,10 @@ using PdfSharpCore.Pdf;
 using TheArtOfDev.HtmlRenderer.PdfSharp;
 using System.Text;
 
+//QR
+using QRCoder;
+using System.Drawing;
+
 namespace server.Controllers
 {
   [Route("api/[controller]")]
@@ -148,14 +152,37 @@ namespace server.Controllers
 
         StringBuilder HtmlContent = new StringBuilder();
 
-        HtmlContent.Append("<body> ");
-        HtmlContent.Append("<h1 style='text-align:center;'>" + company.Nombre + "</h1>");
+        HtmlContent.Append("<body style='text-align:center;'> ");
+        HtmlContent.Append("<h1>" + company.Nombre + "</h1>");
 
         foreach (DetalleTransaccione val in transaccionsInfo)
         {
-          HtmlContent.Append("<p style='text-align:center;'>" + val.Detalle + "</p>");
-          HtmlContent.Append("<p>" + val.Id + "</p>");
+          HtmlContent.Append("<p>" + val.Detalle + "</p>");
+          // HtmlContent.Append("<div style='display:flex; justify-content:center;'> ");
+
+          // =============== QR ===============
+          QRCodeGenerator qrGenerator = new QRCodeGenerator();
+          QRCodeData qrCodeData = qrGenerator.CreateQrCode(val.Id.ToString(), QRCodeGenerator.ECCLevel.Q);
+          QRCode qrCode = new QRCode(qrCodeData);
+
+          // Convert QR code to a Bitmap image
+          Bitmap qrCodeImage = qrCode.GetGraphic(3);
+
+          // Convert the Bitmap to a byte array
+          using (MemoryStream ms = new MemoryStream())
+          {
+            qrCodeImage.Save(ms, System.Drawing.Imaging.ImageFormat.Png);
+            byte[] imageBytes = ms.ToArray();
+            string base64String = Convert.ToBase64String(imageBytes);
+            HtmlContent.Append("<img src='data:image/png;base64," + base64String + "' alt='QR Code' />");
+          }
+          HtmlContent.Append("<div>");
+          HtmlContent.Append("<label style='margin-top:17px; background-color:#10b981; padding:10px; border-radius:12px; color:#fff;'>" + val.Ci + "</label>");
+          HtmlContent.Append("</div>");
+
         }
+
+
 
         HtmlContent.Append("</body>");
 
