@@ -20,7 +20,7 @@ const Evento = () => {
     modifyData,
     filterData,
     getData,
-  } = useGet<Entrada[]>(`TipoEntrada/GetTipoEntradaById/${id}`);
+  } = useGet<Entrada[]>(`TipoEntrada/GetTipoEntradaByEvento/${id}`);
   const { state, item, openModal, closeModal } = useModal<Entrada>(
     "Formulario de entradas"
   );

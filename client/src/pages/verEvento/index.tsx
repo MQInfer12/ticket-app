@@ -14,7 +14,7 @@ import { useRequest } from "../../hooks/useRequest";
 const VerEvento = () => {
   const navigate = useNavigate();
   const { id } = useParams();
-  const { res } = useGet<Entrada[]>(`TipoEntrada/GetTipoEntradaById/${id}`);
+  const { res } = useGet<Entrada[]>(`TipoEntrada/GetTipoEntradaByEvento/${id}`);
   const { user } = useUser();
   const [carrito, setCarrito] = useState<Carrito>({
     idUsuario: user?.userId,
@@ -84,7 +84,8 @@ const VerEvento = () => {
     setLoading(true);
     const res = await sendRequest("Transaccion/ComprarTicket", carrito);
     if(res) {
-      navigate("/dashboard/inicio/gracias");
+      //@ts-ignore
+      navigate(`/dashboard/inicio/gracias/${res?.data.id}`);
     }
     setLoading(false);
   }

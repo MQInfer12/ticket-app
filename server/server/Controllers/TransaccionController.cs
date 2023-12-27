@@ -134,7 +134,7 @@ namespace server.Controllers
       return Ok(new { Message = "Compra realizada", Data = transaccion, Status = 201 });
     }
 
-    [Authorize, HttpGet("GeneratePdf/{transactionId}")]
+    [HttpGet("GeneratePdf/{transactionId}")]
     public IActionResult GeneratePdf(Guid transactionId)
     {
       var transaccionsInfo = _db.DetalleTransacciones.Where(v => v.Idtransaccion == transactionId);
@@ -144,16 +144,13 @@ namespace server.Controllers
       if (transaccionInfo != null)
       {
 
-        var company = _db.Empresas
-          .FirstOrDefault(v => v.Cajas.First().Id == transaccionInfo.Idcaja);
-
 
         var document = new PdfDocument();
 
         StringBuilder HtmlContent = new StringBuilder();
 
         HtmlContent.Append("<body style='text-align:center;'> ");
-        HtmlContent.Append("<h1>" + company.Nombre + "</h1>");
+        HtmlContent.Append("<h1>" + "Club Deportivo Wilstermann" + "</h1>");
 
         foreach (DetalleTransaccione val in transaccionsInfo)
         {

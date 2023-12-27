@@ -42,7 +42,7 @@ function App() {
             }
           />
           <Route
-            path="/dashboard/inicio/gracias"
+            path="/dashboard/inicio/gracias/:id"
             element={
               <ValidateRol roles={[Roles.cliente]}>
                 <Gracias />

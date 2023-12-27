@@ -19,7 +19,7 @@ namespace server.Controllers
             _db = db;
         }
         [HttpGet, Authorize]
-        [Route("GetTipoEntradaById/{id}")]
+        [Route("GetTipoEntradaByEvento/{id}")]
         public IActionResult GetTipoEntradaById(Guid id)
         {
             var entrada = _db.TipoEntrada.Where(e => e.Idtipoevento == id).ToList();
