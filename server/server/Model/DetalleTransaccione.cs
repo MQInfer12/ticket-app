@@ -8,8 +8,9 @@ public partial class DetalleTransaccione
     public Guid Id { get; set; }
 
     public Guid Idtransaccion { get; set; }
+    public Guid? IdProducto { get; set; }
 
-    public string Detalle { get; set; } = null!;
+    public string? Detalle { get; set; } = null!;
 
     public int Cantidad { get; set; }
 

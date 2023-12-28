@@ -173,6 +173,7 @@ public partial class DBContext : DbContext
             entity.Property(e => e.Detalle)
                 .HasMaxLength(255)
                 .HasColumnName("detalle");
+            entity.Property(e => e.IdProducto).HasColumnName("idproducto");
             entity.Property(e => e.Idtransaccion).HasColumnName("idtransaccion");
             entity.Property(e => e.Preciounitario).HasColumnName("preciounitario");
             entity.Property(e => e.Verificado)

@@ -13,6 +13,7 @@ using System.Text;
 //QR
 using QRCoder;
 using System.Drawing;
+using Microsoft.EntityFrameworkCore;
 
 namespace server.Controllers
 {
@@ -110,6 +111,7 @@ namespace server.Controllers
           t => t.Id,
           (te, t) => new
           {
+            Id = te.Id,
             Nombre = te.Nombre,
             NombreEvento = t.Nombre,
             Costo = te.Costo
@@ -120,7 +122,7 @@ namespace server.Controllers
           var detalle = new DetalleTransaccione
           {
             Idtransaccion = transaccion.Id,
-            Detalle = entrada.NombreEvento + " (" + entrada.Nombre + ")",
+            IdProducto = entrada.Id,
             Preciounitario = entrada.Costo,
             Ci = req.Items[i].Ci[j]
           };
@@ -139,9 +141,20 @@ namespace server.Controllers
     {
       var transaccionsInfo = _db.DetalleTransacciones.Where(v => v.Idtransaccion == transactionId);
 
-      var transaccionInfo = _db.Transaccions.FirstOrDefault(v => v.Id == transactionId);
+      // var transaccionInfo = _db.Transaccions.FirstOrDefault(v => v.Id == transactionId);
 
-      if (transaccionInfo != null)
+      List<TipoEntradum> ticketInfo = new List<TipoEntradum>();
+      var vector = transaccionsInfo.ToList();
+      for (int i = 0; i < vector.Count(); i++)
+      {
+        var ticket = _db.TipoEntrada.Include(a => a.IdtipoeventoNavigation).ThenInclude(b => b.IdempresaNavigation).FirstOrDefault(x => x.Id == vector[i].IdProducto);
+        if (ticket != null)
+        {
+          ticketInfo.Add(ticket);
+        }
+      }
+
+      if (ticketInfo != null)
       {
 
 
@@ -150,11 +163,12 @@ namespace server.Controllers
         StringBuilder HtmlContent = new StringBuilder();
 
         HtmlContent.Append("<body style='text-align:center;'> ");
-        HtmlContent.Append("<h1>" + "Club Deportivo Wilstermann" + "</h1>");
+        HtmlContent.Append("<h1>" + ticketInfo.First().IdtipoeventoNavigation.IdempresaNavigation.Nombre + "</h1>");
+        HtmlContent.Append("<h2>" + ticketInfo.First().IdtipoeventoNavigation.Nombre +" " + ticketInfo.First().IdtipoeventoNavigation.Fecha + "</h2>");
 
-        foreach (DetalleTransaccione val in transaccionsInfo)
+        foreach (TipoEntradum val in ticketInfo)
         {
-          HtmlContent.Append("<p>" + val.Detalle + "</p>");
+          HtmlContent.Append("<p>" + val.Nombre + "</p>");
           // HtmlContent.Append("<div style='display:flex; justify-content:center;'> ");
 
           // =============== QR ===============
@@ -173,14 +187,11 @@ namespace server.Controllers
             string base64String = Convert.ToBase64String(imageBytes);
             HtmlContent.Append("<img src='data:image/png;base64," + base64String + "' alt='QR Code' />");
           }
-          HtmlContent.Append("<div>");
-          HtmlContent.Append("<label style='margin-top:17px; background-color:#10b981; padding:10px; border-radius:12px; color:#fff;'>" + val.Ci + "</label>");
-          HtmlContent.Append("</div>");
-
+          // HtmlContent.Append("<div>");
+          // HtmlContent.Append("<label style='margin-top:17px; background-color:#10b981; padding:10px; border-radius:12px; color:#fff;'>" + val.Ci + "</label>");
+          // HtmlContent.Append("</div>");
+          
         }
-
-
-
         HtmlContent.Append("</body>");
 
         PdfGenerator.AddPdfPages(document, HtmlContent.ToString(), PageSize.A4);
