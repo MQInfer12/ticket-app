@@ -1,21 +1,35 @@
-import IconAdd from "../../../icons/iconAdd";
-import IconReload from "../../../icons/iconReload";
+import { DownloadTableExcel } from "react-export-table-to-excel";
+import ControlButton from "./controlButton";
+import { TableView } from "./tableContainer";
 import IconSearch from "../../../icons/iconSearch";
 import IconX from "../../../icons/iconX";
+import IconAdd from "../../../icons/iconAdd";
+import IconReload from "../../../icons/iconReload";
 import IconPdf from "../../../icons/iconPdf";
-import ControlButton from "./controlButton";
+import IconXLSX from "../../../icons/iconXLSX";
+import IconList from "../../../icons/iconList";
 
 interface Props {
   filter: [string, React.Dispatch<React.SetStateAction<string>>];
   reload?: () => void;
   add?: () => void;
-  viewPDF: [boolean, React.Dispatch<React.SetStateAction<boolean>>];
+  view: [TableView, React.Dispatch<React.SetStateAction<TableView>>];
   loading: boolean;
+  tableCurrentRef: HTMLTableElement | null;
+  reports: boolean;
 }
 
-const TableControls = ({ filter, reload, add, viewPDF, loading }: Props) => {
+const TableControls = ({
+  filter,
+  reload,
+  add,
+  view,
+  loading,
+  tableCurrentRef,
+  reports,
+}: Props) => {
   const [filterValue, setFilter] = filter;
-  const [viewPDFValue, setViewPDF] = viewPDF;
+  const [viewValue, setView] = view;
 
   return (
     <div className="w-full flex pb-4">
@@ -24,7 +38,7 @@ const TableControls = ({ filter, reload, add, viewPDF, loading }: Props) => {
           <IconSearch />
         </div>
         <input
-          disabled={viewPDFValue}
+          disabled={viewValue !== "table"}
           className="w-full px-4 pl-10 outline-none h-10 text-sm border border-solid border-slate-300 text-neutral-700 placeholder:text-neutral-400 disabled:bg-slate-200 transition-all duration-300"
           type="text"
           placeholder="Buscar..."
@@ -34,7 +48,7 @@ const TableControls = ({ filter, reload, add, viewPDF, loading }: Props) => {
       </div>
       {filterValue && (
         <ControlButton
-          disabled={viewPDFValue}
+          disabled={viewValue !== "table"}
           title="Eliminar búsqueda"
           onClick={() => setFilter("")}
           icon={<IconX />}
@@ -42,7 +56,7 @@ const TableControls = ({ filter, reload, add, viewPDF, loading }: Props) => {
       )}
       {!!add && (
         <ControlButton
-          disabled={viewPDFValue}
+          disabled={viewValue !== "table"}
           title="Añadir dato"
           onClick={add}
           icon={<IconAdd />}
@@ -50,18 +64,33 @@ const TableControls = ({ filter, reload, add, viewPDF, loading }: Props) => {
       )}
       {!!reload && (
         <ControlButton
-          disabled={viewPDFValue}
+          disabled={viewValue !== "table"}
           title="Recargar datos"
           onClick={reload}
           icon={<IconReload />}
         />
       )}
-      <ControlButton
-        disabled={loading}
-        title="Exportar PDF"
-        onClick={() => setViewPDF((old) => !old)}
-        icon={<IconPdf />}
-      />
+      {reports && (
+        <>
+          <ControlButton
+            disabled={loading}
+            title={viewValue === "PDF" ? "Ver tabla" : "Ver PDF"}
+            onClick={() => setView((old) => (old === "PDF" ? "table" : "PDF"))}
+            icon={viewValue === "PDF" ? <IconList /> : <IconPdf />}
+          />
+          <DownloadTableExcel
+            filename="tabla"
+            sheet="tabla"
+            currentTableRef={tableCurrentRef}
+          >
+            <ControlButton
+              disabled={loading}
+              title="Exportar Excel"
+              icon={<IconXLSX />}
+            />
+          </DownloadTableExcel>
+        </>
+      )}
     </div>
   );
 };

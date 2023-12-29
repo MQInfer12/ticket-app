@@ -11,7 +11,7 @@ const TablePDFRow = ({ rows }: Props) => {
       {rows.map((row) => (
         <View key={row.id} style={styles.row}>
           {row.getVisibleCells().map((cell) => (
-            <Text style={styles.td}>
+            <Text key={cell.id} style={styles.td}>
               {flexRender(cell.column.columnDef.cell, cell.getContext())}
             </Text>
           ))}
