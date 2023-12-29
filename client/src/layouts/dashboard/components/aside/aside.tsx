@@ -14,6 +14,7 @@ import Profile from "./profile";
 import Section from "./section";
 import IconCuenta from "../../../../icons/iconCuenta";
 import IconTienda from "../../../../icons/iconTienda";
+import IconCompra from "../../../../icons/iconCompra";
 
 interface Props {
   open: boolean;
@@ -45,6 +46,13 @@ const Aside = ({ open, setOpen }: Props) => {
                 label="Inicio"
                 to="/dashboard/inicio"
               />
+              <RolComponent roles={[Roles.cliente]}>
+                <IconLink
+                  icon={<IconCompra />}
+                  label="Compras"
+                  to="/dashboard/compras"
+                />
+              </RolComponent>
             </Section>
             <RolComponent roles={[Roles.superadmin, Roles.adminEmpresa]}>
               <Section title="ADMINISTRACIÓN">
@@ -102,7 +110,9 @@ const Aside = ({ open, setOpen }: Props) => {
                 /> */}
               </Section>
             </RolComponent>
-            <RolComponent roles={[Roles.superadmin, Roles.adminEmpresa, Roles.adminTienda]}>
+            <RolComponent
+              roles={[Roles.superadmin, Roles.adminEmpresa, Roles.adminTienda]}
+            >
               <Section title="TIENDA">
                 <IconLink
                   icon={<IconTienda />}

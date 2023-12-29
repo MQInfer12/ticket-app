@@ -164,7 +164,7 @@ namespace server.Controllers
 
         HtmlContent.Append("<body style='text-align:center;'> ");
         HtmlContent.Append("<h1>" + ticketInfo.First().IdtipoeventoNavigation.IdempresaNavigation.Nombre + "</h1>");
-        HtmlContent.Append("<h2>" + ticketInfo.First().IdtipoeventoNavigation.Nombre +" " + ticketInfo.First().IdtipoeventoNavigation.Fecha + "</h2>");
+        HtmlContent.Append("<h2>" + ticketInfo.First().IdtipoeventoNavigation.Nombre + " " + ticketInfo.First().IdtipoeventoNavigation.Fecha + "</h2>");
 
         foreach (TipoEntradum val in ticketInfo)
         {
@@ -190,7 +190,7 @@ namespace server.Controllers
           // HtmlContent.Append("<div>");
           // HtmlContent.Append("<label style='margin-top:17px; background-color:#10b981; padding:10px; border-radius:12px; color:#fff;'>" + val.Ci + "</label>");
           // HtmlContent.Append("</div>");
-          
+
         }
         HtmlContent.Append("</body>");
 
@@ -208,7 +208,36 @@ namespace server.Controllers
       return NotFound(new { Message = "No se encontraron datos", Data = " ", Status = 404 });
     }
 
+    [HttpGet("GetTransactionTicketByUser")]
+    public IActionResult GetTransaction()
+    {
+      var idRolUser = User.FindFirst("UserRolId").Value;
+      var idUser = _db.RolUsuarios.Find(Guid.Parse(idRolUser));
+      var idEmpresa = User.FindFirst("CompanyId").Value;
+      var resp = _db.Transaccions.Include(c => c.IdcajaNavigation).Where(x => x.Idusuario == idUser.Idusuario && x.IdcuentaNavigation.Nombre == "Venta entradas" && x.IdcuentaNavigation.Idempresa == Guid.Parse(idEmpresa));
+      List<TransaccionUserResponse> transactionInfo = new List<TransaccionUserResponse>();
+      var vector = resp.ToList();
+      for (int i = 0; i < vector.Count(); i++)
+      {
+        var detalleT = _db.DetalleTransacciones.Where(x => x.Idtransaccion == vector[i].Id).First();
+        var ticket = _db.TipoEntrada.Include(a => a.IdtipoeventoNavigation).FirstOrDefault(x => x.Id == detalleT.IdProducto);
+        if (ticket != null)
+        {
+          transactionInfo.Add(new TransaccionUserResponse
+          {
+            Id = vector[i].Id,
+            NombreEvento = ticket.IdtipoeventoNavigation.Nombre,
+            Total = vector[i].Montototal,
+            Cantidad = vector[i].Cantidad,
+            FechaEvento = ticket.IdtipoeventoNavigation.Fecha,
+            FechaCompra = vector[i].Fecha
+          });
+        }
+      }
+      return Ok(new { Message = "Lista de transacciones obtenida correctamente", Data = transactionInfo, Status = 200 });
+    }
   }
+
 }
 
 

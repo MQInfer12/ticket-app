@@ -8,6 +8,7 @@ import {
 } from "@tanstack/react-table";
 import IconArrowUp from "../../../icons/iconArrowUp";
 import IconArrowDown from "../../../icons/iconArrowDown";
+import TablePDF from "./pdf/tablePDF";
 
 interface Props {
   filter: string;
@@ -17,6 +18,7 @@ interface Props {
   data: any[];
   columns: ColumnDef<any, any>[];
   onClickRow?: (row: any) => void;
+  viewPDF: boolean;
 }
 
 const TanstackTable = ({
@@ -27,6 +29,7 @@ const TanstackTable = ({
   sorting,
   setSorting,
   onClickRow,
+  viewPDF
 }: Props) => {
   const table = useReactTable({
     data,
@@ -51,6 +54,10 @@ const TanstackTable = ({
   const tdStyle = `px-2 py-2 border border-solid border-slate-300 text-sm text-neutral-800 ${
     onClickRow ? "cursor-pointer" : ""
   }`;
+
+  if(viewPDF) {
+    return <TablePDF table={table} />
+  }
   return (
     <div className="overflow-auto w-full">
       <table className="w-full border-separate border-spacing-0">

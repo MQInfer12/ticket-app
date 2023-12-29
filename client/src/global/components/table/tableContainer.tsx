@@ -15,10 +15,17 @@ interface Props {
 const TableContainer = ({ data, columns, reload, add, onClickRow }: Props) => {
   const [sorting, setSorting] = useState<any[]>([]);
   const [filter, setFilter] = useState("");
+  const [viewPDF, setViewPDF] = useState(false);
 
   return (
     <div className="flex flex-col h-[calc(100%_-_56px)] flex-[0_0_auto]">
-      <TableControls filter={[filter, setFilter]} reload={reload} add={add} />
+      <TableControls
+        filter={[filter, setFilter]}
+        reload={reload}
+        add={add}
+        loading={!data}
+        viewPDF={[viewPDF, setViewPDF]}
+      />
       {data ? (
         <TanstackTable
           columns={[
@@ -34,6 +41,7 @@ const TableContainer = ({ data, columns, reload, add, onClickRow }: Props) => {
           sorting={sorting}
           setSorting={setSorting}
           onClickRow={onClickRow}
+          viewPDF={viewPDF}
         />
       ) : (
         <Loader />

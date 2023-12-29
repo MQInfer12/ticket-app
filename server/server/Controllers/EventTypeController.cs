@@ -36,33 +36,35 @@ namespace server.Controllers
                         CompanyName = x.IdempresaNavigation.Nombre
                     });
             }
-            if (rol == "Cliente")
-            {
-                var idEmpresa = User.FindFirst("CompanyId").Value;
-                eventsType = _db.TipoEventos.Where(e => e.Idempresa == Guid.Parse(idEmpresa))
-                    .Select(x => new EventTypeResponse
-                    {
-                        Id = x.Id,
-                        TypeEventName = x.Nombre,
-                        Date = x.Fecha,
-                        Amount = x.Cantidad,
-                        CompanyId = x.Idempresa,
-                        CompanyName = x.IdempresaNavigation.Nombre
-                    });
-            }
-            else
-            {
-                var idEmpresa = User.FindFirst("CompanyId").Value;
-                eventsType = _db.TipoEventos.Where(e => e.Idempresa == Guid.Parse(idEmpresa))
-                    .Select(x => new EventTypeResponse
-                    {
-                        Id = x.Id,
-                        TypeEventName = x.Nombre,
-                        Date = x.Fecha,
-                        Amount = x.Cantidad,
-                        CompanyId = x.Idempresa,
-                        CompanyName = x.IdempresaNavigation.Nombre
-                    });
+            else{
+                if (rol == "Cliente")
+                {
+                    var idEmpresa = User.FindFirst("CompanyId").Value;
+                    eventsType = _db.TipoEventos.Where(e => e.Idempresa == Guid.Parse(idEmpresa))
+                        .Select(x => new EventTypeResponse
+                        {
+                            Id = x.Id,
+                            TypeEventName = x.Nombre,
+                            Date = x.Fecha,
+                            Amount = x.Cantidad,
+                            CompanyId = x.Idempresa,
+                            CompanyName = x.IdempresaNavigation.Nombre
+                        });
+                }
+                else
+                {
+                    var idEmpresa = User.FindFirst("CompanyId").Value;
+                    eventsType = _db.TipoEventos.Where(e => e.Idempresa == Guid.Parse(idEmpresa))
+                        .Select(x => new EventTypeResponse
+                        {
+                            Id = x.Id,
+                            TypeEventName = x.Nombre,
+                            Date = x.Fecha,
+                            Amount = x.Cantidad,
+                            CompanyId = x.Idempresa,
+                            CompanyName = x.IdempresaNavigation.Nombre
+                        });
+                }
             }
 
             if (eventsType == null)

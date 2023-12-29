@@ -17,6 +17,7 @@ import VerEvento from "./pages/verEvento";
 import Gracias from "./pages/gracias";
 import Ingresos from "./pages/ingresos";
 import Categorias from "./pages/categorias";
+import Compras from "./pages/compras";
 
 function App() {
   return (
@@ -25,6 +26,16 @@ function App() {
         <Route path="/" element={<Login />} />
         <Route path="/dashboard" element={<Dashboard />}>
           <Route path="/dashboard/inicio" element={<Inicio />} />
+
+          <Route
+            path="/dashboard/compras"
+            element={
+              <ValidateRol roles={[Roles.cliente]}>
+                <Compras />
+              </ValidateRol>
+            }
+          />
+
           <Route
             path="/dashboard/inicio/verEvento/:id"
             element={
@@ -121,7 +132,20 @@ function App() {
               </ValidateRol>
             }
           />
-          <Route path="/dashboard/categorias" element={<ValidateRol roles={[Roles.superadmin, Roles.adminEmpresa, Roles.adminTienda]}><Categorias/></ValidateRol>}/>
+          <Route
+            path="/dashboard/categorias"
+            element={
+              <ValidateRol
+                roles={[
+                  Roles.superadmin,
+                  Roles.adminEmpresa,
+                  Roles.adminTienda,
+                ]}
+              >
+                <Categorias />
+              </ValidateRol>
+            }
+          />
           <Route path="/dashboard/*" element={<div>404</div>} />
         </Route>
       </Routes>
