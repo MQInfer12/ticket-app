@@ -21,3 +21,17 @@ public partial class Item
 
     public virtual Categorium IdcategoriaNavigation { get; set; } = null!;
 }
+public class ItemDTO
+{
+    public Guid IdCategoria { get; set; }
+
+    public string DetalleItem { get; set; } = null!;
+
+    public string FechaRegistroItem { get; set;  } = null!;
+
+    public int CantidadinicialItem { get; set; } 
+
+    public int StockItem { get; set;} 
+
+    public double CostoItem { get; set; }
+}
