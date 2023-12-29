@@ -1,10 +1,12 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using server.Dtos;
 using server.Model;
 using server.Responses;
 using System.ComponentModel.Design;
+using System.Globalization;
 
 namespace server.Controllers
 {
@@ -36,11 +38,13 @@ namespace server.Controllers
                         CompanyName = x.IdempresaNavigation.Nombre
                     });
             }
-            else{
+            else
+            {
                 if (rol == "Cliente")
                 {
+                    DateTime fechaActual = DateTime.Now;
                     var idEmpresa = User.FindFirst("CompanyId").Value;
-                    eventsType = _db.TipoEventos.Where(e => e.Idempresa == Guid.Parse(idEmpresa))
+                    eventsType = _db.TipoEventos.Include(a => a.IdempresaNavigation).Where(e => e.Idempresa == Guid.Parse(idEmpresa)).AsEnumerable().Where(e => fechaActual <= DateTime.ParseExact(e.Fecha, "yyyy-MM-dd", CultureInfo.InvariantCulture))
                         .Select(x => new EventTypeResponse
                         {
                             Id = x.Id,
@@ -49,7 +53,7 @@ namespace server.Controllers
                             Amount = x.Cantidad,
                             CompanyId = x.Idempresa,
                             CompanyName = x.IdempresaNavigation.Nombre
-                        });
+                        }).AsQueryable();
                 }
                 else
                 {

@@ -36,7 +36,7 @@ const Evento = () => {
     },
     {
       header: "Cantidad inicial",
-      accessorKey: "cantidadinicial",
+      accessorKey: "cantidadInicial",
     },
     {
       header: "Stock",
@@ -72,7 +72,7 @@ const Evento = () => {
                 initialValues={{
                   nombreEvent: item?.nombre || "",
                   costoEvent: item?.costo || "",
-                  cantidadinicialEvent: item?.cantidadinicial || "",
+                  cantidadinicialEvent: item?.cantidadInicial || "",
                   stockEvent: item?.stock || 0,
                 }}
                 validationSchema={entradaSchema}

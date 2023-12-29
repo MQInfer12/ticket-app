@@ -56,6 +56,7 @@ const Compras = () => {
         data={res?.data}
         columns={columns}
         reload={getData}
+        reports={false}
       />
     </PageContainer>
   );

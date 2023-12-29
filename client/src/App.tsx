@@ -18,6 +18,7 @@ import Gracias from "./pages/gracias";
 import Ingresos from "./pages/ingresos";
 import Categorias from "./pages/categorias";
 import Compras from "./pages/compras";
+import Categoria from "./pages/categoria";
 
 function App() {
   return (
@@ -143,6 +144,20 @@ function App() {
                 ]}
               >
                 <Categorias />
+              </ValidateRol>
+            }
+          />
+          <Route
+            path="/dashboard/categorias/:id"
+            element={
+              <ValidateRol
+                roles={[
+                  Roles.superadmin,
+                  Roles.adminEmpresa,
+                  Roles.adminTienda,
+                ]}
+              >
+                <Categoria />
               </ValidateRol>
             }
           />
