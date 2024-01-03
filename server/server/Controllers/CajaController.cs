@@ -18,6 +18,13 @@ namespace server.Controllers
             _db = db;
         }
 
+        //functions that we use in several endpoints
+        private IActionResult NotfoundFunc()
+        {
+            return NotFound(new { Message = "No se encontro ningun dato", Data = ' ', Status = 404 });
+        }
+
+
         [HttpGet, Authorize]
         public IActionResult Get()
         {
@@ -26,26 +33,23 @@ namespace server.Controllers
             if (rol == "Super Administrador")
             {
                 registers = _db.Cajas
-                   .Select(x => new CajaResponse
-                   {
-                       Id = x.Id,
-                       CajaName = x.Nombre,
-                       CompanyId = x.Idempresa,
-                       CompanyName = x.IdempresaNavigation.Nombre
-                   });
+                   .Select(x => new CajaResponse(
+                       x.Id,
+                       x.Idempresa,
+                       x.Nombre,
+                       x.IdempresaNavigation.Nombre
+                   ));
             }
             else
             {
                 var idEmpresa = User.FindFirst("CompanyId").Value;
                 registers = _db.Cajas.Where(c => c.Idempresa == Guid.Parse(idEmpresa))
-                   .Select(x => new CajaResponse
-                   {
-                       Id = x.Id,
-                       CajaName = x.Nombre,
-                       CompanyId = x.Idempresa,
-                       CompanyName = x.IdempresaNavigation.Nombre
-
-                   });
+               .Select(x => new CajaResponse(
+                       x.Id,
+                       x.Idempresa,
+                       x.Nombre,
+                       x.IdempresaNavigation.Nombre
+                   ));
             }
             return Ok(new BaseResponse<IQueryable<CajaResponse>>
             { Message = "Lista de cajas obtenida correctamente", Data = registers, Status = 200 });
@@ -56,14 +60,12 @@ namespace server.Controllers
         {
             var registers = _db.Cajas
                 .Where(v => v.Idempresa == GetByCompanyId)
-                .Select(x => new CajaResponse
-                {
-                    Id = x.Id,
-                    CajaName = x.Nombre,
-                    CompanyId = x.Idempresa,
-                    CompanyName = x.IdempresaNavigation.Nombre
-
-                });
+          .Select(x => new CajaResponse(
+                       x.Id,
+                       x.Idempresa,
+                       x.Nombre,
+                       x.IdempresaNavigation.Nombre
+                   ));
             return Ok(new BaseResponse<IQueryable<CajaResponse>>
             { Message = "Lista de contactos obtenida correctamente", Data = registers, Status = 200 });
         }
@@ -72,17 +74,16 @@ namespace server.Controllers
         [Route("ById/{id}")]
         public IActionResult Get(Guid id)
         {
-            var caja = _db.Cajas.Where(c => c.Id == id).Select(cr => new CajaResponse
-            {
-                Id = cr.Id,
-                CajaName = cr.Nombre,
-                CompanyId = cr.Idempresa,
-                CompanyName = cr.IdempresaNavigation.Nombre
-            }).First();
+            var caja = _db.Cajas.Where(c => c.Id == id).Select(x => new CajaResponse(
+                       x.Id,
+                       x.Idempresa,
+                       x.Nombre,
+                       x.IdempresaNavigation.Nombre
+                   )).FirstOrDefault();
 
             if (caja == null)
             {
-                return NotFound(new { Message = "No existe esta caja", Data = ' ', Status = 404 });
+                return NotfoundFunc();
             }
 
             return Ok(new { Message = "Datos obtenidos con exito", Data = caja, Status = 200 });
@@ -104,13 +105,12 @@ namespace server.Controllers
 
             var registersReturn = _db.Cajas
                 .Where(v => v.Id == registers.Id)
-                .Select(x => new CajaResponse
-                {
-                    Id = x.Id,
-                    CajaName = x.Nombre,
-                    CompanyId = x.Idempresa,
-                    CompanyName = x.IdempresaNavigation.Nombre
-                }).First();
+                 .Select(x => new CajaResponse(
+                       x.Id,
+                       x.Idempresa,
+                       x.Nombre,
+                       x.IdempresaNavigation.Nombre
+                   )).First();
 
             return Ok(new BaseResponse<CajaResponse>
             { Message = "Se creo la empresa", Data = registersReturn, Status = 201 });
@@ -124,7 +124,7 @@ namespace server.Controllers
 
             if (existingCaja == null)
             {
-                return NotFound(new { Message = "No se encontro la caja para editar", Data = ' ', Status = 404 });
+                return NotfoundFunc();
             }
 
             existingCaja.Nombre = req.CajaName;
@@ -135,13 +135,12 @@ namespace server.Controllers
 
             var registersReturn = _db.Cajas
                 .Where(v => v.Id == existingCaja.Id)
-                .Select(x => new CajaResponse
-                {
-                    Id = x.Id,
-                    CajaName = x.Nombre,
-                    CompanyId = x.Idempresa,
-                    CompanyName = x.IdempresaNavigation.Nombre
-                }).First();
+                   .Select(x => new CajaResponse(
+                       x.Id,
+                       x.Idempresa,
+                       x.Nombre,
+                       x.IdempresaNavigation.Nombre
+                   )).First();
 
             return Ok(new BaseResponse<CajaResponse>
             { Message = "Se edito la empresa", Data = registersReturn, Status = 200 });
@@ -155,7 +154,7 @@ namespace server.Controllers
             var registers = _db.Cajas.Find(id);
             if (registers == null)
             {
-                return NotFound(new { Message = "No se encontro la caja", Data = ' ', Status = 404 });
+               return NotfoundFunc();
             }
 
             _db.Cajas.Remove(registers);
