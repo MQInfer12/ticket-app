@@ -25,12 +25,28 @@ namespace server.Controllers
             return NotFound(new { Message = "No se encontro ningun dato", Data = ' ', Status = 404 });
         }
 
+        private string UserToken(string val)
+        {
+            return User.FindFirst(val).Value;
+        }
+
+        private CajaResponse getCajaResponse(Guid? id = null)
+        {
+            var caja = _db.Cajas.Where(c => c.Id == id).Select(x => new CajaResponse(
+                 x.Id,
+                 x.Idempresa,
+                 x.Nombre,
+                 x.IdempresaNavigation.Nombre
+             )).FirstOrDefault();
+            return caja;
+        }
+
         [HttpGet, Authorize]
         public IActionResult Get()
         {
-            string rol = User.FindFirst("RoleName").Value;
+            string rol = UserToken("RoleName");
             IQueryable<CajaResponse> registers;
-            
+
             if (rol == Roles.SuperAdmin)
             {
                 registers = _db.Cajas
@@ -43,7 +59,7 @@ namespace server.Controllers
             }
             else
             {
-                var idEmpresa = User.FindFirst("CompanyId").Value;
+                var idEmpresa = UserToken("CompanyId");
                 registers = _db.Cajas.Where(c => c.Idempresa == Guid.Parse(idEmpresa))
                .Select(x => new CajaResponse(
                        x.Id,
@@ -75,12 +91,7 @@ namespace server.Controllers
         [Route("ById/{id}")]
         public IActionResult Get(Guid id)
         {
-            var caja = _db.Cajas.Where(c => c.Id == id).Select(x => new CajaResponse(
-                       x.Id,
-                       x.Idempresa,
-                       x.Nombre,
-                       x.IdempresaNavigation.Nombre
-                   )).FirstOrDefault();
+            var caja = getCajaResponse(id);
 
             if (caja == null)
             {
@@ -104,14 +115,7 @@ namespace server.Controllers
             _db.Cajas.Add(registers);
             _db.SaveChanges();
 
-            var registersReturn = _db.Cajas
-                .Where(v => v.Id == registers.Id)
-                 .Select(x => new CajaResponse(
-                       x.Id,
-                       x.Idempresa,
-                       x.Nombre,
-                       x.IdempresaNavigation.Nombre
-                   )).First();
+            var registersReturn = getCajaResponse(registers.Id);
 
             return Ok(new BaseResponse<CajaResponse>
             { Message = "Se creo la empresa", Data = registersReturn, Status = 201 });
@@ -134,14 +138,7 @@ namespace server.Controllers
             _db.Cajas.Update(existingCaja);
             _db.SaveChanges();
 
-            var registersReturn = _db.Cajas
-                .Where(v => v.Id == existingCaja.Id)
-                   .Select(x => new CajaResponse(
-                       x.Id,
-                       x.Idempresa,
-                       x.Nombre,
-                       x.IdempresaNavigation.Nombre
-                   )).First();
+            var registersReturn = getCajaResponse(existingCaja.Id);
 
             return Ok(new BaseResponse<CajaResponse>
             { Message = "Se edito la empresa", Data = registersReturn, Status = 200 });
