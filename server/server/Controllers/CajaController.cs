@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using server.Dtos;
 using server.Model;
 using server.Responses;
+using server.Constants;
 
 namespace server.Controllers
 {
@@ -24,13 +25,13 @@ namespace server.Controllers
             return NotFound(new { Message = "No se encontro ningun dato", Data = ' ', Status = 404 });
         }
 
-
         [HttpGet, Authorize]
         public IActionResult Get()
         {
-            var rol = User.FindFirst("RoleName").Value;
+            string rol = User.FindFirst("RoleName").Value;
             IQueryable<CajaResponse> registers;
-            if (rol == "Super Administrador")
+            
+            if (rol == Roles.SuperAdmin)
             {
                 registers = _db.Cajas
                    .Select(x => new CajaResponse(
@@ -154,7 +155,7 @@ namespace server.Controllers
             var registers = _db.Cajas.Find(id);
             if (registers == null)
             {
-               return NotfoundFunc();
+                return NotfoundFunc();
             }
 
             _db.Cajas.Remove(registers);
