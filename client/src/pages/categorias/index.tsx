@@ -14,6 +14,7 @@ import { useModal } from "../../hooks/useModal";
 import { useUser } from "../../store/user";
 import { CategoriaForm, categoriaSchema } from "./validations/categorias";
 
+
 const Categorias = () => {
   const { user } = useUser();
   const navigate = useNavigate();

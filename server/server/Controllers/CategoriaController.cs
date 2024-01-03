@@ -17,6 +17,25 @@ namespace server.Controllers
       _db = db;
     }
 
+    [HttpGet("GetItemsAndCategoryByCompany"), Authorize]
+    public IActionResult GetItemsAndCategoryByCompany()
+    {
+      var companyId = User.FindFirst("CompanyId")?.Value;
+
+      if (companyId == null)
+      {
+        return NotFound(new BaseResponse<char>
+        {
+          Message = "No se encontro la categoria para editar",
+          Data = ' ',
+          Status = 404
+        });
+      }
+
+      var categories = _db.Categoria.Where(v => v.Idempresa == Guid.Parse(companyId));
+
+      return Ok(categories);
+    }
 
     [HttpGet, Authorize]
     public IActionResult Get()

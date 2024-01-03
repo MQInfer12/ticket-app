@@ -60,11 +60,11 @@ const Categoria = () => {
               validationSchema={itemSchema}
               initialValues={{
                 idCategoria: id,
-                detalleItem : item?.detalle || "",
-                fechaRegistroItem : item?.fechaRegistro || "",
-                cantidadinicialItem : item?.cantidadInicial || "",
-                stockItem : item?.stock || "",
-                costoItem : item?.costo || "",
+                detalleItem: item?.detalle || "",
+                fechaRegistroItem: item?.fechaRegistro || "",
+                cantidadinicialItem: item?.cantidadInicial || "",
+                stockItem: item?.stock || "",
+                costoItem: item?.costo || "",
               }}
               post={{
                 route: "Item/PostItem",
@@ -91,7 +91,11 @@ const Categoria = () => {
               }}
             >
               <FormInput title="Detalle" name="detalleItem" />
-              <FormInput title="Fecha registro" name="fechaRegistroItem" type={"Date"}/>
+              <FormInput
+                title="Fecha registro"
+                name="fechaRegistroItem"
+                type={"Date"}
+              />
               <FormInput title="Cantidad inicial" name="cantidadinicialItem" />
               <FormInput title="Stock" name="stockItem" />
               <FormInput title="Costo" name="costoItem" />

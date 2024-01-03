@@ -9,11 +9,14 @@ import User from "./components/user";
 
 type Page = "Usuarios";
 
+
 const Caja = () => {
   const { id } = useParams();
   const [page, setPage] = useState<Page>("Usuarios");
   const pages: Page[] = ["Usuarios"];
   const { res } = useGet<CajaType>(`Caja/ById/${id}`);
+
+
 
   return (
     <PageContainer backRoute="/dashboard/cajas" title="Caja">

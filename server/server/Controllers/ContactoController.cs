@@ -67,6 +67,5 @@ namespace server.Controllers
 
             return Ok(new { Message = "Se elimino el contacto", Data = c, Status = 200 });
         }
-
     }
 }

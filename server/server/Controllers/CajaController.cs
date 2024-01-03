@@ -32,7 +32,6 @@ namespace server.Controllers
                        CajaName = x.Nombre,
                        CompanyId = x.Idempresa,
                        CompanyName = x.IdempresaNavigation.Nombre
-
                    });
             }
             else

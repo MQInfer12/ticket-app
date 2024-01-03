@@ -5,7 +5,6 @@ using server.Model;
 using server.Responses;
 
 namespace server.Controllers
-
 {
     [Route("api/[controller]")]
     [ApiController]
@@ -23,7 +22,8 @@ namespace server.Controllers
         [Route("GetItemByCategory/{id}")]
         public IActionResult GetItemByCategory(Guid id)
         {
-            var item = _db.Items.Where(i => i.Idcategoria == id).Select(x => new ItemResponse{
+            var item = _db.Items.Where(i => i.Idcategoria == id).Select(x => new ItemResponse
+            {
                 Id = x.Id,
                 IdCategoria = id,
                 NombreCategoria = x.IdcategoriaNavigation.Nombre,
@@ -46,8 +46,9 @@ namespace server.Controllers
         public IActionResult PostItem(ItemDTO Item)
         {
             var category = _db.Categoria.Include(x => x.IdempresaNavigation).Where(i => i.Id == Item.IdCategoria).First();
-            if(category == null){
-               return NotFound(new { Message = "No se encontro la categoria", Data = ' ', Status = 404 });
+            if (category == null)
+            {
+                return NotFound(new { Message = "No se encontro la categoria", Data = ' ', Status = 404 });
             }
             var i = new Item
             {
@@ -60,7 +61,8 @@ namespace server.Controllers
             };
             _db.Items.Add(i);
             _db.SaveChanges();
-            var itemResp = new ItemResponse{
+            var itemResp = new ItemResponse
+            {
                 Id = i.Id,
                 IdCategoria = i.Idcategoria,
                 NombreCategoria = i.IdcategoriaNavigation.Nombre,
@@ -73,12 +75,13 @@ namespace server.Controllers
             };
             return Ok(new { Message = "Se añadio el contacto", Data = itemResp, Status = 200 });
         }
-        [HttpPut ("{id}"), Authorize]
+        [HttpPut("{id}"), Authorize]
         public IActionResult PutItem(Guid id, ItemDTO Item)
         {
             var category = _db.Categoria.Include(x => x.IdempresaNavigation).Where(i => i.Id == Item.IdCategoria).First();
-            if(category == null){
-               return NotFound(new { Message = "No se encontro la categoria", Data = ' ', Status = 404 });
+            if (category == null)
+            {
+                return NotFound(new { Message = "No se encontro la categoria", Data = ' ', Status = 404 });
             }
             var i = _db.Items.Find(id);
             if (i == null)
@@ -92,7 +95,8 @@ namespace server.Controllers
             i.Stock = Item.StockItem;
             i.Costo = Item.CostoItem;
             _db.SaveChanges();
-            var itemResp = new ItemResponse{
+            var itemResp = new ItemResponse
+            {
                 Id = i.Id,
                 IdCategoria = i.Idcategoria,
                 NombreCategoria = i.IdcategoriaNavigation.Nombre,
@@ -105,7 +109,7 @@ namespace server.Controllers
             };
             return Ok(new { Message = "Se edito el item correctamente", Data = itemResp, Status = 200 });
         }
-        [HttpDelete ("{id}"), Authorize]
+        [HttpDelete("{id}"), Authorize]
         public IActionResult DeleteItem(Guid id)
         {
             var i = _db.Items.Find(id);

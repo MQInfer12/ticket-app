@@ -62,7 +62,6 @@ namespace server.Controllers
         [Route("GetUserByToken")]
         public IActionResult GetUserToken()
         {
-
             string userRolId = User.FindFirst("UserRolId").Value; //get id
             string companyId = User.FindFirst("CompanyId")?.Value; //get id
             if (companyId != null)
@@ -310,12 +309,7 @@ namespace server.Controllers
                 return NotFound(new { Message = "No se encontro el rol Cliente", Data = ' ', Status = 404 });
             }
 
-            //get company
-            var company = _db.Empresas.FirstOrDefault(v => v.Nombre == "CBBA");
-            if (company == null)
-            {
-                return NotFound(new { Message = "No se encontro la empresa global 'CBBA'", Data = ' ', Status = 404 });
-            }
+        
 
             //save img
             var filePathImg = saveImg(req.Image.FileName, req);
@@ -355,7 +349,6 @@ namespace server.Controllers
             {
                 Idusuario = user.Id,
                 Idtiporol = roleType.Id,
-                Idempresa = company.Id,
                 Estado = true
             };
             _db.RolUsuarios.Add(userRole);
