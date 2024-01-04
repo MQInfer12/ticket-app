@@ -1,17 +1,11 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.IdentityModel.Tokens;
+using server.Constants;
 using server.Dtos;
 using server.Helpers;
 using server.Helps;
 using server.Model;
-using System;
 using System.Data;
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using System.Text;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
-using static System.Net.Mime.MediaTypeNames;
 
 namespace server.Controllers
 {
@@ -19,43 +13,14 @@ namespace server.Controllers
     [ApiController]
     public class UserController : ControllerBase
     {
-        private IConfiguration _config;
         private DBContext _db;
+        private readonly TokenHelper _tokenHelper;
+        HttpClass<Usuario> httpConst = new HttpClass<Usuario>();
 
-        public UserController(IConfiguration configuration, DBContext db)
+        public UserController(DBContext db, TokenHelper tokenHelper)
         {
-            _config = configuration;
             _db = db;
-
-        }
-
-        private string GenerateToken(RolUsuario userRol, string nameRole, Guid roleId, Guid? companyId)
-        {
-            var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Jwt:Key"]));
-            var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
-
-
-            var claims = new List<Claim>(){
-                new Claim("UserRolId", userRol.Id.ToString()),
-                new Claim("RoleName", nameRole.ToString()),
-                new Claim("RoleId", roleId.ToString()),
-            };
-            if (companyId != null)
-            {
-                claims.Add(new Claim("CompanyId", companyId.ToString()));
-            }
-
-            //Add ROLE
-            claims.Add(new Claim(ClaimTypes.Role, nameRole.ToString()));
-
-            var token = new JwtSecurityToken(
-                _config["Jwt:Issuer"],
-                _config["Jwt:Audience"],
-                claims,
-                expires: DateTime.Now.AddDays(1),
-                signingCredentials: credentials);
-
-            return new JwtSecurityTokenHandler().WriteToken(token);
+            _tokenHelper = tokenHelper;
         }
 
         [HttpGet, Authorize]
@@ -63,7 +28,7 @@ namespace server.Controllers
         public IActionResult GetUserToken()
         {
             string userRolId = User.FindFirst("UserRolId").Value; //get id
-            string companyId = User.FindFirst("CompanyId")?.Value; //get id
+            string companyId = User.FindFirst("CompanyId").Value; //get id
             if (companyId != null)
             {
                 var userRes = _db.RolUsuarios
@@ -116,7 +81,6 @@ namespace server.Controllers
         [Route("GetimgPerson/{userId}")]
         public IActionResult GetImgPerson(Guid userId)
         {
-
             var userRes = _db.Usuarios
                 .Where(v => v.Id == userId)
                 .Join(_db.Personas,
@@ -126,18 +90,22 @@ namespace server.Controllers
                 {
                     Foto = person.Foto,
                 }
-                ).First();
+                ).FirstOrDefault();
 
             if (userRes == null)
             {
-                return NotFound(new { Message = "No se encontro el id de ese usuario", Data = ' ', Status = 404 });
+                return NotFound(httpConst.NotfoundFunc("No se encontro el id de ese usuario"));
             }
+
             if (userRes.Foto == null)
             {
-                return NotFound(new { Message = "No se encontro la foto de este usuario", Data = ' ', Status = 404 });
+                return NotFound(httpConst.NotfoundFunc("No se encontro la foto de este usuario"));
+
             }
-            var path = Path.Combine(Directory.GetCurrentDirectory(),
-                "wwwroot", "UserImage", userRes.Foto);
+            var path = Path.Combine(
+                Directory.GetCurrentDirectory(),
+                "wwwroot", "UserImage", userRes.Foto
+                );
 
             return PhysicalFile(path, "image/png");
         }
@@ -147,8 +115,6 @@ namespace server.Controllers
         [Route("GetUserById/{id}")]
         public IActionResult GetUserById(Guid id)
         {
-
-
             var userRes = _db.RolUsuarios.Where(v => v.Idusuario == id)
                 .Join(_db.TipoRols,
                 userRole => userRole.Idtiporol,
@@ -222,14 +188,14 @@ namespace server.Controllers
                                 ).ToList();
                     if (userRols.Count == 0)
                     {
-                        return NotFound(new { Message = "Este usuario no tiene ningun rol", Data = ' ', Status = 404 });
+                        return NotFound(httpConst.NotfoundFunc("Este usuario no tiene ningun rol"));
                     }
                     return Ok(new { Message = "Bienvenido", Data = userRols, Status = 200 });
                 }
                 return BadRequest(new { Message = "Contraseña incorrecta", Data = ' ', Status = 409 });
 
             }
-            return NotFound(new { Message = "No se encontro el usuario", Data = ' ', Status = 404 });
+            return NotFound(httpConst.NotfoundFunc("No se encontro el usuario"));
         }
 
         [HttpGet("LoginByRole/{rolUserId}")]
@@ -239,22 +205,18 @@ namespace server.Controllers
             var userRol = _db.RolUsuarios.FirstOrDefault(v => v.Id == rolUserId);
 
             if (userRol == null)
-            {
-                return NotFound(new { Message = "No se encontro el rol de ese usuario", Data = ' ', Status = 404 });
-            }
+                return NotFound(httpConst.NotfoundFunc("No se encontro el rol de ese usuario"));
 
             //get the name of the rol iof the table roleType
             var roletype = _db.TipoRols.FirstOrDefault(v => v.Id == userRol.Idtiporol);
 
             if (roletype == null)
-            {
-                return NotFound(new { Message = "No se encontro el nombre de ese rol", Data = ' ', Status = 404 });
-            }
+                return NotFound(httpConst.NotfoundFunc("No se encontro el nombre de ese rol"));
 
             var user = _db.Usuarios.Find(userRol.Idusuario);
 
 
-            var token = GenerateToken(userRol, roletype.Nombre, roletype.Id, userRol.Idempresa);
+            var token = _tokenHelper.GenerateToken(userRol, roletype.Nombre, roletype.Id, userRol.Idempresa);
             return Ok(new { Message = "Bienvenido", Data = token, Status = 200 });
         }
 
@@ -274,10 +236,7 @@ namespace server.Controllers
 
             //Directory.CreateDirectory(Path.GetDirectoryName(filePath));
 
-
             return uniqueFileName;
-
-
         }
 
         [HttpPost("Register")]
@@ -286,30 +245,21 @@ namespace server.Controllers
             // ====================== SAVE IN PEOPLE TABLE ======================
             var existPeople = _db.Personas.Any(e => e.Ci == req.Ci);
             if (existPeople)
-            {
-                return BadRequest(new { Message = "Ya existe este CI", Data = ' ', Status = 409 });
-            }
+                return BadRequest(httpConst.BadRequest("Ya existe este CI"));
 
             var existUser = _db.Usuarios.Any(e => e.NombreUsuario == req.Usuario);
             if (existUser)
-            {
-                return BadRequest(new { Message = "Ya existe este nombre de usuario", Data = ' ', Status = 409 });
-            }
-
+                return BadRequest(httpConst.BadRequest("Ya existe este nombre de usuario"));
 
             if (req.Contrasenia != req.ContraseniaRepit)
-            {
-                return BadRequest(new { Message = "Las contraseñas no coindicen", Data = ' ', Status = 409 });
-            }
+                return BadRequest(httpConst.BadRequest("Las contraseñas no coindicen"));
+
 
             //get role type
             var roleType = _db.TipoRols.FirstOrDefault((v) => v.Nombre == "Cliente");
             if (roleType == null)
-            {
-                return NotFound(new { Message = "No se encontro el rol Cliente", Data = ' ', Status = 404 });
-            }
+                return NotFound(httpConst.NotfoundFunc("No se encontro el rol Cliente"));
 
-        
 
             //save img
             var filePathImg = saveImg(req.Image.FileName, req);
@@ -326,8 +276,6 @@ namespace server.Controllers
             _db.Personas.Add(people);
             _db.SaveChanges();
 
-
-
             // ====================== SAVE IN USER TABLE ======================
             //Generate password
 
@@ -339,6 +287,7 @@ namespace server.Controllers
                 Contrasenia = passwordHash,
                 Idpersona = people.Id,
             };
+
             _db.Usuarios.Add(user);
             _db.SaveChanges();
 
@@ -354,7 +303,7 @@ namespace server.Controllers
             _db.RolUsuarios.Add(userRole);
             _db.SaveChanges();
 
-            var token = GenerateToken(userRole, roleType.Nombre, roleType.Id, userRole.Idempresa);
+            var token = _tokenHelper.GenerateToken(userRole, roleType.Nombre, roleType.Id, userRole.Idempresa);
 
             return Ok(new { Message = "Se registro su cuenta con exito", Data = token, Status = 200 });
         }

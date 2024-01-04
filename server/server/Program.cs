@@ -5,6 +5,8 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Microsoft.OpenApi.Models;
 using System.Text.Json.Serialization;
+using server.Constants;
+using server.Helpers;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -78,6 +80,9 @@ builder.Services.AddSwaggerGen(option =>
         }
     });
 });
+
+//methods
+builder.Services.AddScoped<TokenHelper>();
 
 var app = builder.Build();
 

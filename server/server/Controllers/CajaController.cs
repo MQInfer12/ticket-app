@@ -14,15 +14,10 @@ namespace server.Controllers
     {
         private DBContext _db;
 
+        HttpClass<CajaResponse> _httpInstance = new HttpClass<CajaResponse>();
         public CajaController(DBContext db)
         {
             _db = db;
-        }
-
-        //functions that we use in several endpoints
-        private IActionResult NotfoundFunc()
-        {
-            return NotFound(new { Message = "No se encontro ningun dato", Data = ' ', Status = 404 });
         }
 
         private string UserToken(string val)
@@ -37,7 +32,7 @@ namespace server.Controllers
                  x.Idempresa,
                  x.Nombre,
                  x.IdempresaNavigation.Nombre
-             )).FirstOrDefault();
+             )).First();
             return caja;
         }
 
@@ -60,16 +55,18 @@ namespace server.Controllers
             else
             {
                 var idEmpresa = UserToken("CompanyId");
-                registers = _db.Cajas.Where(c => c.Idempresa == Guid.Parse(idEmpresa))
-               .Select(x => new CajaResponse(
+                registers = _db.Cajas
+                    .Where(c => c.Idempresa == Guid.Parse(idEmpresa))
+                    .Select(x => new CajaResponse(
                        x.Id,
                        x.Idempresa,
                        x.Nombre,
                        x.IdempresaNavigation.Nombre
-                   ));
+                    ));
             }
-            return Ok(new BaseResponse<IQueryable<CajaResponse>>
-            { Message = "Lista de cajas obtenida correctamente", Data = registers, Status = 200 });
+
+            return Ok(_httpInstance.Get(registers));
+
         }
 
         [HttpGet("{GetByCompanyId}"), Authorize]
@@ -77,14 +74,16 @@ namespace server.Controllers
         {
             var registers = _db.Cajas
                 .Where(v => v.Idempresa == GetByCompanyId)
-          .Select(x => new CajaResponse(
+                .Select(x => new CajaResponse(
                        x.Id,
                        x.Idempresa,
                        x.Nombre,
                        x.IdempresaNavigation.Nombre
-                   ));
-            return Ok(new BaseResponse<IQueryable<CajaResponse>>
-            { Message = "Lista de contactos obtenida correctamente", Data = registers, Status = 200 });
+                 ));
+
+            HttpClass<CajaResponse> _httpInstance = new HttpClass<CajaResponse>();
+            return Ok(_httpInstance.Get(registers));
+
         }
 
         [HttpGet, Authorize]
@@ -95,10 +94,10 @@ namespace server.Controllers
 
             if (caja == null)
             {
-                return NotfoundFunc();
+                return NotFound(_httpInstance.NotfoundFunc());
             }
 
-            return Ok(new { Message = "Datos obtenidos con exito", Data = caja, Status = 200 });
+            return Ok(_httpInstance.GetJustOne(caja));
         }
 
 
@@ -117,8 +116,7 @@ namespace server.Controllers
 
             var registersReturn = getCajaResponse(registers.Id);
 
-            return Ok(new BaseResponse<CajaResponse>
-            { Message = "Se creo la empresa", Data = registersReturn, Status = 201 });
+            return Ok(_httpInstance.Post(registersReturn));
         }
 
         [HttpPut("{id}"), Authorize]
@@ -129,7 +127,7 @@ namespace server.Controllers
 
             if (existingCaja == null)
             {
-                return NotfoundFunc();
+                return NotFound(_httpInstance.NotfoundFunc());
             }
 
             existingCaja.Nombre = req.CajaName;
@@ -140,8 +138,7 @@ namespace server.Controllers
 
             var registersReturn = getCajaResponse(existingCaja.Id);
 
-            return Ok(new BaseResponse<CajaResponse>
-            { Message = "Se edito la empresa", Data = registersReturn, Status = 200 });
+            return Ok(_httpInstance.Put(registersReturn));
 
         }
 
@@ -152,12 +149,13 @@ namespace server.Controllers
             var registers = _db.Cajas.Find(id);
             if (registers == null)
             {
-                return NotfoundFunc();
+                return NotFound(_httpInstance.NotfoundFunc());
             }
 
             _db.Cajas.Remove(registers);
             _db.SaveChanges();
-            return Ok(new { Message = "Se elimino la Caja", Data = ' ', Status = 200 });
+
+            return Ok(_httpInstance.Delete());
 
         }
     }
