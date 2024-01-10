@@ -28,7 +28,7 @@ namespace server.Controllers
         public IActionResult GetUserToken()
         {
             string userRolId = User.FindFirst("UserRolId").Value; //get id
-            string companyId = User.FindFirst("CompanyId").Value; //get id
+            string companyId = User.FindFirst("CompanyId")?.Value; //get id
             if (companyId != null)
             {
                 var userRes = _db.RolUsuarios
